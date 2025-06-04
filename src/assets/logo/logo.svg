@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none">
+  <defs>
+    <linearGradient id="storeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#9333EA;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#DB2777;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="24" height="24" rx="4" fill="white"/>
+  <g transform="translate(2,2) scale(0.83)">
+    <path d="m2 7 4.41-4.41A2 2 0 0 1 7.83 2h8.34a2 2 0 0 1 1.42.59L22 7" stroke="url(#storeGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8" stroke="url(#storeGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M15 22v-4a2 2 0 0 0-2-2h-2a2 2 0 0 0-2 2v4" stroke="url(#storeGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M2 7h20" stroke="url(#storeGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M22 7v3a2 2 0 0 1-2 2v0a2.18 2.18 0 0 1-4 0v0a2.18 2.18 0 0 1-4 0v0a2.18 2.18 0 0 1-4 0v0a2.18 2.18 0 0 1-4 0A2 2 0 0 1 2 10V7" stroke="url(#storeGradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+</svg>
