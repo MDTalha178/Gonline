@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import {  Globe, ArrowRight, CheckCircle, Zap} from 'lucide-react';
+import { Link } from "react-router-dom";
 const HeroComponent = () => {
 
   const [currentFeature, setCurrentFeature] = useState(0);
@@ -44,10 +45,13 @@ const HeroComponent = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
-                Start Your Shop Free
+              <Link to={"/login"}>
+                <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
+                  Start Your Shop Free
                 <ArrowRight className="w-5 h-5 ml-2" />
-              </button>
+                </button>
+              </Link>
+             
               <button className="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-600 hover:text-white transition-all duration-300">
                 Watch Demo
               </button>
