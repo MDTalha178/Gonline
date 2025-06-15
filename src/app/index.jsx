@@ -9,7 +9,6 @@ function App() {
     <>
     <div className='min-h-screen'>
     
-    {/* <Homepage /> */}
     <BrowserRouter>
     <Header
       leftContent={["Gonline"]} 

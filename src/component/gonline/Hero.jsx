@@ -1,10 +1,16 @@
-import { useEffect, useState } from "react";
-import {  Globe, ArrowRight, CheckCircle, Zap} from 'lucide-react';
-import { Link } from "react-router-dom";
-const HeroComponent = () => {
+import React, { useState, useEffect } from 'react';
+import { Zap, ArrowRight, Globe, CheckCircle } from 'lucide-react';
 
+export const ShopLaunch = () => {
   const [currentFeature, setCurrentFeature] = useState(0);
-  const features = ['Custom Domain', 'SubDomain', 'Online Ordering', 'Shop Discovery', "Inventory Management"];
+  
+  const features = [
+    "inventory management",
+    "payment processing", 
+    "customer analytics",
+    "order tracking",
+    "marketing tools"
+  ];
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -13,14 +19,25 @@ const HeroComponent = () => {
     return () => clearInterval(interval);
   }, []);
 
+  const handleFeatureClick = () => {
+    alert('Starting your shop setup!');
+    // Add your actual logic here
+    console.log('Shop setup initiated');
+  };
+
+  const handleDemoClick = () => {
+    alert('Demo video would play here!');
+    console.log('Demo requested');
+  };
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-20 h-20 bg-purple-200 rounded-full opacity-60 animate-bounce"></div>
         <div className="absolute top-40 right-20 w-16 h-16 bg-pink-200 rounded-full opacity-60 animate-pulse"></div>
-        <div className="absolute bottom-20 left-20 w-24 h-24 bg-orange-200 rounded-full opacity-60 animate-bounce delay-1000"></div>
-        <div className="absolute bottom-40 right-10 w-12 h-12 bg-blue-200 rounded-full opacity-60 animate-pulse delay-500"></div>
+        <div className="absolute bottom-20 left-20 w-24 h-24 bg-orange-200 rounded-full opacity-60 animate-bounce"></div>
+        <div className="absolute bottom-40 right-10 w-12 h-12 bg-blue-200 rounded-full opacity-60 animate-pulse"></div>
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20">
@@ -45,14 +62,17 @@ const HeroComponent = () => {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
-              <Link to={"/login"}>
-                <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center">
-                  Start Your Shop Free
+              <button 
+                className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center cursor-pointer" 
+                onClick={handleFeatureClick}
+              >
+                Start Your Shop Free
                 <ArrowRight className="w-5 h-5 ml-2" />
-                </button>
-              </Link>
-             
-              <button className="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-600 hover:text-white transition-all duration-300">
+              </button>
+              <button 
+                className="border-2 border-purple-600 text-purple-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-purple-600 hover:text-white transition-all duration-300"
+                onClick={handleDemoClick}
+              >
                 Watch Demo
               </button>
             </div>
@@ -101,6 +121,4 @@ const HeroComponent = () => {
       </div>
     </section>
   );
-};
-
-export default HeroComponent;
+}

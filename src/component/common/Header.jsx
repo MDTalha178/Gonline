@@ -60,13 +60,15 @@ const Header = ({leftContent, rightContent, leftbutton=[], rightbutton=[]}) => {
         {isMenuOpen && (
           <div className="md:hidden absolute top-full left-0 right-0 bg-white shadow-lg rounded-b-2xl">
             <nav className="flex flex-col p-6 space-y-4">
-              <a href="#features" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">Features</a>
-              <a href="#shops" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">Explore Shops</a>
-              <a href="#pricing" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">Pricing</a>
-              <a href="#about" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">About</a>
-              <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-full font-semibold mt-4">
-                Start Your Shop
-              </button>
+              {rightContent && rightContent.map((item, index) => 
+                <a key={index} href="#features" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">{item}</a>
+              )}
+              {rightbutton  && rightbutton.map((item, index) =>
+                <button key={index} className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
+                  <Link to={"/login"}>{item} </Link>   
+                </button>
+                
+            )}
             </nav>
           </div>
         )}
