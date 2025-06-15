@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import{ Menu, X , Store} from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = ({leftContent, rightContent, leftbutton=[], rightbutton=[]}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -19,7 +20,7 @@ const Header = ({leftContent, rightContent, leftbutton=[], rightbutton=[]}) => {
         <div className="flex justify-between items-center py-4">
           <div className="flex items-center space-x-2">
             <div className="w-10 h-10 bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl flex items-center justify-center">
-              <Store className="w-6 h-6 text-white" />
+             <Link to={'/'}><Store className="w-6 h-6 text-white" /></Link> 
             </div>
 
             {/* Left side conent for navabar */}
@@ -37,20 +38,13 @@ const Header = ({leftContent, rightContent, leftbutton=[], rightbutton=[]}) => {
             {rightContent && rightContent.map((item, index) => 
                 <a key={index} href="#features" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">{item}</a>
             )}
-            <a href="#features" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">Features</a>
-            <a href="#shops" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">Explore Shops</a>
-            <a href="#pricing" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">Pricing</a>
-            <a href="#about" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">About</a>
-
 
             {rightbutton  && rightbutton.map((item, index) =>
                 <button key={index} className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
-                  {item}    
+                  <Link to={"/login"}>{item} </Link>   
                 </button>
+                
             )}
-            <button className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
-              Start Your Shop
-            </button>
           </nav>
 
           {/* Mobile Menu Button */}

@@ -1,4 +1,4 @@
-import featureData from "./data/fatureData";
+import featureData from "../../data/fatureData";
 
 const FeaturesSection = () => {
 

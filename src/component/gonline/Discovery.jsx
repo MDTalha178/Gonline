@@ -1,5 +1,5 @@
 import { useState } from "react";
-import shops, { categories } from "./data/shopDiscovery";
+import shops, { categories } from "../../data/shopDiscovery";
 import { MapPin, Search, Star } from "lucide-react";
 import ComingSoonBanner from "../common/ComingSoon";
 

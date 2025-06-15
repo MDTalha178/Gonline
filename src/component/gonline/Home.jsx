@@ -1,5 +1,3 @@
-import Footer from "../common/Footer";
-import Header from "../common/Header";
 import CTASection from "./CTASection";
 import ShopDiscoverySection from "./Discovery";
 import FeaturesSection from "./Feature";
