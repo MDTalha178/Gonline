@@ -17,12 +17,12 @@ const SignupForm = ({formData, handleInputChange}) => {
                     <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <InputField
                         type="text"
-                        name="firstName"
-                        value={formData.firstName}
+                        name="first_name"
+                        value={formData.first_name}
                         onChange={handleInputChange}
                         className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                         placeholder="Enter first name"
-                        required="true"
+                        required={true}
 
                     />
                 </div>
@@ -35,12 +35,12 @@ const SignupForm = ({formData, handleInputChange}) => {
                 <User className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                 <InputField
                 type="text"
-                name="lastName"
-                value={formData.lastName}
+                name="last_name"
+                value={formData.last_name}
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                 placeholder="Enter last name"
-                required="true"
+                required={true}
                 />
             </div>
             </div>
@@ -59,7 +59,7 @@ const SignupForm = ({formData, handleInputChange}) => {
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                 placeholder="Enter your email"
-                required="true"
+                required={true}
             />
             </div>
         </div>
@@ -76,7 +76,7 @@ const SignupForm = ({formData, handleInputChange}) => {
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                 placeholder="Enter phone number"
-                required="true"
+                required={true}
             />
             </div>
         </div>
@@ -94,7 +94,7 @@ const SignupForm = ({formData, handleInputChange}) => {
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                 placeholder="Create password"
-                required="true"
+                required={true}
             />
             <button
                 type="button"
@@ -114,12 +114,12 @@ const SignupForm = ({formData, handleInputChange}) => {
             <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
             <InputField
                 type={showConfirmPassword ? "text" : "password"}
-                name="confirmPassword"
-                value={formData.confirmPassword}
+                name="confirm_password"
+                value={formData.confirm_password}
                 onChange={handleInputChange}
                 className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
                 placeholder="Confirm password"
-                required="true"
+                required={true}
             />
             <button
                 type="button"

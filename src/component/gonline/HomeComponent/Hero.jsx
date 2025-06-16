@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { Zap, ArrowRight, Globe, CheckCircle } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 export const ShopLaunch = () => {
+  const navigate  = useNavigate()
   const [currentFeature, setCurrentFeature] = useState(0);
   
   const features = [
@@ -19,11 +21,6 @@ export const ShopLaunch = () => {
     return () => clearInterval(interval);
   }, []);
 
-  const handleFeatureClick = () => {
-    alert('Starting your shop setup!');
-    // Add your actual logic here
-    console.log('Shop setup initiated');
-  };
 
   const handleDemoClick = () => {
     alert('Demo video would play here!');
@@ -33,7 +30,7 @@ export const ShopLaunch = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
       {/* Animated Background Elements */}
-      <div className="absolute inset-0">
+      <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-20 h-20 bg-purple-200 rounded-full opacity-60 animate-bounce"></div>
         <div className="absolute top-40 right-20 w-16 h-16 bg-pink-200 rounded-full opacity-60 animate-pulse"></div>
         <div className="absolute bottom-20 left-20 w-24 h-24 bg-orange-200 rounded-full opacity-60 animate-bounce"></div>
@@ -64,7 +61,7 @@ export const ShopLaunch = () => {
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <button 
                 className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center cursor-pointer" 
-                onClick={handleFeatureClick}
+                onClick={() => navigate('/login')}
               >
                 Start Your Shop Free
                 <ArrowRight className="w-5 h-5 ml-2" />

@@ -1,5 +1,5 @@
-import ComingSoonBanner from "../common/ComingSoon";
-import testimonials from "../../data/testomonial";
+import ComingSoonBanner from "../../common/ComingSoon";
+import testimonials from "../../../data/testomonial";
 import { Star } from "lucide-react";
 
 const TestimonialsSection = () => {
