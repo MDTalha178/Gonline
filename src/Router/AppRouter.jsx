@@ -21,7 +21,7 @@ export const AppRouter = () => {
         path="/login"
         element={
           <PublicRoute>
-            < AuthComponentModule loginaction='login'/>
+            < AuthComponentModule loginaction='signup'/>
           </PublicRoute>
         }
       />
