@@ -1,5 +1,18 @@
+import { setToken } from "../../module/Auth/token";
 import { endPoint } from "../../request/endipoint";
 import request from "../../request/request";
+
+
+/**
+ * Authenticates a user using email and password.
+ * 
+ * Sends a POST request to the login endpoint with the user's credentials.
+ * If the login is successful, the authentication tokens are stored locally.
+ * 
+ * @param {Object} formData - Contains the user's login credentials, including email and password.
+ * @returns {Object|null} - Returns the response object if successful, otherwise returns null.
+ */
+
 
 const loginService = async (formData) => {
     const data = {
@@ -9,6 +22,7 @@ const loginService = async (formData) => {
     const response = await request.create(endPoint.auth.login, data);
     try{
         if(response.success === true){
+            setToken(response.data)
             return response
         }
     }catch{

@@ -1,12 +1,11 @@
 import { Routes, Route } from 'react-router-dom';
 import Homepage from '../component/gonline/HomeComponent/Home';
 import PublicRoute from './PublicRoutes';
-import AuthPages from '../component/gonline/AuthCompoent/Auth';
 import AuthComponentModule from '../module/Auth/Auth';
 import Verification from '../component/gonline/AuthCompoent/Verification';
+import ShopRgistration from '../module/shopRegistration/shopRegistration';
 
 export const AppRouter = () => {
-  console.log("AppRouter is running");
   return (
     <Routes>
       <Route
@@ -30,6 +29,14 @@ export const AppRouter = () => {
         element={
           <PublicRoute>
             <Verification />
+          </PublicRoute>
+        }
+      />
+      <Route
+        path="/shopregistration"
+        element={
+          <PublicRoute>
+            <ShopRgistration />
           </PublicRoute>
         }
       />

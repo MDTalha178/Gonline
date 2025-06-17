@@ -1,8 +1,12 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ArrowRight, ArrowLeft, Shield, Mail, RefreshCw, CheckCircle, Clock } from 'lucide-react';
-import { useSearchParams } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import verificationService from '../../../service/authService/verificationService';
+import { useToast } from '../../../hooks/useToast';
 
 const Verification = () => {
+  const navigate = useNavigate()
+  const {toast} = useToast()
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
   const [timer, setTimer] = useState(30);
   const [canResend, setCanResend] = useState(false);
@@ -11,7 +15,6 @@ const Verification = () => {
   const email = searchParams.get('email'); // This would come from props or state
   const inputRefs = useRef([]);
 
-  console.log(email)
 
   // Timer countdown
   useEffect(() => {
@@ -71,13 +74,18 @@ const Verification = () => {
     const otpString = otp.join('');
     if (otpString.length !== 6) return;
 
+    const formData = {
+      verification_field:email,
+      otp:otpString,
+      verification_type:'email',
+      role_name:'Vendor'
+
+    }
+
     setIsVerifying(true);
-    // Simulate API call
-    setTimeout(() => {
-      setIsVerifying(false);
-      console.log('OTP Verified:', otpString);
-      // Handle successful verification
-    }, 2000);
+    const response = await verificationService(formData,toast);
+    if(response) navigate('/shopregistration')
+    setIsVerifying(false);
   };
 
   // Resend OTP
@@ -91,7 +99,7 @@ const Verification = () => {
 
   // Go back
   const handleBack = () => {
-    console.log('Going back to login');
+     navigate('/login')
   };
 
   const isOtpComplete = otp.every(digit => digit !== '');
