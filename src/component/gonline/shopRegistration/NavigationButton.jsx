@@ -19,7 +19,7 @@ const NavigationButtons = ({ currentStep, totalSteps, onNext, onPrevious, isNext
       <button
         onClick={onNext}
         disabled={isNextDisabled}
-        className={`flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-none`}
+        className={`flex items-center space-x-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white rounded-xl font-semibold hover:shadow-lg transition-all duration-200 transform hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none disabled:hover:shadow-none cursor-pointer`}
       >
         <span>{currentStep === totalSteps ? 'Complete Registration' : 'Continue'}</span>
         {currentStep !== totalSteps && <ChevronRight className="w-5 h-5" />}

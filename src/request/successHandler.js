@@ -59,7 +59,6 @@ const successHandler = (response, toast = null, options = {}) => {
 
     // Handle failed operations (success: false)
     if (data.success === false) {
-        console.log("kfnfn")
         const message = data && data.message || codeMessage[status] || "Operation failed";
         
         if (showToast && showWarningToast && toast) {
@@ -103,10 +102,9 @@ const successHandler = (response, toast = null, options = {}) => {
     else if (data.success === true || data.success === undefined) {
         const message = data && data.data.message;
         const successText = customSuccessMessage || message 
-        console.log(showToast, showSuccessToast, toast, successText)
         
         if (showToast && showSuccessToast && toast && successText) {
-            console.log("djndnj")
+
             // Different success messages based on status codes
             if (status === 201) {
                 toast.success(successText || "Resource created successfully!", {
@@ -127,7 +125,6 @@ const successHandler = (response, toast = null, options = {}) => {
                 });
             }
             else if (status === 200) {
-                console.log("djndnj")
                 // Different messages based on operation type
                 // const title = getOperationTitle(operation);
                 toast.success(successText, {

@@ -5,9 +5,8 @@
  */
 
 export const setToken = (data) =>{
-    console.log(data)
-    const token = {accessToken: data.access_token, refreshToken:data.refresh_token};
-    console.log(token)
+
+    const token = {accessToken: data.access_token, refreshToken:data.refresh_token, role_type:data.role_type};
     localStorage.setItem('token', JSON.stringify(token));
 }
 

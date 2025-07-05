@@ -18,7 +18,8 @@ const AuthAction = ({currentPage, loginMethod, handleSubmit, formData, setLoginM
             disabled={isloading} 
             type='button' 
             handleSubmit={handleSubmit}
-            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center mt-6 cursor-pointer"/>
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-xl font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center mt-6 cursor-pointer"
+        />
             {/* {isloading && <Spinner size="sm" className="mr-2" />}
             {!isloading && currentPage === 'signup' 
             ? 'Create Account' 

@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import{ Menu, X , Store} from "lucide-react";
+import{ Menu, X , Store, ShoppingCart} from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Header = ({leftContent, rightContent, leftbutton=[], rightbutton=[]}) => {
+const Header = ({leftContent, rightContent, leftbutton=[], rightbutton=[], options={}}) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const {setUserTypeModal} = options
 
   useEffect(() => {
     const handleScroll = () => {
@@ -38,10 +39,10 @@ const Header = ({leftContent, rightContent, leftbutton=[], rightbutton=[]}) => {
             {rightContent && rightContent.map((item, index) => 
                 <a key={index} href="#features" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">{item}</a>
             )}
-
+            
             {rightbutton  && rightbutton.map((item, index) =>
-                <button key={index} className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
-                  <Link to={"/login"}>{item} </Link>   
+                <button key={index} onClick={() => setUserTypeModal(true)} className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
+                    {item}   
                 </button>
                 
             )}

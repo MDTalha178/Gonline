@@ -23,7 +23,8 @@ const errorHandler = (error, toast = null, options = {}) => {
         };
     }
     else if (response && response.status) {
-        const message = response.data && response.data.message || codeMessage[response.status];
+        // response?.data?.data?.non_field_errors[0]
+        const message = response?.data?.data?.non_field_errors[0] || response?.data?.error || response.data && response.data.message || codeMessage[response.status];
         const { status } = response;
 
         // Show toast notification based on status
@@ -55,6 +56,12 @@ const errorHandler = (error, toast = null, options = {}) => {
             else if (status >= 500) {
                 toast.error("Something went wrong on our end. Please try again later.", {
                     title: "Server Error",
+                    duration: 6000
+                });
+            }
+            else if (status === 400) {
+                toast.error(message || "Something went wrong on our end. Please try again later.", {
+                    title: "Something Went wrong",
                     duration: 6000
                 });
             }

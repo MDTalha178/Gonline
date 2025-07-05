@@ -25,7 +25,18 @@ const request = {
         }catch(error){
             return errorHandler(error, toast)
         }
-    }
+    },
+    read: async (url, toast) => {
+        axiosInstance.defaults.headers = {
+        ...headerInstance,
+        };
+        try {
+        const response = await axiosInstance.get(url);
+        return successHandler(response, toast);
+        } catch (error) {
+        return errorHandler(error, toast);
+        }
+  },
 }
 
 export default request;

@@ -12,8 +12,10 @@ const Verification = () => {
   const [canResend, setCanResend] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
   const [searchParams] = useSearchParams();
-  const email = searchParams.get('email'); // This would come from props or state
+  const email = searchParams.get('email');
+  const userType = searchParams.get('userType'); // This would come from props or state
   const inputRefs = useRef([]);
+
 
 
   // Timer countdown
@@ -78,7 +80,7 @@ const Verification = () => {
       verification_field:email,
       otp:otpString,
       verification_type:'email',
-      role_name:'Vendor'
+      role_name:userType
 
     }
 
@@ -94,7 +96,6 @@ const Verification = () => {
     setCanResend(false);
     setOtp(['', '', '', '', '', '']);
     inputRefs.current[0].focus();
-    console.log('Resending OTP to:', email);
   };
 
   // Go back

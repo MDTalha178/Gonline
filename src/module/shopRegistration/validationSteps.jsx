@@ -1,4 +1,4 @@
-const validateStep = (step, formData) => {
+const validateStep = (step, formData, selectedPlan) => {
     switch (step) {
       case 1:
         return formData.shopName && formData.category && formData.ownerName && 

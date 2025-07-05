@@ -1,11 +1,12 @@
-import { Check, Crown, Globe, PiIcon, Store } from "lucide-react";
+import { Check, Crown, Globe, MapPin, PiIcon, Store } from "lucide-react";
 
 const ProgressSteps = ({ currentStep, totalSteps }) => {
   const steps = [
     { id: 1, name: 'Shop Details', icon: Store },
-    { id: 2, name: 'Choose Plan', icon: Crown },
-    { id: 3, name: 'Domain Setup', icon: Globe },
-    { id: 4, name: 'Review', icon: Check }
+    { id: 2, name: 'Address', icon: MapPin },
+    { id: 3, name: 'Choose Plan', icon: Crown },
+    { id: 4, name: 'Domain Setup', icon: Globe },
+    { id: 5, name: 'Review', icon: Check }
   ];
 
   return (

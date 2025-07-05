@@ -1,21 +1,25 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import AuthPages from "../../component/gonline/AuthCompoent/Auth";
-import { endPoint } from "../../request/endipoint";
-import request from "../../request/request";
 import signupService from "../../service/authService/signupService";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import loginService from "../../service/authService/loginService";
 import { useToast } from "../../hooks/useToast";
+import Header from "../../component/common/Header";
+import { ROLE_TYPE } from "../../utils/constant";
+import { useAuth } from "../../context/authContext/authContext";
+import UserTypeModal from "../../component/gonline/AuthCompoent/UserTypeModal";
 
 const AuthComponentModule = ({loginaction = 'signup'}) =>{
     const { toast } = useToast();
-
+    const { handlelogin } = useAuth()
     const [currentPage, setCurrentPage] = useState(loginaction);
+    const [searchParams] = useSearchParams();
+    const {userType, actionFrom} = Object.fromEntries([...searchParams]);
     const [isloading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     // Track login method type (password or OTP)
-    const [loginMethod, setLoginMethod] = useState('password'); // 'password' or 'otp'
+    const [loginMethod, setLoginMethod] = useState('password');
     
     // Manage all form field values
     const [formData, setFormData] = useState({
@@ -25,7 +29,7 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
         phone: '',
         password: '',
         confirm_password: '',
-        role_name:'Vendor'
+        role_name: ROLE_TYPE[userType]
     });
 
      /**
@@ -48,21 +52,49 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
         e.preventDefault();
 
         if (currentPage === 'signup') {
-            const response = await signupService(formData, toast);
-            if(response) navigate(`/verification?email=${formData.email}`);
+            try{
+                const response = await signupService(formData, toast);
+                handlelogin(response?.data);
+                if(response) navigate(`/verification?email=${formData.email}&userType=${userType}`);
+            }
+            catch(error){
+                toast.error('Something went wrong');
+            }
+            finally{
+                setIsLoading(false);
+            }
+            
         } 
-        else 
-        {
-            console.log('Login submitted:');
-            const response = await loginService(formData);
+        else{
+            {   
+            try{
+                const response = await loginService(formData);
+                if(response) navigate(`/dashboard`);
+            }
+            catch(error){
+                toast.error('Something went wrong');
+            }
+            finally{
+                setIsLoading(false);
+            }
         }
-        setIsLoading(false);
+            
+        }
     };
     useEffect(() => {
-        
-    }, [isloading, setIsLoading])
+    }, [isloading, setIsLoading, userType]);
+
+    if(!userType) return  <UserTypeModal />
+
     return(
-        <AuthPages
+        <>
+         <Header
+          leftContent={["Gonline"]} 
+        //   rightContent={["Features", "Explore Shops", "Pricing", "About"]} 
+        //   leftbutton={[]} 
+            rightbutton={["Start Your Shop"]}
+        />
+         <AuthPages
             currentPage={currentPage}
             loginMethod={loginMethod}
             setCurrentPage={setCurrentPage}
@@ -72,6 +104,8 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
             handleInputChange={handleInputChange}
             isloading={isloading}
         />
+        </>
+       
     )
 }
 

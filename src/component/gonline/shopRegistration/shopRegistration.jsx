@@ -5,7 +5,7 @@ import ProgressSteps from "./ProgressSteps";
 import ShopRegistrationFooter from "./shopRegistrationFooter";
 import ShopRegistrationHeader from "./shopRegistrationHeader";
 
-const ShopRegistrationComponent = ({currentStep, totalSteps, handleNext, handlePrevious, formData, setFormData}) =>{
+const ShopRegistrationComponent = ({currentStep, totalSteps, handleNext, handlePrevious, selectedPlan, handlePlanSelection}) =>{
 
     return(
         <div className="min-h-screen bg-gradient-to-br from-purple-50 via-white to-pink-50">
@@ -15,16 +15,16 @@ const ShopRegistrationComponent = ({currentStep, totalSteps, handleNext, handleP
                 <ProgressSteps currentStep={currentStep} totalSteps={totalSteps} />
             
                 <div className="mb-8">
-                {renderStepContent(currentStep, formData, setFormData)}
+                {renderStepContent(currentStep, selectedPlan, handlePlanSelection)}
                 </div>
                 
-                <NavigationButtons
+                {/* <NavigationButtons
                 currentStep={currentStep}
                 totalSteps={totalSteps}
                 onNext={handleNext}
                 onPrevious={handlePrevious}
-                isNextDisabled={!validateStep(currentStep, formData)}
-                />
+                isNextDisabled={!validateStep(currentStep, selectedPlan)}
+                /> */}
             </div>
 
             <ShopRegistrationFooter />

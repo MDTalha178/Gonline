@@ -24,7 +24,7 @@ export const ShopLaunch = () => {
 
   const handleDemoClick = () => {
     alert('Demo video would play here!');
-    console.log('Demo requested');
+
   };
 
   return (

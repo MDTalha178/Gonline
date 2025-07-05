@@ -1,11 +1,12 @@
+import PlanSelection from "./PlanSelection";
 import ShopDetailsRegistration from "./shopDetails";
 
- const renderStepContent = (currentStep, formData, setFormData) => {
+ const renderStepContent = (currentStep, selectedPlan, handlePlanSelection) => {
     switch (currentStep) {
       case 1:
-        return <ShopDetailsRegistration formData={formData} setFormData={setFormData} />;
-    //   case 2:
-    //     return <PlanSelection selectedPlan={selectedPlan} setSelectedPlan={setSelectedPlan} />;
+        return <ShopDetailsRegistration />;
+      case 2:
+        return <PlanSelection  selectedPlan={selectedPlan} handlePlanSelection={handlePlanSelection}/>;
     //   case 3:
     //     return <DomainSetup selectedPlan={selectedPlan} domainData={domainData} setDomainData={setDomainData} />;
     //   case 4:
