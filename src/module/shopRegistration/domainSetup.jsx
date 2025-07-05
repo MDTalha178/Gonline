@@ -14,11 +14,11 @@ const DomainSetup = ({selectedPlan, currentStep, totalSteps, handleNext, handleP
 
     const [domainData, setdomainData] = useState({
         domain_name: '',
-        store_id: '6d8a2fec-fcd9-4450-9a8a-89911ba3a4b8',
+        store_id: storeId,
         domain_type: DOMAIN_TYPE[selectedPlan]
     });
 
-    const data = useStoreDetail('6d8a2fec-fcd9-4450-9a8a-89911ba3a4b8');
+    const data = useStoreDetail(storeId);
     
     if(!data) return <FullscreenLoader  message='Loading..' />;
 
@@ -35,7 +35,7 @@ const DomainSetup = ({selectedPlan, currentStep, totalSteps, handleNext, handleP
     const handleOnSubmit = async () =>{
         try{
             const response = await createStoreDomainService(domainData, toast);
-            if(response) handleNext({id:'6d8a2fec-fcd9-4450-9a8a-89911ba3a4b8'});
+            if(response) handleNext({id:storeId});
         }catch(e){
             toast.error(e.message)
         }

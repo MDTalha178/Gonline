@@ -18,7 +18,6 @@ const ShopRgistration = () =>{
 
 
     const handleNext = (optinalData = {}) =>{
-        console.log("Calind")
         setStoreId(optinalData.id || null);
         setCurrentStep(currentStep + 1);
     }
