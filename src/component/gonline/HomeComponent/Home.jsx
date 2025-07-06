@@ -6,6 +6,7 @@ import ShopDiscoverySection from "./Discovery";
 import FeaturesSection from "./Feature";
 import {ShopLaunch} from "./Hero";
 import TestimonialsSection from "./Testomonial";
+import Footer from "./Footer";
 
 // Main Homepage Component
 const Homepage = () => {
@@ -28,6 +29,7 @@ const Homepage = () => {
         <ShopDiscoverySection />
         <TestimonialsSection />
         <CTASection />
+        <Footer />
 
     </div>
   );

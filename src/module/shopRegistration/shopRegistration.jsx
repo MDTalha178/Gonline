@@ -1,5 +1,4 @@
 import { useState } from "react";
-import ShopRegistrationComponent from "../../component/gonline/shopRegistration/shopRegistration"
 import ShopAddress from "./shopAddress";
 import ShopDetailsRegistration from "./shopDetails";
 import ShopRegistrationFooter from "../../component/gonline/shopRegistration/shopRegistrationFooter";
@@ -7,11 +6,10 @@ import ShopRegistrationHeader from "../../component/gonline/shopRegistration/sho
 import ProgressSteps from "../../component/gonline/shopRegistration/ProgressSteps";
 import PlanSelection from "./PlanSelection";
 import DomainSetup from "./domainSetup";
-import ReviewSummary from "../../component/gonline/shopRegistration/ReviewSummary";
 import { ReviewSummaryComponent } from "./reviewSummary";
 
 const ShopRgistration = () =>{
-    const [currentStep, setCurrentStep] = useState(3);
+    const [currentStep, setCurrentStep] = useState(1);
     const [storeId, setStoreId] = useState(null);
     const [selectedPlan, setSelectedPlan] = useState('basic');
     const totalSteps = 4;
