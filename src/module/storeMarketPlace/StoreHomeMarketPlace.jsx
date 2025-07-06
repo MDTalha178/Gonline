@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import getComponentOrder from "../../utils/Sorting";
 import StoreHome from "../../component/marketplace/StoreHome";
 import Header from "../../component/marketplace/StoreHeader";
+import FullscreenLoader from "../../component/Loader/FullScreenLoader";
 
 const StoreHomeMarketPlace = () => {
     const { storeName } = useParams();
@@ -12,8 +13,7 @@ const StoreHomeMarketPlace = () => {
     useEffect(() => {
         
     }, [data, storeName])
-
-    if(!data) return <div>Loading</div>;
+    if(!data) return <FullscreenLoader  message='Loading..' />
 
     const sortedData = data ? [...data].sort((a, b) => {
         return getComponentOrder(a.name) - getComponentOrder(b.name);

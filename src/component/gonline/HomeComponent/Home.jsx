@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Header from "../../common/Header";
 import  LoginModal  from "../AuthCompoent/UserTypeModal";
 import CTASection from "./CTASection";
@@ -7,15 +7,39 @@ import FeaturesSection from "./Feature";
 import {ShopLaunch} from "./Hero";
 import TestimonialsSection from "./Testomonial";
 import Footer from "./Footer";
+import getSubdomain from "../../../utils/domain";
+import setDoummntTitle from "../../../utils/utils";
+import FullscreenLoader from "../../Loader/FullScreenLoader";
+import StoreHomeMarketPlace from "../../../module/storeMarketPlace/StoreHomeMarketPlace";
 
 // Main Homepage Component
 const Homepage = () => {
   
   const [UserTypeModal, setUserTypeModal] = useState(false);
+  const [subDomain, setSubDomain] = useState(null);
+  const [loading, setLoading] = useState(false);
 
+  useEffect(() =>{
+    setLoading(true);
+
+    const subDomainName = getSubdomain()
+
+    if(subDomainName){
+      setSubDomain(subDomainName);
+      setDoummntTitle(document,subDomainName)
+    }
+    setLoading(false);
+
+  },[subDomain])
+
+   if(loading) return <FullscreenLoader  message='Loading..' />
+
+   if(subDomain) return <StoreHomeMarketPlace />
 
   return (
-    <div className="min-h-screen">
+    <>
+      {subDomain}
+      <div className="min-h-screen">
         <Header
           leftContent={["Gonline"]} 
           rightContent={["Features", "Explore Shops", "Pricing", "About"]} 
@@ -31,7 +55,9 @@ const Homepage = () => {
         <CTASection />
         <Footer />
 
-    </div>
+      </div>
+    </>
+  
   );
 
 };
