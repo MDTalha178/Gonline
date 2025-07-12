@@ -13,7 +13,6 @@ const useStoreDetails = (storeName) =>{
           try {
             const response = await getStoreService(toast, storeName);
             if (response?.data){
-                console.log(response.data);
                 seData(response.data);
             } 
             else seData(data);

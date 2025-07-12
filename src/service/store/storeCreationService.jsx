@@ -1,3 +1,4 @@
+import SERVICE_CONFIGS from "../../config/serverApiConfig";
 import { endPoint } from "../../request/endipoint";
 import request from "../../request/request";
 
@@ -15,7 +16,7 @@ import request from "../../request/request";
 
 export const storeCreationService = async(formData, toast) =>{
     try {
-        const response =  await request.create(endPoint.store.createStore, formData, toast);
+        const response =  await request.create(endPoint.store.createStore, formData, toast,  {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);
@@ -25,7 +26,7 @@ export const storeCreationService = async(formData, toast) =>{
 
 export const storeLocationService = async(formData, toast) => {
     try {
-        const response =  await request.create(endPoint.store.storeLocation, formData, toast);
+        const response =  await request.create(endPoint.store.storeLocation, formData, toast,  {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);

@@ -1,3 +1,4 @@
+import SERVICE_CONFIGS from "../../config/serverApiConfig";
 import { setToken } from "../../module/Auth/token";
 import { endPoint } from "../../request/endipoint";
 import request from "../../request/request";
@@ -15,7 +16,7 @@ import request from "../../request/request";
  */
 
 const signupService = async (formData, toast) => {
-    const response = await request.create(endPoint.auth.signup, formData, toast);
+    const response = await request.create(endPoint.auth.signup, formData, toast,  {service: SERVICE_CONFIGS.USER_SERVICE, requiresAuth: false});
     try{
         if(response.success === true){
             setToken(response.data);

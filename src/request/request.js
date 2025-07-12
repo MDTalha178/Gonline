@@ -1,26 +1,31 @@
 import axios from "axios";
-import { API_BASE_URL } from "../config/serverApiConfig";
-import { ACCESS_TOKEN_NAME } from "../utils/constant";
 import successHandler from "./successHandler";
 import errorHandler from "./errorHandler";
+import { getToken } from "../module/Auth/token";
 
-const headerInstance =  {};
 
-const axiosInstance =  axios.create({
-    baseURL:API_BASE_URL,
-    timeout:3000,
-    headers: {
-        ...headerInstance,
+const buildHeaders = (requiresAuth = false) => {
+    const baseHeaders = {
         'Content-Type': 'application/json',
+    };
+    if (requiresAuth) {
+        const token = getToken();
+        if(token) {
+            baseHeaders['Authorization'] = `Bearer ${token}`;
+        }
     }
-})
+    return baseHeaders;
+
+}
 
 const request = {
-    create: async (url, jsonData, toast) => {
-        axiosInstance.defaults.headers = {...headerInstance}
+    create: async (url, jsonData, toast, config) => {
+        const instance = axios.create(config.service);
+        
+        instance.defaults.headers = {...buildHeaders(config.requiresAuth)};
 
         try{
-            const response = await axiosInstance.post(url, jsonData);
+            const response = await instance.post(url, jsonData);
             return successHandler(response, toast)
         }catch(error){
             return errorHandler(error, toast)
