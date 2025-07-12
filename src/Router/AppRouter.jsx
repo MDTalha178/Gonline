@@ -2,6 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { useDomainContext } from '../context/domainContext/domainContext';
 import FullscreenLoader from '../component/Loader/FullScreenLoader';
 import gonliesRoutes from './goOnlinesRouter';
+import { ShopOfflineCard } from '../component/Loader/StoreStatus/OfflineStore';
 
 export const AppRouter = () => {
   const  {domainInfo, storeData, loading} = useDomainContext();
@@ -19,7 +20,15 @@ export const AppRouter = () => {
             element={route.element}
           />
          ))}
-
+      </Routes>
+    );
+  if(domainInfo.isSubdomain && !storeData) 
+    return (
+      <Routes>
+        <Route
+          path='*'
+          element={<ShopOfflineCard/>}
+        />
       </Routes>
     );
 };
