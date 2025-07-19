@@ -15,6 +15,8 @@ export const endPoint = {
         storeLaunchSetting: 'shop/shop/create-store-setting/'
     },
     marketPalce:{
-        getStoreDetailsByName: 'store/'
+        getStoreDetailsByName: 'store/',
+        storeProduct: 'stores/product',
+        storeDeals:"stores/product/store-deals"
     }
 }

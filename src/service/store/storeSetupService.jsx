@@ -14,7 +14,7 @@ export const storeSetupService = async(formData, toast) => {
 
 export const getStoreThemeService = async(toast, queryParams={}) => {
     try {
-        const response =  await request.read(`${endPoint.store.getStoreTheme}?${new URLSearchParams(queryParams).toString()}`, toast);
+        const response =  await request.read(`${endPoint.store.getStoreTheme}?${new URLSearchParams(queryParams).toString()}`, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);

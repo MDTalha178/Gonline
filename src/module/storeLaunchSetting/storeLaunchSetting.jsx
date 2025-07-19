@@ -6,6 +6,7 @@ import FullscreenLoader from "../../component/Loader/FullScreenLoader";
 import { useToast } from "../../hooks/useToast";
 import request from "../../request/request";
 import { STORE_STATUS } from "../../utils/constant";
+import SERVICE_CONFIGS from "../../config/serverApiConfig";
 
 const StoreLaunchSetting = () =>{
     const { toast } = useToast();
@@ -41,7 +42,7 @@ const StoreLaunchSetting = () =>{
             online_status: settings.platformStatus
         }
         try {
-            const response =  await request.create(endPoint.store.storeLaunchSetting, payload, toast);
+            const response =  await request.create(endPoint.store.storeLaunchSetting, payload, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true});
             if (response.success === true)  navigate(`/shopregistration/storetemplate/${storeId}/launchsetting/creatingstore`)
            
         } catch (error) {

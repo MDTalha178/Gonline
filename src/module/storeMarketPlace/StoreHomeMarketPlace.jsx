@@ -5,10 +5,12 @@ import getComponentOrder from "../../utils/Sorting";
 import StoreHome from "../../component/marketplace/StoreHome";
 import Header from "../../component/marketplace/StoreHeader";
 import FullscreenLoader from "../../component/Loader/FullScreenLoader";
+import StoreFooter from "../../component/marketplace/StoreHome/StoreFooter/StoreFooter";
 
 const StoreHomeMarketPlace = () => {
     const { storeName } = useParams();
     const data = useStoreDetails(storeName);
+    console.log("Store Data:", data);
 
     useEffect(() => {
         
@@ -32,6 +34,7 @@ const StoreHomeMarketPlace = () => {
             {sortedData.length > 0 && sortedData.map((item, index) => (
                 <StoreHome key={index} data={item} />
             ))}
+            <StoreFooter/>
         </div>
     );
 }

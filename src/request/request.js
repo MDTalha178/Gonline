@@ -31,12 +31,11 @@ const request = {
             return errorHandler(error, toast)
         }
     },
-    read: async (url, toast) => {
-        axiosInstance.defaults.headers = {
-        ...headerInstance,
-        };
+    read: async (url, toast, config) => {
+        const instance = axios.create(config.service);
+        instance.defaults.headers = {...buildHeaders(config.requiresAuth)};
         try {
-        const response = await axiosInstance.get(url);
+        const response = await instance.get(url);
         return successHandler(response, toast);
         } catch (error) {
         return errorHandler(error, toast);

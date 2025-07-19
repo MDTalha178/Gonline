@@ -18,7 +18,7 @@ const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurren
         whatsapp: '',
         description: '',
         short_description: '',
-        store_category_id:'2f927d37-c5dd-499d-a965-0b2b50de3ac1',
+        store_category_id:'53d4e1bd-71e2-4a00-8d6e-8c06c3392f74',
         contact_type:''
     });
 

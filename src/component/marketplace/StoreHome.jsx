@@ -27,14 +27,14 @@ const StoreHome = ({data}) => {
               <div className="flex flex-col lg:flex-row gap-16">
                 {/* Sidebar - Only render if filter exists */}
                 {hadFeatured && (
-                  <FeatureProductSection featuredData={config.featured}/>
+                  <FeatureProductSection featuredData={config.featured} storeId={data.store_id}/>
                 )}
 
                 {/* Main Content - Adjust width based on whether sidebar exists */}
                 {hasDeals && (
                   <div className={`space-y-12 ${hasFilter ? 'lg:w-5/6' : 'w-full'}`}>
                     {/* Deals of the Day */}
-                    <DealsOfTheDayComponent dealsData={config.deals} />
+                    <DealsOfTheDayComponent dealsData={config.deals} storeId={data.store_id} />
 
                     {/* Upcoming Deals */}
                     {<StoreEventSection />}

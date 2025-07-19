@@ -36,7 +36,7 @@ export const storeLocationService = async(formData, toast) => {
 
 export const createStoreDomainService = async(formData, toast) => {
     try {
-        const response =  await request.create(endPoint.store.storeDomain, formData, toast);
+        const response =  await request.create(endPoint.store.storeDomain, formData, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);

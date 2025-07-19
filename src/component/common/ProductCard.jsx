@@ -8,12 +8,12 @@ const ProductCard = ({product}) => {
             className="bg-white border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer"
         >
             {/* Product Image Container */}
-            <ProductCardImageCard productImage={product.image}/>
+            <ProductCardImageCard productImage={product.thumbnail}/>
                 
             {/* Product Info */}
             <div className="p-6 space-y-4">
                 <h3 className="font-medium text-gray-900 text-base leading-tight group-hover:text-gray-700 transition-colors duration-200">
-                    Premium Product {product?.name || product}
+                    Premium Product {product?.product_name || 'Not Available'}
                 </h3>
                 
                 {/* Rating */}
@@ -23,15 +23,15 @@ const ProductCard = ({product}) => {
                             <Star key={i} className="w-3 h-3 text-gray-400 fill-current" />
                         ))}
                     </div>
-                    <span className="text-xs text-gray-500">(4.8)</span>
+                    <span className="text-xs text-gray-500">({product.average_rating})</span>
                 </div>
                 
                 {/* Price Section */}
                 <div className="flex items-center justify-between">
                     <div className="space-y-1">
                         <div className="flex items-center space-x-2">
-                            <span className="text-lg font-semibold text-gray-900">$99.99</span>
-                            <span className="text-sm text-gray-400 line-through">$129.99</span>
+                            <span className="text-lg font-semibold text-gray-900">${product.product_price}</span>
+                            <span className="text-sm text-gray-400 line-through">${product.discount_price}</span>
                         </div>
                     </div>
                     <span className="bg-gray-100 text-gray-700 px-2 py-1 rounded text-xs font-medium">
@@ -49,9 +49,9 @@ const ProductCard = ({product}) => {
                 <div className="flex items-center justify-between text-xs text-gray-500">
                     <span className="flex items-center">
                         <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                        In Stock
+                        {product.is_in_stock ? "In Stock" : "Out of Stock"}
                     </span>
-                    <span>Free Shipping</span>
+                    <span>{product.free_shipping ? "Free Shipping" : "Shipping Charges"}</span>
                 </div>
             </div>
         </div>
