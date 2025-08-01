@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { getDomainInfo } from '../../utils/domain';
 import setDoummntTitle from '../../utils/utils';
 import { useToast } from '../../hooks/useToast';
+import { getStoreService } from '../../service/marketPlace/store';
 
 const DomainContext = createContext();
 
@@ -45,10 +46,27 @@ export const DomainProvider = ({ children }) => {
             }
         }
         intialize();
-    },[])
+    },[]);
+    const setStoreDataByStoreName = async (storeSlug) => {
+        try {
+            setLoading(true);
+            const response = await getStoreService(storeSlug);
+            if (response.ok) {
+                const data = await response.json();
+                setStoreData(data);
+                setDoummntTitle(document, storeSlug);
+            } else {
+                toast.error('Failed to fetch store data');
+            }
+        } catch (error) {
+            toast.error('Error fetching store data:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return(
-        <DomainContext.Provider value={{ domainInfo, storeData, loading }}>
+        <DomainContext.Provider value={{ domainInfo, storeData, loading, setStoreDataByStoreName }}>
             {children}
         </DomainContext.Provider>
     )

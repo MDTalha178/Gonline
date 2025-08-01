@@ -3,8 +3,10 @@ import StoreSectionHederAnimation from "../../../common/StoreHeaderAnimation"
 import useStoreDeal from "../../../../hooks/useStoreDeal";
 import { useEffect, useState } from "react";
 import { getcountDown, getUpcomingsales } from "../../../../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 const StoreEventSection = ({eventData, storeId}) => {
+    const navigate = useNavigate();
     const dealsProducts = useStoreDeal(storeId);
     const[timer, setTimer] = useState(null);
     const [countDown, setCountDown] = useState({
@@ -26,7 +28,6 @@ const StoreEventSection = ({eventData, storeId}) => {
         return () => clearInterval(timer);
     }, [dealsProducts, setCountDown]);
 
-    console.log(countDown)
 
     return(
         <>
@@ -74,7 +75,7 @@ const StoreEventSection = ({eventData, storeId}) => {
                     <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">Featured Products</h3>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {dealsProducts && dealsProducts.map((item) => (
-                            <div key={item.id} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer">
+                            <div key={item.id}  onClick={() => navigate(`/store/product/${item.product.id}`)} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer">
                                 {/* Product Image Placeholder */}
                                 <div className="aspect-square bg-gray-100 flex items-center justify-center">
                                     <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">

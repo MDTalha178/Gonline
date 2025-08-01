@@ -48,7 +48,7 @@ const Homepage = () => {
           options={{setUserTypeModal}}
         />
         {UserTypeModal && <LoginModal setUserTypeModal={setUserTypeModal} />}
-        <ShopLaunch />
+        <ShopLaunch setUserTypeModal={setUserTypeModal} />
         <FeaturesSection />
         <ShopDiscoverySection />
         <TestimonialsSection />

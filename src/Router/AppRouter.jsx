@@ -3,6 +3,7 @@ import { useDomainContext } from '../context/domainContext/domainContext';
 import FullscreenLoader from '../component/Loader/FullScreenLoader';
 import gonliesRoutes from './goOnlinesRouter';
 import { ShopOfflineCard } from '../component/Loader/StoreStatus/OfflineStore';
+import subDomainRoutes from './subDomainRouter';
 
 export const AppRouter = () => {
   const  {domainInfo, storeData, loading} = useDomainContext();
@@ -25,10 +26,13 @@ export const AppRouter = () => {
   if(domainInfo.isSubdomain && !storeData) 
     return (
       <Routes>
-        <Route
-          path='*'
-          element={<ShopOfflineCard/>}
-        />
+         {subDomainRoutes.map((route,index) =>(
+          <Route
+            key={index}
+            path={route.path}
+            element={route.element}
+          />
+         ))}
       </Routes>
     );
 };

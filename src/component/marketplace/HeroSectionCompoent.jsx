@@ -1,6 +1,5 @@
 const HeroSectionCompoent = ({bannerData}) => {
 
-  console.log(bannerData.banner);
    return (
     <div className="relative overflow-hidden">
       <div className={`relative bg-gradient-to-br ${bannerData?.bgColorFromn || 'from-gray-50'} ${bannerData?.bgColorTod || 'to-white'} overflow-hidden min-h-screen`}>

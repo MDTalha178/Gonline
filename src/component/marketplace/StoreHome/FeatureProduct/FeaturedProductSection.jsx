@@ -1,6 +1,6 @@
 import { ArrowRight } from "lucide-react";
 import ProductCard from "../../../common/ProductCard";
-import { use, useEffect } from "react";
+import { useEffect } from "react";
 import useStorePorducts from "../../../../hooks/useStorePorduct";
 
 const FeatureProductSection = ({ featuredData ,storeId}) => {

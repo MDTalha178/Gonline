@@ -1,6 +1,21 @@
 import { ArrowRight, Mail, Phone, MapPin, Facebook, Twitter, Instagram, Youtube } from "lucide-react";
+import FullscreenLoader from "../../../Loader/FullScreenLoader";
+import useStoreDetails from "../../../../hooks/useStoreDetails";
+import { useEffect } from "react";
+import useStoreDetail from "../../../../hooks/useStoreDetail";
+import FooterShimmer from "../../Shimmer/FooterShimmer";
 
-const StoreFooter = ({ footerData }) => {
+const StoreFooter = ({ storeId, footerData }) => {
+    const data  = useStoreDetail(storeId);
+
+
+    useEffect(() =>{
+        console.log(data)
+    },[data])
+    console.log(data);
+
+    if(!data) return <FooterShimmer/>
+
     return (
         <footer className="w-full bg-gray-900 text-white">
             {/* Newsletter Section */}
@@ -35,10 +50,10 @@ const StoreFooter = ({ footerData }) => {
                     {/* Company Info */}
                     <div className="lg:col-span-1">
                         <h4 className="text-2xl font-light mb-6 tracking-tight">
-                            {footerData?.company?.name || "Your Store"}
+                            {data?.store_name|| "Store"}
                         </h4>
                         <p className="text-white/70 font-light leading-relaxed mb-6">
-                            {footerData?.company?.description || "Crafting premium products with exceptional quality and timeless design for the modern lifestyle."}
+                            {data?.description || "its's and Online store we are happy to server you"}
                         </p>
                         <div className="flex space-x-4">
                             {[
@@ -117,16 +132,16 @@ const StoreFooter = ({ footerData }) => {
                             <div className="flex items-start space-x-3">
                                 <MapPin className="w-5 h-5 text-white/70 mt-0.5 flex-shrink-0" />
                                 <p className="text-white/70 font-light">
-                                    {footerData?.contact?.address || "123 Business Street, Suite 100, City, State 12345"}
+                                    {data?.location?.address_line_1 + " " + data?.location?.address_line_2 + " " + data?.location?.state}
                                 </p>
                             </div>
                             <div className="flex items-center space-x-3">
                                 <Phone className="w-5 h-5 text-white/70 flex-shrink-0" />
                                 <a 
-                                    href={`tel:${footerData?.contact?.phone || "+1 (555) 123-4567"}`}
+                                    href={`tel:${data?.contacts[0].phone_number || ""}`}
                                     className="text-white/70 hover:text-white transition-colors duration-300 font-light"
                                 >
-                                    {footerData?.contact?.phone || "+1 (555) 123-4567"}
+                                    {data?.contacts[0].phone_number || ""}
                                 </a>
                             </div>
                             <div className="flex items-center space-x-3">

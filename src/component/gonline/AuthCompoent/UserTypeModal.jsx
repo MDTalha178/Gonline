@@ -11,6 +11,13 @@ export const UserTypeModal = ({ setUserTypeModal }) => {
       setSelectedRole(role);
   };
 
+  const handleOnclink = () => {
+    console.log("User Type Selected:");
+
+
+    setUserTypeModal(false);
+  }
+
 
   // Apply blur to the background content when modal opens
   useEffect(() => {
@@ -39,7 +46,7 @@ export const UserTypeModal = ({ setUserTypeModal }) => {
       <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-md mx-4 p-8 transform transition-all duration-300 scale-100">
         {/* Close Button */}
         <button
-          onClick={() => setUserTypeModal(false)}
+          onClick={handleOnclink}
           className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors duration-200"
         >
           <X className="w-6 h-6 cursor-pointer" />

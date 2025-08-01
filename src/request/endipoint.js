@@ -17,6 +17,7 @@ export const endPoint = {
     marketPalce:{
         getStoreDetailsByName: 'store/',
         storeProduct: 'stores/product',
-        storeDeals:"stores/product/store-deals"
+        storeDeals:"stores/product/store-deals",
+        storeUser:"store-user/user/"
     }
 }

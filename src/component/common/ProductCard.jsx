@@ -1,10 +1,13 @@
 import { ShoppingCart, Star } from "lucide-react"
 import ProductCardImageCard from "./ProductCardImageCard"
+import { useNavigate } from "react-router-dom"
 
 const ProductCard = ({product}) => {
+    const navigate = useNavigate();
     return(
         <div 
             key={product} 
+            onClick={() => navigate(`/store/product/:${product.id}`)}
             className="bg-white border border-gray-100 overflow-hidden hover:shadow-xl transition-all duration-500 group cursor-pointer"
         >
             {/* Product Image Container */}

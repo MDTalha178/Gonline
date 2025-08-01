@@ -2,9 +2,11 @@ import { ShoppingCart, Clock, ArrowRight } from "lucide-react";
 import { useEffect, useState } from "react";
 import useStoreDeal from "../../hooks/useStoreDeal";
 import { getcountDown } from "../../utils/utils";
+import { useNavigate } from "react-router-dom";
 
 const DealsOfTheDayComponent = ({ dealsData, storeId }) => {
     const dealsProducts = useStoreDeal(storeId);
+    const navigate = useNavigate();
     const[timer, setTimer] = useState(null);
     const [countDown, setCountDown] = useState({
         hours: '00',
@@ -24,7 +26,6 @@ const DealsOfTheDayComponent = ({ dealsData, storeId }) => {
         return () => clearInterval(timer);
     }, [dealsProducts, setCountDown]);
 
-    console.log(countDown)
     
     return (
         <div className="w-full">
@@ -79,7 +80,8 @@ const DealsOfTheDayComponent = ({ dealsData, storeId }) => {
                             {dealsProducts && dealsProducts.map((deal) => (
                                 <div 
                                     key={deal.id} 
-                                    className="group bg-white border border-gray-100 rounded-none p-8 hover:shadow-xl hover:border-gray-200 transition-all duration-500 hover:transform hover:scale-[1.02]"
+                                    onClick={() => navigate(`/product/${deal.product.id}`)}
+                                    className="group bg-white border border-gray-100 rounded-none p-8 hover:shadow-xl hover:border-gray-200 transition-all duration-500 hover:transform hover:scale-[1.02] cursor-pointer"
                                 >
                                     {/* Product Image Placeholder */}
                                     <div className="w-full h-56 bg-gray-50 mb-6 flex items-center justify-center group-hover:bg-gray-100 transition-all duration-300 overflow-hidden">

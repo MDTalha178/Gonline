@@ -56,3 +56,15 @@ export const ROLE_TYPE = {
     CUSTOMER:'CUSTOMER',
     VENDOR:'VENDOR'
 }
+
+export const CURRENCY_ICON_CODE = {
+    INR: '\u20B9'
+}
+
+export const REVIEWS_ANALYTICS_TYPE ={
+    5: 'five_star_count',
+    4: 'four_star_count',
+    3: 'three_star_count',
+    2: 'two_star_count',    
+    1: 'one_star_count'
+}

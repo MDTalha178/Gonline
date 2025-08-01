@@ -2,7 +2,7 @@ import React, { useState, useEffect, use } from 'react';
 import { Zap, ArrowRight, Globe, CheckCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-export const ShopLaunch = () => {
+export const ShopLaunch = ({setUserTypeModal}) => {
   const navigate  = useNavigate()
   const [currentFeature, setCurrentFeature] = useState(0);
   
@@ -61,7 +61,7 @@ export const ShopLaunch = () => {
             <div className="flex flex-col sm:flex-row gap-4 mb-12">
               <button 
                 className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full font-semibold text-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300 flex items-center justify-center cursor-pointer" 
-                onClick={() => navigate('/login')}
+                onClick={() => setUserTypeModal(true)}
               >
                 Start Your Shop Free
                 <ArrowRight className="w-5 h-5 ml-2" />

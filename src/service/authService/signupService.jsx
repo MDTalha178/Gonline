@@ -29,4 +29,19 @@ const signupService = async (formData, toast) => {
     
 }
 
+
+export const storeSignupService = async (formData, toast) => {
+    const response = await request.create(endPoint.marketPalce.storeUser, formData, toast,  {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false});
+    try{
+        if(response.success === true){
+            setToken(response.data);
+            return response
+        }
+        return null
+    }catch{
+        return null;
+    }
+    
+}
+
 export default signupService;

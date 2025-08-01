@@ -10,6 +10,9 @@ import Unauthorized from "../component/common/unAuthrized";
 import ProtectedRoute from "./ProtectedRoute";
 import { ROLE_TYPE } from "../utils/constant";
 import ShopRgistration from "../module/shopRegistration/shopRegistration";
+// import ProductInfo from "../component/marketplace/Product/ProductDetails";
+import NewProductDetailsPage from "../component/marketplace/Product/ProductDetails";
+import StoreProductDetails from "../module/storeMarketPlace/StoreProductDetails";
 
 const gonliesRoutes = [
   {
@@ -73,6 +76,14 @@ const gonliesRoutes = [
     element: (
       <ProtectedRoute isPublic>
         <StoreHomeMarketPlace />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/product/:productID",
+    element: (
+      <ProtectedRoute isPublic>
+        <StoreProductDetails />
       </ProtectedRoute>
     ),
   },

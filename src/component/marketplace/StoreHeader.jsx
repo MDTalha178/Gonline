@@ -43,7 +43,7 @@ const Header = ({storeLogo, storeName, leftContent, rightContent, leftbutton=[],
             <StoreCart store={storeName}/>
             {rightbutton  && rightbutton.map((item, index) =>
                 <button key={index} className="bg-gradient-to-r from-gray-800 to-gray-700 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
-                  <Link to={"/login"}>{item} </Link>   
+                 <Link to={`/login?storeName=${storeName}`}>{item} </Link>   
                 </button>
                 
             )}
@@ -67,7 +67,7 @@ const Header = ({storeLogo, storeName, leftContent, rightContent, leftbutton=[],
               )}
               {rightbutton  && rightbutton.map((item, index) =>
                 <button key={index} className={`group bg-gradient-to-r ${bannerData?.textColorFroms || 'from-gray-800'} ${bannerData?.textColorTos || 'to-gray-700'} text-white px-10 py-4 font-medium hover:shadow-2xl transform hover:-translate-y-1 transition-all duration-300 cursor-pointer relative overflow-hidden`}>
-                  <Link to={"/login"}>{item} </Link>   
+                  <Link to={`/login?storeName=${storeName}`}>{item} </Link>     
                 </button>
                 
             )}
