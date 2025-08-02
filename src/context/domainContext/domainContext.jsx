@@ -29,7 +29,7 @@ export const DomainProvider = ({ children }) => {
             try{
                 const domainInfo = getDomainInfo();
                 setDomainInfo(domainInfo);
-
+                console.log('Domain Info:', domainInfo);
                 if(domainInfo.storeSlug){
                     const response = await getStoreService(toast, domainInfo.storeSlug);
                     if(response?.data && response.data?.online_status){

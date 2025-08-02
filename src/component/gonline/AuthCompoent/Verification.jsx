@@ -4,7 +4,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import verificationService from '../../../service/authService/verificationService';
 import { useToast } from '../../../hooks/useToast';
 
-const Verification = ({email, userType}) => {
+const Verification = () => {
   const navigate = useNavigate()
   const {toast} = useToast()
   const [otp, setOtp] = useState(['', '', '', '', '', '']);
@@ -14,6 +14,10 @@ const Verification = ({email, userType}) => {
 
  // This would come from props or state
   const inputRefs = useRef([]);
+
+  const [searchParams] = useSearchParams();
+  const email = searchParams.get('email');
+  const userType = searchParams.get('userType');
 
 
 
