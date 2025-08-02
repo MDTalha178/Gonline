@@ -4,12 +4,15 @@ import FullscreenLoader from '../component/Loader/FullScreenLoader';
 import gonliesRoutes from './goOnlinesRouter';
 import { ShopOfflineCard } from '../component/Loader/StoreStatus/OfflineStore';
 import subDomainRoutes from './subDomainRouter';
+import InvalidStoreExample from '../component/common/InavlidStoreCard';
+import ShopStatusCardsDemo from '../component/common/StoreStatus';
 
 export const AppRouter = () => {
-  const  {domainInfo, storeData, loading} = useDomainContext();
-
+  const  {domainInfo, storeData, loading, error} = useDomainContext();
 
   if (loading) return <FullscreenLoader  message='Fecting Domain Details plase wait....' />
+
+  if(error) return  <ShopStatusCardsDemo  data={error} />
 
   if(!domainInfo.isSubdomain) 
     return (
@@ -23,7 +26,7 @@ export const AppRouter = () => {
          ))}
       </Routes>
     );
-  if(domainInfo.isSubdomain && !storeData) 
+  if(domainInfo.isSubdomain) 
     return (
       <Routes>
          {subDomainRoutes.map((route,index) =>(

@@ -12,10 +12,11 @@ const successHandler = (response, toast = null, options = {}) => {
     // Handle cases where response doesn't have expected data structure
     if (!response || !response.data) {
         const fallbackResponse = {
-            status: 404,
+            status: 204,
             url: null,
             data: {
-                success: false,
+                status: response?.status || 404,
+                success: true,
                 result: null,
                 message: codeMessage[1000] || "No data received from server",
             }
@@ -27,7 +28,6 @@ const successHandler = (response, toast = null, options = {}) => {
                 duration: 4000
             });
         }
-        
         return fallbackResponse.data;
     }
 

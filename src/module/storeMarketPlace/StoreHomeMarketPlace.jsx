@@ -12,6 +12,7 @@ import { useToast } from "../../hooks/useToast";
 
 const StoreHomeMarketPlace = () => {
     // const storeName  = "Talha-Store"; // useParams() to get storeName from URL
+    console.log("StoreHomeMarketPlace component rendered");
     const{toast} = useToast();
     const  {domainInfo, storeData, loading} = useDomainContext();
     const { storeName } = useParams();
@@ -24,7 +25,7 @@ const StoreHomeMarketPlace = () => {
             setData(response.data);
         } 
         else {
-            toast.error('Failed to fetch store data', response);
+            toast.error('Failed to fetch store datandnnd', response);
         }
     }
 

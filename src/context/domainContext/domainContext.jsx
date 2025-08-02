@@ -3,6 +3,7 @@ import { getDomainInfo } from '../../utils/domain';
 import setDoummntTitle from '../../utils/utils';
 import { useToast } from '../../hooks/useToast';
 import { getStoreService } from '../../service/marketPlace/store';
+import { STORE_STATUS } from '../../utils/constant';
 
 const DomainContext = createContext();
 
@@ -20,6 +21,7 @@ export const DomainProvider = ({ children }) => {
     const[domainInfo, setDomainInfo] = useState(null);
     const[storeData, setStoreData] = useState(null);
     const[loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
 
     useEffect(() =>{
@@ -29,16 +31,29 @@ export const DomainProvider = ({ children }) => {
                 setDomainInfo(domainInfo);
 
                 if(domainInfo.storeSlug){
-                    const response = await getStoreService(domainInfo.storeSlug);
-                    if(response.ok){
-                        const data = await response.json();
-                        setStoreData(data);
+                    const response = await getStoreService(toast, domainInfo.storeSlug);
+                    if(response?.data && response.data?.online_status){
+                        if(response.data?.online_status == STORE_STATUS.OFFLINE || response.data?.online_status == STORE_STATUS.SUSPENDED || response.data?.online_status == STORE_STATUS.TEMPORARILY_UNAVAILABLE || response.data?.online_status == STORE_STATUS.MAINTENANCE || response.data?.online_status == STORE_STATUS.DRAFT){
+                            setError({
+                                status: 403,
+                                store_status: response.data?.online_status
+                            });
+                            toast.error(`Store is currently ${response.data?.online_status}`);
+                        }
+                        setStoreData(response.data);
                         setDoummntTitle(document, domainInfo.storeSlug);
+                    }
+                    else if(response.status == 204){
+                        setError({
+                            status: 204,
+                            store_status:STORE_STATUS.NOT_FOUND
+                        })
                     }
                 }else{
                     setDoummntTitle(document, 'Gonlines - Build Your Online Store');
                 }
             }catch(error) {
+                console.error('Error fetching domain info:', error);
                 toast.error('Error fetching domain info:', error);
             }
             finally{
@@ -66,7 +81,7 @@ export const DomainProvider = ({ children }) => {
     };
 
     return(
-        <DomainContext.Provider value={{ domainInfo, storeData, loading, setStoreDataByStoreName }}>
+        <DomainContext.Provider value={{ domainInfo, storeData, loading, setStoreDataByStoreName, error }}>
             {children}
         </DomainContext.Provider>
     )

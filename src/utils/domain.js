@@ -30,7 +30,7 @@ export const getDomainInfo = () => {
   const hostname = window.location.hostname;
   const subdomain = hostname.split('.')[0];
   const isMainDomain = hostname === 'gonlines.com' || hostname === 'www.gonlines.com';
-  const isSubdomain = hostname.includes('.gonlines.com') && !isMainDomain;
+  const isSubdomain = true
   const isCustomDomain = !hostname.includes('gonlines.com');
   
   return {
