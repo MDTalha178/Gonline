@@ -9,6 +9,7 @@ import StoreFooter from "../../component/marketplace/StoreHome/StoreFooter/Store
 import { useDomainContext } from "../../context/domainContext/domainContext";
 import { getStoreService } from "../../service/marketPlace/store";
 import { useToast } from "../../hooks/useToast";
+import ShopStatusCardsDemo from "../../component/common/StoreStatus";
 
 const StoreHomeMarketPlace = () => {
     // const storeName  = "Talha-Store"; // useParams() to get storeName from URL
@@ -16,14 +17,17 @@ const StoreHomeMarketPlace = () => {
     const{toast} = useToast();
     const  {domainInfo, storeData, loading} = useDomainContext();
     const { storeName } = useParams();
-    const[data, setData] = useState(null);
+    const[data, setData] = useState(storeData);
+    const[error, setError] = useState(null);
 
     const fetchStoreData = async (storeName) => {
-        const response = await getStoreService(toast, storeName);
+        const response = await getStoreService(toast, storeName, {}, document);
         if(response?.data){
-            console.log(response.data);
             setData(response.data);
         } 
+        if(response?.error){
+            setError(response.error);
+        }
         else {
             toast.error('Failed to fetch store datandnnd', response);
         }
@@ -44,6 +48,10 @@ const StoreHomeMarketPlace = () => {
 
     if(loading) return <FullscreenLoader  message='Loading..' />
 
+    if(error) {
+        return <ShopStatusCardsDemo data={error} />
+    }
+
     const sortedData = data ? [...data].sort((a, b) => {
         return getComponentOrder(a.name) - getComponentOrder(b.name);
     }) : [];
@@ -62,7 +70,7 @@ const StoreHomeMarketPlace = () => {
             {sortedData.length > 0 && sortedData.map((item, index) => (
                 <StoreHome key={index} data={item} />
             ))}
-            {/* <StoreFooter storeId={sortedData[0].store_id}/> */}
+            {sortedData.length > 0 && <StoreFooter storeId={sortedData[0].store_id}/>}
         </div>
     );
 }

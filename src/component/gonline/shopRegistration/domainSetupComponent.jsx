@@ -1,5 +1,7 @@
 import { Check, Crown, Globe, CheckCircle, XCircle, Loader2 } from "lucide-react"
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { storeCheckStoreDomainAvailability } from "../../../service/store/storeCreationService";
+import { useToast } from "../../../hooks/useToast";
 
 export const BasicPlanDomainSetupCompponent = ({domainData, storeData}) =>{
     return(
@@ -24,47 +26,48 @@ export const BasicPlanDomainSetupCompponent = ({domainData, storeData}) =>{
 
 
 export const ProfessinalPlanDomainSetupComponent = ({domainData, storeData, handleDomainChange}) => {
-    const [isChecking, setIsChecking] = useState(false);
-    const [availabilityStatus, setAvailabilityStatus] = useState(null); // null, 'available', 'unavailable'
+const{ toast } = useToast();
+const [isChecking, setIsChecking] = useState(false);
+const [availabilityStatus, setAvailabilityStatus] = useState(null); // null, 'available', 'unavailable'
+  
+const handleCheckAvailability = async () => {
+    const domainName = domainData?.domain_name;
     
-    const handleCheckAvailability = async () => {
-        const domainName = domainData?.domain_name;
-        
-        if (!domainName || domainName.length < 3) {
-            setAvailabilityStatus('error');
-            return;
+    if (!domainName || domainName.length < 3) {
+        setAvailabilityStatus('error');
+        return;
+    }
+    
+    setIsChecking(true);
+    setAvailabilityStatus(null);
+
+    const payload = {
+        domain: domainName
+    }
+    
+    try {
+      // Simulate API call - replace with your actual API endpoint
+      const response = await storeCheckStoreDomainAvailability(payload, toast);
+      if(response?.data){
+        if(response.data.status) {
+          setAvailabilityStatus('available');
+        } else {
+          setAvailabilityStatus('unavailable');
         }
+         setIsChecking(false);
+      }
         
-        setIsChecking(true);
-        setAvailabilityStatus(null);
-        
-        try {
-            // Simulate API call - replace with your actual API endpoint
-            const response = await fetch('/api/check-subdomain-availability', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ subdomain: domainName })
-            });
-            
-            const result = await response.json();
-            
-            // Simulate delay for better UX
-            setTimeout(() => {
-                setAvailabilityStatus(result.available ? 'available' : 'unavailable');
-                setIsChecking(false);
-            }, 1000);
-            
-        } catch (error) {
-            console.error('Error checking availability:', error);
-            // For demo purposes, simulate random availability
-            setTimeout(() => {
-                setAvailabilityStatus(Math.random() > 0.3 ? 'available' : 'unavailable');
-                setIsChecking(false);
-            }, 1000);
-        }
-    };
+    } catch (error) {
+        console.error('Error checking availability:', error);
+        // For demo purposes, simulate random availabilitys
+        setAvailabilityStatus('unavailable');
+        setIsChecking(false);
+    }
+  };
+
+  useEffect(() => {
+    console.log('Availability status changed:', availabilityStatus);
+  }, [setAvailabilityStatus])
     
     const getStatusIcon = () => {
         if (isChecking) return <Loader2 className="w-4 h-4 animate-spin text-purple-600" />;

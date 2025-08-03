@@ -2,9 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 import { useDomainContext } from '../context/domainContext/domainContext';
 import FullscreenLoader from '../component/Loader/FullScreenLoader';
 import gonliesRoutes from './goOnlinesRouter';
-import { ShopOfflineCard } from '../component/Loader/StoreStatus/OfflineStore';
 import subDomainRoutes from './subDomainRouter';
-import InvalidStoreExample from '../component/common/InavlidStoreCard';
 import ShopStatusCardsDemo from '../component/common/StoreStatus';
 
 export const AppRouter = () => {

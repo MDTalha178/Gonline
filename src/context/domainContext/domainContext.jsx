@@ -29,7 +29,6 @@ export const DomainProvider = ({ children }) => {
             try{
                 const domainInfo = getDomainInfo();
                 setDomainInfo(domainInfo);
-                console.log('Domain Info:', domainInfo);
                 if(domainInfo.storeSlug){
                     const response = await getStoreService(toast, domainInfo.storeSlug);
                     if(response?.data && response.data?.online_status){
@@ -53,7 +52,6 @@ export const DomainProvider = ({ children }) => {
                     setDoummntTitle(document, 'Gonlines - Build Your Online Store');
                 }
             }catch(error) {
-                console.error('Error fetching domain info:', error);
                 toast.error('Error fetching domain info:', error);
             }
             finally{
@@ -61,7 +59,7 @@ export const DomainProvider = ({ children }) => {
             }
         }
         intialize();
-    },[]);
+    },[storeData]);
     const setStoreDataByStoreName = async (storeSlug) => {
         try {
             setLoading(true);

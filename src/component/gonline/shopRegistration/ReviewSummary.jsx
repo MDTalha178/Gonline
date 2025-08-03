@@ -36,15 +36,15 @@ const ReviewSummary = ({ selectedPlan, storeData }) => {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Owner:</span>
-                <span className="font-medium">{formData?.ownerName || 'Not provided'}</span>
+                <span className="font-medium">{storeData?.store_owner?.first_name + " " + storeData?.store_owner?.last_name || 'Not provided'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Email:</span>
-                <span className="font-medium">{formData.email || 'Not provided'}</span>
+                <span className="font-medium">{storeData?.store_owner?.email || 'Not provided'}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-600">Phone:</span>
-                <span className="font-medium">{storeData?.phone_number || 'Not provided'}</span>
+                <span className="font-medium">{storeData?.store_owner?.phone || 'Not provided'}</span>
               </div>
             </div>
           </div>

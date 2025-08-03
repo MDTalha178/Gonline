@@ -43,3 +43,13 @@ export const createStoreDomainService = async(formData, toast) => {
     }
     return null;
 }
+
+export const storeCheckStoreDomainAvailability = async(domain, toast) => {
+    try {
+        const response =  await request.create(endPoint.store.checkStoreDomainAvailability, {domain}, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true});
+        if (response.success === true) return response
+    } catch (error) {
+        toast.error(error.message);
+    }
+    return null;
+}

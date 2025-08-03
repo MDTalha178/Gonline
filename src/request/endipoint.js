@@ -12,7 +12,8 @@ export const endPoint = {
         getStoreTheme:'/shop/shop/get-store-theme/',
         getStoreDetailsByName: 'store/',
         getStoreDetails:'shop/shop/',
-        storeLaunchSetting: 'shop/shop/create-store-setting/'
+        storeLaunchSetting: 'shop/shop/create-store-setting/',
+        checkStoreDomainAvailability: 'shop/shop/check-domain-available/',
     },
     marketPalce:{
         getStoreDetailsByName: 'store/',

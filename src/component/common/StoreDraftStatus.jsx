@@ -234,8 +234,7 @@ const StoreDraftStatus = () => {
   };
 
   const handleRetry = () => {
-    console.log('Checking again...');
-    alert('Retry triggered');
+    window.location.reload();
   };
 
   return (
@@ -243,12 +242,6 @@ const StoreDraftStatus = () => {
       {showCard ? (
         <div className="space-y-4">
           <div className="fixed top-4 left-4 z-50 space-x-2">
-            <button 
-              onClick={() => setOwnerMode(!ownerMode)}
-              className="bg-white px-4 py-2 rounded-lg shadow-md text-sm border"
-            >
-              Toggle: {ownerMode ? 'Owner View' : 'Visitor View'}
-            </button>
           </div>
           <ShopDraftModeCard 
             onBack={handleBack}
