@@ -28,9 +28,9 @@ export default getSubdomain;
 
 export const getDomainInfo = () => {
   const hostname = window.location.hostname;
-  const subdomain = 'hitestshop';
+  const subdomain = hostname.split('.')[0];
   const isMainDomain = hostname === 'gonlines.com' || hostname === 'www.gonlines.com' || hostname === 'localhost';
-  const isSubdomain = true;
+   const isSubdomain = hostname.includes('.gonlines.com') && !isMainDomain;
   const isCustomDomain = !hostname.includes('gonlines.com') && !isMainDomain && !isSubdomain;
   
   return {
