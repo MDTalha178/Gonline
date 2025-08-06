@@ -9,6 +9,7 @@ export const AuthProvider = ({ children }) => {
 
   const handlelogin = (data) =>{
       const storedUser = JSON.parse(localStorage.getItem('token'));
+      console.log(storedUser);
       if (storedUser) {
         setUser(storedUser);
       }

@@ -4,8 +4,10 @@ import { ROLE_TYPE } from "../../../utils/constant";
 import signupService, { storeSignupService } from "../../../service/authService/signupService";
 import { useToast } from "../../../hooks/useToast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../../context/authContext/authContext";
 
 const StoreAuth = () =>{
+    const {handlelogin} = useAuth()
     const navigate = useNavigate();
     const {toast} = useToast();
     const [activeTab, setActiveTab] = useState('login');
@@ -42,6 +44,7 @@ const StoreAuth = () =>{
         };
         if (activeTab === 'signup') {
             const response = await storeSignupService(payload, toast);
+            handlelogin(response?.data);
             if(response) navigate(`/verification?email=${formData.email}&userType=${formData.role_name}&storeName=${formData.store_name}`);
         }
     }

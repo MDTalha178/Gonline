@@ -2,10 +2,16 @@ import { useEffect, useState } from "react";
 import{ Menu, X , Store} from "lucide-react";
 import { Link } from "react-router-dom";
 import StoreCart from "./StoreCart";
+import { useAuth } from "../../context/authContext/authContext";
+import ProfileDropdown from "../user/UserProfileIcon";
 
 const Header = ({storeLogo, storeName, leftContent, rightContent, leftbutton=[], rightbutton=[]}) => {
+
+  const { isAuthenticated, user, isLoading } = useAuth();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+
 
   useEffect(() => {
     const handleScroll = () => {
@@ -40,8 +46,11 @@ const Header = ({storeLogo, storeName, leftContent, rightContent, leftbutton=[],
             {rightContent && rightContent.map((item, index) => 
                 <a key={index} href="#features" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">{item}</a>
             )}
-            <StoreCart store={storeName}/>
-            {rightbutton  && rightbutton.map((item, index) =>
+            {isAuthenticated && <Link to={`/cart`}> <StoreCart store={storeName}/></Link>}
+
+            {isAuthenticated && ProfileDropdown({storeName, userName: user?.firstName + " " + user?.lastName} || "Guest")}
+
+            {!isAuthenticated && rightbutton  && rightbutton.map((item, index) =>
                 <button key={index} className="bg-gradient-to-r from-gray-800 to-gray-700 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200">
                  <Link to={`/login?storeName=${storeName}`}>{item} </Link>   
                 </button>

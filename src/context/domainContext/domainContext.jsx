@@ -59,7 +59,7 @@ export const DomainProvider = ({ children }) => {
             }
         }
         intialize();
-    },[]);
+    },[setStoreData]);
     const setStoreDataByStoreName = async (storeSlug) => {
         try {
             setLoading(true);

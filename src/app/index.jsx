@@ -5,6 +5,7 @@ import AppRouter from '../Router/AppRouter';
 import ToastProvider from '../context/toastContext/toastProvider';
 import AuthProvider from '../context/authContext/authContext';
 import { DomainProvider } from '../context/domainContext/domainContext';
+import { CartProvider } from '../context/cartContext/cartContext';
 function App() {
   return (
     <div className='min-h-screen'>
@@ -12,7 +13,9 @@ function App() {
       <ToastProvider> 
         <DomainProvider>
         <AuthProvider> 
+          <CartProvider>
             <AppRouter />
+            </CartProvider>
         </AuthProvider> 
         </DomainProvider>
           </ToastProvider>

@@ -1,10 +1,13 @@
 import { Award, Heart, RotateCcw, Share, Shield, ShoppingCart, Star, Truck } from "lucide-react";
 import { useState } from "react";
 import { CURRENCY_ICON_CODE } from "../../../utils/constant";
+import { useCartContext } from "../../../context/cartContext/cartContext";
 
 const ProductInfo = ({prdoductData}) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [quantity, setQuantity] = useState(1);
+
+  const {addItemToCart} = useCartContext();
 
   const images = [
     'https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=600&h=600&fit=crop',
@@ -111,7 +114,7 @@ const ProductInfo = ({prdoductData}) => {
                 +
               </button>
             </div>
-            <button className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-none font-medium hover:bg-gray-800 transition-all duration-300 flex items-center justify-center space-x-2 uppercase tracking-wider">
+            <button onClick={() => addItemToCart(prdoductData, quantity)} className="flex-1 bg-gray-900 text-white px-6 py-3 rounded-none font-medium hover:bg-gray-800 transition-all duration-300 flex items-center justify-center space-x-2 uppercase tracking-wider">
               <ShoppingCart className="w-5 h-5" />
               <span>Add to Cart</span>
             </button>

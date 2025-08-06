@@ -12,7 +12,6 @@ const ProtectedRoute = ({
 }) => {
   const { isAuthenticated, user, isLoading } = useAuth()
 
-
    if (isLoading) {
     return (
       <FullscreenLoader  message='Loading..' />

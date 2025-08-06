@@ -19,6 +19,7 @@ export const endPoint = {
         getStoreDetailsByName: 'store/',
         storeProduct: 'stores/product',
         storeDeals:"stores/product/store-deals",
-        storeUser:"store-user/user/"
+        storeUser:"store-user/user/",
+        storeCart:"store-user/store-cart/"
     }
 }

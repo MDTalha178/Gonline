@@ -10,10 +10,7 @@ const StoreFooter = ({ storeId, footerData }) => {
 
 
     useEffect(() =>{
-        console.log(data)
     },[data])
-    console.log(data);
-
     if(!data) return <FooterShimmer/>
 
     return (

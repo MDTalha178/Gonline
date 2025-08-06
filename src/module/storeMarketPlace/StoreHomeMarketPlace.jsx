@@ -1,5 +1,4 @@
 import { useParams } from "react-router-dom";
-import useStoreDetails from "../../hooks/useStoreDetails";
 import { useEffect, useState } from "react";
 import getComponentOrder from "../../utils/Sorting";
 import StoreHome from "../../component/marketplace/StoreHome";
@@ -12,8 +11,6 @@ import { useToast } from "../../hooks/useToast";
 import ShopStatusCardsDemo from "../../component/common/StoreStatus";
 
 const StoreHomeMarketPlace = () => {
-    // const storeName  = "Talha-Store"; // useParams() to get storeName from URL
-    console.log("StoreHomeMarketPlace component rendered");
     const{toast} = useToast();
     const  {domainInfo, storeData, loading} = useDomainContext();
     const { storeName } = useParams();
