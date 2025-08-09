@@ -2,13 +2,17 @@ import { ArrowRight } from "lucide-react";
 import ProductCard from "../../../common/ProductCard";
 import { useEffect } from "react";
 import useStorePorducts from "../../../../hooks/useStorePorduct";
+import { useDomainContext } from "../../../../context/domainContext/domainContext";
 
 const FeatureProductSection = ({ featuredData ,storeId}) => {
-    const featuredProducts =  useStorePorducts(storeId);
+    console.log("Featured Data:", storeId);
+
+    const {storeOrigin} =  useDomainContext();
+    const featuredProducts =  useStorePorducts(storeId, storeOrigin);
 
     useEffect(() => {
         // Any additional logic can be added here if needed
-    }, [featuredProducts]);
+    }, [featuredProducts, storeOrigin]);
 
     return (
         <div className="w-full min-h-screen bg-white">
@@ -29,7 +33,6 @@ const FeatureProductSection = ({ featuredData ,storeId}) => {
                 <div className="w-full max-w-none">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-8">
                         {featuredProducts.map((product) => (
-                            console.log("Product:", product),
                             <ProductCard key={product.id} product={product} />
                         ))}
                     </div>

@@ -2,7 +2,7 @@ import { SplinePointer, Zap } from "lucide-react";
 import BouncingDots from "./BouncingDots";
 import Spinner from "./Spinner";
 
-  const FullscreenLoader = ({ message = "Loading..." }) => (
+  const FullscreenLoader = ({ message = "Loading..." , sipinnder=true, bouncingDots=true}) => (
 
 
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50">
@@ -17,7 +17,7 @@ import Spinner from "./Spinner";
       <div className="text-center z-10">
         <div className="bg-white rounded-3xl shadow-2xl p-8 transform hover:scale-105 transition-transform duration-300">
           <div className="mb-6">
-            <Spinner size="xl" className="mx-auto mb-4" />
+            {sipinnder && <Spinner size="xl" className="mx-auto mb-4" />}
             <div className="inline-flex items-center bg-gradient-to-r from-purple-100 to-pink-100 rounded-full px-4 py-2">
               <Zap className="w-4 h-4 text-purple-600 mr-2" />
               <span className="text-sm font-medium text-purple-700">Please Wait</span>
@@ -25,7 +25,7 @@ import Spinner from "./Spinner";
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">{message}</h2>
           <p className="text-gray-600 mb-4">This won't take long...</p>
-          <BouncingDots />
+          {bouncingDots && <BouncingDots />}
         </div>
       </div>
     </div>

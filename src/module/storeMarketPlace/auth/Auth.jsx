@@ -39,7 +39,6 @@ const StoreAuth = () =>{
         // Handle form submission logic here
         const payload = {
             ...formData,
-            store_id: 'eec63b74-000f-48ac-9de0-d61087d16839',
             confirm_password: formData.password
         };
         if (activeTab === 'signup') {

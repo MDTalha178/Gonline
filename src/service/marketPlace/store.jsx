@@ -55,3 +55,13 @@ export const storeServiceUtility =  (response, document=null) =>{
     }
     return {...response, error:error}
 }
+
+export const getStore = async (toast) => {
+    try {
+        const response =  await request.read(endPoint.store.getStore, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false});
+        if (response.success === true) return response
+    } catch (error) {
+        toast.error(error.message);
+    }
+    return null;
+}

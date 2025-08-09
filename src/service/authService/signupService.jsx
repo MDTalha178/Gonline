@@ -2,6 +2,8 @@ import SERVICE_CONFIGS from "../../config/serverApiConfig";
 import { setToken } from "../../module/Auth/token";
 import { endPoint } from "../../request/endipoint";
 import request from "../../request/request";
+import { getHeaderDomainInfo } from "../../utils/domain";
+import { getStoreName } from "../../utils/utils";
 
 
 /**
@@ -31,7 +33,7 @@ const signupService = async (formData, toast) => {
 
 
 export const storeSignupService = async (formData, toast) => {
-    const response = await request.create(endPoint.marketPalce.storeUser, formData, toast,  {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false});
+    const response = await request.create(endPoint.marketPalce.storeUser, formData, toast,  {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false}, {headers: { 'X-Store-Origin': getStoreName()}});
     try{
         if(response.success === true){
             setToken(response.data);

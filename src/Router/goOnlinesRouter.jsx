@@ -13,6 +13,7 @@ import ShopRgistration from "../module/shopRegistration/shopRegistration";
 // import ProductInfo from "../component/marketplace/Product/ProductDetails";
 import NewProductDetailsPage from "../component/marketplace/Product/ProductDetails";
 import StoreProductDetails from "../module/storeMarketPlace/StoreProductDetails";
+import StoreCart from "../module/storeMarketPlace/storeCart/StoreCart";
 
 const gonliesRoutes = [
   {
@@ -84,6 +85,14 @@ const gonliesRoutes = [
     element: (
       <ProtectedRoute isPublic>
         <StoreProductDetails />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/cart",
+    element: (
+      <ProtectedRoute requiredRoles={[ROLE_TYPE.CUSTOMER]}>
+        <StoreCart />
       </ProtectedRoute>
     ),
   },

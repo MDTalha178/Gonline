@@ -54,3 +54,10 @@ console.log(convertISOToDateTime(isoString));
 // Output (in your local time): "2025-07-25 15:08:20"  (for IST)
 
 
+export function saveStoreSlug(storeName){
+  localStorage.setItem('storeName', JSON.stringify(storeName))
+}
+
+export function getStoreName(){
+  return JSON.parse(localStorage.getItem('storeName'));
+}

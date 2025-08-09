@@ -19,10 +19,10 @@ const buildHeaders = (requiresAuth = false) => {
 }
 
 const request = {
-    create: async (url, jsonData, toast, config) => {
+    create: async (url, jsonData, toast, config, extra={}) => {
         const instance = axios.create(config.service);
         
-        instance.defaults.headers = {...buildHeaders(config.requiresAuth)};
+        instance.defaults.headers = {...buildHeaders(config.requiresAuth), ...extra?.headers};
 
         try{
             const response = await instance.post(url, jsonData);
@@ -32,7 +32,6 @@ const request = {
         }
     },
     read: async (url, toast, config, extra={}) => {
-        console.log(extra);
         const instance = axios.create(config.service);
         instance.defaults.headers = {...buildHeaders(config.requiresAuth), ...extra?.headers};
         try {

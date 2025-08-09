@@ -3,6 +3,8 @@ import { ArrowRight, ArrowLeft, Shield, Mail, RefreshCw, CheckCircle, Clock } fr
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import verificationService from '../../../service/authService/verificationService';
 import { useToast } from '../../../hooks/useToast';
+import { ROLE_TYPE } from '../../../utils/constant';
+import { getStoreName } from '../../../utils/utils';
 
 const Verification = () => {
   const navigate = useNavigate()
@@ -89,7 +91,8 @@ const Verification = () => {
 
     setIsVerifying(true);
     const response = await verificationService(formData,toast);
-    if(response) navigate('/shopregistration')
+    if(response && userType === ROLE_TYPE.VENDOR)  navigate('/shopregistration');
+    if(response && userType === ROLE_TYPE.CUSTOMER) navigate(`/store/${getStoreName()}`);
     setIsVerifying(false);
   };
 

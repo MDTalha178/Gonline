@@ -9,6 +9,7 @@ import { useDomainContext } from "../../context/domainContext/domainContext";
 import { getStoreService } from "../../service/marketPlace/store";
 import { useToast } from "../../hooks/useToast";
 import ShopStatusCardsDemo from "../../component/common/StoreStatus";
+import { saveStoreSlug } from "../../utils/utils";
 
 const StoreHomeMarketPlace = () => {
     const{toast} = useToast();
@@ -21,6 +22,7 @@ const StoreHomeMarketPlace = () => {
         const response = await getStoreService(toast, storeName, {}, document);
         if(response?.data){
             setData(response.data);
+            saveStoreSlug(storeName)
         } 
         if(response?.error){
             setError(response.error);
@@ -52,7 +54,10 @@ const StoreHomeMarketPlace = () => {
     const sortedData = data ? [...data].sort((a, b) => {
         return getComponentOrder(a.name) - getComponentOrder(b.name);
     }) : [];
-
+    
+    if(sortedData.length === 0) {
+        return <FullscreenLoader message="No data available for this store."  sipinnder={false} bouncingDots={false}/>;
+    }
 
     return(
         <div className="min-h-screen bg-gray-50">

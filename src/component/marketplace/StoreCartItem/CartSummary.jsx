@@ -1,14 +1,16 @@
 import { ArrowRight, Gift, Lock, Tag, Truck } from "lucide-react";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
+import { CURRENCY_ICON_CODE } from "../../../utils/constant";
 
 const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon }) => {
   const [couponCode, setCouponCode] = useState('');
   
-  const subtotal = items && items.reduce((sum, item) => sum + (item.price * item.quantity), 0) || 0;
+  const [subtotal, setsubtotal] = useState(null);
+  const [shipping, setShipping] = useState(false);
+  const [total, setTotal] = useState(null);
   const discount = appliedCoupon ? appliedCoupon.discount : 0;
-  const shipping = subtotal > 100 ? 0 : 9.99;
-  const tax = (subtotal - discount) * 0.08;
-  const total = subtotal - discount + shipping + tax;
+  const tax = 10
+  // const total = subtotal - discount + shipping + tax;
 
   const handleApplyCoupon = () => {
     if (couponCode.trim()) {
@@ -16,6 +18,15 @@ const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon }) =>
       setCouponCode('');
     }
   };
+
+
+  useEffect(() => {
+    if (items && items.length > 0) {
+      setShipping(items[0].is_shipping_free || false);
+      setsubtotal(items[0].total_cart_value);
+      setTotal(items[0].total_cart_value - discount + (shipping ? 0 : 40) + tax);
+    }
+  }, [items, setShipping, setTotal, setsubtotal, discount, shipping, tax]);
 
   return (
     <div className="bg-white rounded-none shadow-sm p-6 border border-gray-200 sticky top-4">
@@ -25,7 +36,7 @@ const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon }) =>
       <div className="space-y-3 mb-6">
         <div className="flex justify-between text-gray-600">
           <span>Subtotal ({items && items.length} items)</span>
-          <span>${subtotal.toFixed(2)}</span>
+          <span>{CURRENCY_ICON_CODE.INR}{subtotal}</span>
         </div>
         
         {appliedCoupon && (
@@ -39,7 +50,7 @@ const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon }) =>
                 ×
               </button>
             </div>
-            <span>-${discount.toFixed(2)}</span>
+            <span>-${discount}</span>
           </div>
         )}
         
@@ -48,18 +59,18 @@ const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon }) =>
             <Truck className="w-4 h-4" />
             <span>Shipping</span>
           </div>
-          <span>{shipping === 0 ? 'FREE' : `$${shipping.toFixed(2)}`}</span>
+          <span>{shipping === true ? 'FREE' : `$${40}`}</span>
         </div>
         
         <div className="flex justify-between text-gray-600">
           <span>Tax</span>
-          <span>${tax.toFixed(2)}</span>
+          <span>{CURRENCY_ICON_CODE.INR}{tax}</span>
         </div>
         
         <div className="border-t pt-3">
           <div className="flex justify-between font-medium text-lg text-gray-900">
             <span>Total</span>
-            <span>${total.toFixed(2)}</span>
+            <span>{CURRENCY_ICON_CODE.INR}{total}</span>
           </div>
         </div>
       </div>

@@ -42,3 +42,37 @@ export const getDomainInfo = () => {
     storeSlug: isSubdomain ? subdomain : (isCustomDomain ? hostname : null)
   };
 };
+
+export const getHeaderDomainInfo = () => {
+  const hostname = window.location.hostname;
+  const pathname = window.location.pathname;
+  const subdomain = hostname.split('.')[0];
+
+  const isMainDomain =
+    hostname === 'gonlines.com' ||
+    hostname === 'www.gonlines.com' ||
+    hostname === 'localhost';
+
+  const isSubdomain = hostname.includes('.gonlines.com') && !isMainDomain;
+  const isCustomDomain =
+    !hostname.includes('gonlines.com') && !isMainDomain && !isSubdomain;
+
+  let storeSlug = null;
+
+  if (isSubdomain) {
+    storeSlug = subdomain;
+  } else if (isCustomDomain) {
+    storeSlug = hostname;
+  } else if (isMainDomain && pathname.startsWith('/store/')) {
+    storeSlug = pathname.split('/')[2] || null;
+  }
+
+  return {
+    hostname,
+    subdomain: isSubdomain ? subdomain : null,
+    isMainDomain,
+    isSubdomain,
+    isCustomDomain,
+    storeSlug,
+  };
+};

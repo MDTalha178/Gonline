@@ -5,16 +5,15 @@ import { useToast } from "../../../hooks/useToast";
 import { CURRENCY_ICON_CODE } from "../../../utils/constant";
 
 const SimilarProducts = ({productId, storeId}) => {
-
   const {toast} = useToast()
-    const[prdoductData, setprdoductData] = useState([]);
+  const[prdoductData, setprdoductData] = useState([]);
   
     useEffect(()=>{
       // Fetch reviews from API or perform any necessary setup
       // This is a placeholder for actual data fetching logic
       const fetchReviews = async () => {
         try {
-          const response = await fetchSimilarProducts(productId, toast);
+          const response = await fetchSimilarProducts(productId, toast,{});
           setprdoductData(response?.data);
         } catch (error) {
           toast.error("Error fetching reviews:", error);

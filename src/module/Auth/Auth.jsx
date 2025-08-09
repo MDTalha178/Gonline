@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import AuthPages from "../../component/gonline/AuthCompoent/Auth";
-import signupService from "../../service/authService/signupService";
+import signupService, { storeSignupService } from "../../service/authService/signupService";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import loginService from "../../service/authService/loginService";
 import { useToast } from "../../hooks/useToast";
@@ -20,6 +20,8 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
 
     // Track login method type (password or OTP)
     const [loginMethod, setLoginMethod] = useState('password');
+
+    console.log("userType", ROLE_TYPE[userType], "actionFrom", actionFrom);
     
     // Manage all form field values
     const [formData, setFormData] = useState({
@@ -53,8 +55,9 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
 
         if (currentPage === 'signup') {
             try{
-                const response = await signupService(formData, toast);
+                const response = userType == ROLE_TYPE.CUSTOMER ? await storeSignupService(formData, toast) : await signupService(formData, toast);
                 handlelogin(response?.data);
+                console.log("response", response, "userType", userType);
                 if(response) navigate(`/verification?email=${formData.email}&userType=${userType}`);
             }
             catch(error){

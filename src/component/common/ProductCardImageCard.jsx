@@ -1,8 +1,10 @@
 import { Eye, Heart, ShoppingCart } from "lucide-react"
+import { useNavigate } from "react-router-dom";
 
-const ProductCardImageCard = ({productImage}) => {
+const ProductCardImageCard = ({productImage, product}) => {
+    const navigate = useNavigate();
     return(
-        <div className="relative overflow-hidden bg-gray-50 group">
+        <div className="relative overflow-hidden bg-gray-50 group" onClick={() => navigate(`/product/${product.id}`)}>
             <div className="w-full h-64 flex items-center justify-center">
                 <ShoppingCart className="w-20 h-20 text-gray-300 group-hover:scale-105 transition-transform duration-500" />
             </div>

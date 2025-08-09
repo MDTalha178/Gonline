@@ -5,7 +5,14 @@
  */
 
 export const setToken = (data) =>{
-    const token = {accessToken: data.access_token, refreshToken:data.refresh_token, role_type:data.role_type, firstName:data?.user?.first_name, lastName:data?.user?.last_name, userId:data?.id};
+    const token = {accessToken: data.access_token, 
+        refreshToken:data.refresh_token, 
+        role_type:data.role_type, 
+        firstName:data?.user?.first_name || data?.first_name, 
+        lastName:data?.user?.last_name || data?.last_name,
+        userId:data?.id,
+
+    };
     localStorage.setItem('token', JSON.stringify(token));
 }
 

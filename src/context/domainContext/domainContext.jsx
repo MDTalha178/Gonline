@@ -22,6 +22,7 @@ export const DomainProvider = ({ children }) => {
     const[storeData, setStoreData] = useState(null);
     const[loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [storeOrigin, setstoreOrigin] = useState(null);
 
 
     useEffect(() =>{
@@ -79,7 +80,7 @@ export const DomainProvider = ({ children }) => {
     };
 
     return(
-        <DomainContext.Provider value={{ domainInfo, storeData, loading, setStoreDataByStoreName, error }}>
+        <DomainContext.Provider value={{ domainInfo, storeData, loading, setStoreDataByStoreName, error , setstoreOrigin, storeOrigin}}>
             {children}
         </DomainContext.Provider>
     )

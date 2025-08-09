@@ -14,6 +14,7 @@ export const endPoint = {
         getStoreDetails:'shop/shop/',
         storeLaunchSetting: 'shop/shop/create-store-setting/',
         checkStoreDomainAvailability: 'shop/shop/check-domain-available/',
+        getStore:'shop/shop/get-store/'
     },
     marketPalce:{
         getStoreDetailsByName: 'store/',
