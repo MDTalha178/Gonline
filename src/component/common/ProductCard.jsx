@@ -23,11 +23,11 @@ const ProductCard = ({product}) => {
                 
                 {/* Rating */}
                 <div className="flex items-center space-x-2"  onClick={() => navigate(`/product/${product.id}`)}>
-                    <div className="flex items-center">
-                        {[...Array(parseInt(product.average_rating))].map((_, i) => (
+                    {/* <div className="flex items-center">
+                        {[...Array(parseInt(product?.average_rating))].map((_, i) => (
                             <Star key={i} className="w-3 h-3 text-gray-400 fill-current" />
                         ))}
-                    </div>
+                    </div> */}
                     <span className="text-xs text-gray-500">({parseFloat(product.average_rating).toFixed(1)})</span>
                 </div>
                 

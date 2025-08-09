@@ -2,7 +2,6 @@ import { Heart, Minus, Plus, Trash2 } from "lucide-react";
 import { CURRENCY_ICON_CODE } from "../../../utils/constant";
 
 const CartItem = ({ item, onUpdateQuantity, onRemove, onMoveToWishlist }) => {
-    console.log(item)
   return (
     <div className="bg-white rounded-none shadow-sm p-6 border border-gray-200">
       <div className="flex items-start space-x-4">

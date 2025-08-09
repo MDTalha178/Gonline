@@ -21,6 +21,7 @@ export const endPoint = {
         storeProduct: 'stores/product',
         storeDeals:"stores/product/store-deals",
         storeUser:"store-user/user/",
-        storeCart:"store-user/store-cart/"
+        storeCart:"store-user/store-cart/",
+        storeProductList: 'stores/product/',
     }
 }

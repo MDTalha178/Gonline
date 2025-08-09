@@ -1,4 +1,3 @@
-// routes/mainDomainRoutes.js
 import Homepage from "../component/gonline/HomeComponent/Home";
 import AuthComponentModule from "../module/Auth/Auth";
 import Verification from "../component/gonline/AuthCompoent/Verification";
@@ -10,10 +9,9 @@ import Unauthorized from "../component/common/unAuthrized";
 import ProtectedRoute from "./ProtectedRoute";
 import { ROLE_TYPE } from "../utils/constant";
 import ShopRgistration from "../module/shopRegistration/shopRegistration";
-// import ProductInfo from "../component/marketplace/Product/ProductDetails";
-import NewProductDetailsPage from "../component/marketplace/Product/ProductDetails";
 import StoreProductDetails from "../module/storeMarketPlace/StoreProductDetails";
 import StoreCart from "../module/storeMarketPlace/storeCart/StoreCart";
+import StoreProduct from "../module/storeMarketPlace/StoreProduct/StoreProduct";
 
 const gonliesRoutes = [
   {
@@ -97,9 +95,18 @@ const gonliesRoutes = [
     ),
   },
   {
+    path: "/products",
+    element: (
+      <ProtectedRoute isPublic requiredRoles={[ROLE_TYPE.CUSTOMER]}>
+        <StoreProduct />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/unauthorized",
     element: <Unauthorized />,
   },
 ];
 
 export default gonliesRoutes;
+

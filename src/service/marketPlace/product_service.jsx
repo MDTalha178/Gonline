@@ -43,3 +43,13 @@ export const fetchSimilarProducts = async(productId, toast, queryParams={}) => {
     }
     return null;
 }
+
+export const fetchProductList= async(toast, queryParams={}) => {
+    try {
+       const response =  await request.read(`${endPoint.marketPalce.storeProduct}/?${new URLSearchParams(queryParams).toString()}`, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false}, {headers: { 'X-Store-Origin': getStoreName()}});
+       if (response.success === true) return response
+    } catch (error) {
+        toast.error(error.message);
+    }
+    return null;
+}

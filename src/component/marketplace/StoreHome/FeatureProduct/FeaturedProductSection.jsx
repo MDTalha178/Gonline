@@ -3,9 +3,10 @@ import ProductCard from "../../../common/ProductCard";
 import { useEffect } from "react";
 import useStorePorducts from "../../../../hooks/useStorePorduct";
 import { useDomainContext } from "../../../../context/domainContext/domainContext";
+import { useNavigate } from "react-router-dom";
 
 const FeatureProductSection = ({ featuredData ,storeId}) => {
-    console.log("Featured Data:", storeId);
+    const navigate = useNavigate()
 
     const {storeOrigin} =  useDomainContext();
     const featuredProducts =  useStorePorducts(storeId, storeOrigin);
@@ -42,7 +43,7 @@ const FeatureProductSection = ({ featuredData ,storeId}) => {
                 {/* View All Button */}
                 { featuredProducts && featuredProducts.length > 0 && (
                 <div className="text-center mt-16">
-                    <button className="group bg-gray-900 text-white px-12 py-4 rounded-none font-medium hover:bg-gray-800 transition-all duration-300 flex items-center space-x-3 mx-auto cursor-pointer uppercase tracking-wider text-sm">
+                    <button onClick={() =>navigate('/products')} className="group bg-gray-900 text-white px-12 py-4 rounded-none font-medium hover:bg-gray-800 transition-all duration-300 flex items-center space-x-3 mx-auto cursor-pointer uppercase tracking-wider text-sm">
                         <span>View All Products</span>
                         <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-200" />
                     </button>
