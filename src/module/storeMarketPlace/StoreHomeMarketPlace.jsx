@@ -22,13 +22,14 @@ const StoreHomeMarketPlace = () => {
         const response = await getStoreService(toast, storeName, {}, document);
         if(response?.data){
             setData(response.data);
-            saveStoreSlug(storeName)
+            saveStoreSlug(storeName);
+            return;
         } 
         if(response?.error){
             setError(response.error);
         }
         else {
-            toast.error('Failed to fetch store datandnnd', response);
+            toast.error('Failed to fetch store', response);
         }
     }
 

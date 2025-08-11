@@ -6,7 +6,7 @@ import setDoummntTitle from "../../utils/utils";
 
 export const getStoreService = async(toast, store, queryParams={}, document=null) => {
     try {
-        const response =  await request.read(`${endPoint.marketPalce.getStoreDetailsByName}${store}/?${new URLSearchParams(queryParams).toString()}`, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false});
+        const response =  await request.read(`${endPoint.marketPalce.getStoreDetailsByName}${store}/?${new URLSearchParams(queryParams).toString()}`, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false}, {showToast: false});
         if (response.success === true){
             return storeServiceUtility(response, document)
         } return response
@@ -19,7 +19,7 @@ export const getStoreService = async(toast, store, queryParams={}, document=null
 export const getStoreDetailsService = async(toast, store, queryParams={}) => {
 
     try {
-        const response =  await request.read(`${endPoint.store.getStoreDetails}${store}/get-store-details/?${new URLSearchParams(queryParams).toString()}`,  toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false});
+        const response =  await request.read(`${endPoint.store.getStoreDetails}${store}/get-store-details/?${new URLSearchParams(queryParams).toString()}`,  toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false}, {showToast: false});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);
@@ -58,7 +58,7 @@ export const storeServiceUtility =  (response, document=null) =>{
 
 export const getStore = async (toast) => {
     try {
-        const response =  await request.read(endPoint.store.getStore, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false});
+        const response =  await request.read(endPoint.store.getStore, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: false}, {showToast: false});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);

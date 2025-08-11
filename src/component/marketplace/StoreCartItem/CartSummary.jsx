@@ -2,7 +2,7 @@ import { ArrowRight, Gift, Lock, Tag, Truck } from "lucide-react";
 import { use, useEffect, useState } from "react";
 import { CURRENCY_ICON_CODE } from "../../../utils/constant";
 
-const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon }) => {
+const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon , handleCheckout}) => {
   const [couponCode, setCouponCode] = useState('');
   
   const [subtotal, setsubtotal] = useState(null);
@@ -98,7 +98,7 @@ const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon }) =>
       </div>
 
       {/* Checkout Button */}
-      <button className="w-full bg-gray-900 text-white py-3 px-6 rounded-none font-medium hover:bg-gray-800 flex items-center justify-center space-x-2 transition-all duration-300 uppercase tracking-wider">
+      <button onClick={handleCheckout} className="w-full bg-gray-900 text-white py-3 px-6 rounded-none font-medium hover:bg-gray-800 flex items-center justify-center space-x-2 transition-all duration-300 uppercase tracking-wider">
         <Lock className="w-4 h-4" />
         <span>Secure Checkout</span>
         <ArrowRight className="w-4 h-4" />

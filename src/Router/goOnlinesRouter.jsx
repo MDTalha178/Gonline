@@ -12,6 +12,7 @@ import ShopRgistration from "../module/shopRegistration/shopRegistration";
 import StoreProductDetails from "../module/storeMarketPlace/StoreProductDetails";
 import StoreCart from "../module/storeMarketPlace/storeCart/StoreCart";
 import StoreProduct from "../module/storeMarketPlace/StoreProduct/StoreProduct";
+import StoreCheckout from "../module/storeMarketPlace/checkout/Checkout";
 
 const gonliesRoutes = [
   {
@@ -99,6 +100,14 @@ const gonliesRoutes = [
     element: (
       <ProtectedRoute isPublic requiredRoles={[ROLE_TYPE.CUSTOMER]}>
         <StoreProduct />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/checkout",
+    element: (
+      <ProtectedRoute requiredRoles={[ROLE_TYPE.CUSTOMER]}>
+        <StoreCheckout />
       </ProtectedRoute>
     ),
   },

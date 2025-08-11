@@ -3,9 +3,10 @@ import { useEffect, useState } from "react";
 import useStoreDeal from "../../hooks/useStoreDeal";
 import { getcountDown } from "../../utils/utils";
 import { useNavigate } from "react-router-dom";
+import CardLoader from "../common/ComLoader";
 
 const DealsOfTheDayComponent = ({ dealsData, storeId }) => {
-    const dealsProducts = useStoreDeal(storeId);
+    const { data: dealsProducts, loading } = useStoreDeal(storeId);
     const navigate = useNavigate();
     const[timer, setTimer] = useState(null);
     const [countDown, setCountDown] = useState({
@@ -73,7 +74,7 @@ const DealsOfTheDayComponent = ({ dealsData, storeId }) => {
             
             {/* Products Section - White background like your FeatureProductSection */}
             <div className="w-full min-h-screen bg-white">
-                <div className="w-full px-4 sm:px-6 lg:px-8 xl:px-16 py-16">
+                {loading && <CardLoader isLoading={loading} message="Hang tight! We're finding the perfect deals for you..."/>} :<div className="w-full px-4 sm:px-6 lg:px-8 xl:px-16 py-16">
                     {/* Products Grid - Full Width matching FeatureProductSection */}
                     <div className="w-full max-w-none">
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-8">

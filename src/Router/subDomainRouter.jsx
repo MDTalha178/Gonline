@@ -1,10 +1,12 @@
 import Unauthorized from "../component/common/unAuthrized";
 import StoreOtpVerification from "../component/marketplace/auth/OtpVerifcation";
 import StoreAuth from "../module/storeMarketPlace/auth/Auth";
+import StoreCheckout from "../module/storeMarketPlace/checkout/Checkout";
 import StoreCart from "../module/storeMarketPlace/storeCart/StoreCart";
 import StoreHomeMarketPlace from "../module/storeMarketPlace/StoreHomeMarketPlace";
 import StoreProduct from "../module/storeMarketPlace/StoreProduct/StoreProduct";
 import StoreProductDetails from "../module/storeMarketPlace/StoreProductDetails";
+import { ROLE_TYPE } from "../utils/constant";
 import ProtectedRoute from "./ProtectedRoute";
 
 const subDomainRoutes = [
@@ -53,6 +55,14 @@ const subDomainRoutes = [
     element: (
       <ProtectedRoute isPublic>
         <StoreProductDetails />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/checkout",
+    element: (
+      <ProtectedRoute requiredRoles={[ROLE_TYPE.CUSTOMER]}>
+        <StoreCheckout />
       </ProtectedRoute>
     ),
   },

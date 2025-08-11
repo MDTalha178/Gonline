@@ -4,10 +4,11 @@ import useStoreDeal from "../../../../hooks/useStoreDeal";
 import { useEffect, useState } from "react";
 import { getcountDown, getUpcomingsales } from "../../../../utils/utils";
 import { useNavigate } from "react-router-dom";
+import CardLoader from "../../../common/ComLoader";
 
 const StoreEventSection = ({eventData, storeId}) => {
     const navigate = useNavigate();
-    const dealsProducts = useStoreDeal(storeId);
+    const { data: dealsProducts, loading } = useStoreDeal(storeId);
     const[timer, setTimer] = useState(null);
     const [countDown, setCountDown] = useState({
         day: '00',
@@ -73,7 +74,7 @@ const StoreEventSection = ({eventData, storeId}) => {
                 {/* Preview Products Section */}
                 <div className="p-8">
                     <h3 className="text-xl font-semibold text-gray-900 mb-6 text-center">Featured Products</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    {loading ? <CardLoader isLoading={loading} message="Hang tight! We're finding the perfect deals for you..."/>:<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                         {dealsProducts && dealsProducts.map((item) => (
                             <div key={item.id}  onClick={() => navigate(`/product/${item.product.id}`)} className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-all duration-300 group cursor-pointer">
                                 {/* Product Image Placeholder */}
@@ -97,7 +98,7 @@ const StoreEventSection = ({eventData, storeId}) => {
                                 </div>
                             </div>
                         ))}
-                    </div>
+                    </div>}
                 </div>
                 
                 {/* CTA Button Section */}

@@ -1,18 +1,21 @@
 import { ArrowRight } from "lucide-react";
 import ProductCard from "../../../common/ProductCard";
-import { useEffect } from "react";
+import { use, useEffect, useState } from "react";
 import useStorePorducts from "../../../../hooks/useStorePorduct";
 import { useDomainContext } from "../../../../context/domainContext/domainContext";
 import { useNavigate } from "react-router-dom";
+import CardLoader from "../../../common/ComLoader";
 
 const FeatureProductSection = ({ featuredData ,storeId}) => {
     const navigate = useNavigate()
 
     const {storeOrigin} =  useDomainContext();
     const featuredProducts =  useStorePorducts(storeId, storeOrigin);
+    const[loading, setLoading] = useState(true);
 
     useEffect(() => {
         // Any additional logic can be added here if needed
+        setLoading(false);
     }, [featuredProducts, storeOrigin]);
 
     return (
@@ -30,7 +33,7 @@ const FeatureProductSection = ({ featuredData ,storeId}) => {
                 </div>
                 
                 {/* Products Grid - Full Width */}
-                {featuredProducts && featuredProducts.length > 0 && (
+                {loading ? <CardLoader isLoading={loading} message="Hang tight! We're finding the perfect feature product for you..."/> :featuredProducts && featuredProducts.length > 0 && (
                 <div className="w-full max-w-none">
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-4 gap-8">
                         {featuredProducts.map((product) => (

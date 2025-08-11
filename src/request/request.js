@@ -31,14 +31,14 @@ const request = {
             return errorHandler(error, toast)
         }
     },
-    read: async (url, toast, config, extra={}) => {
+    read: async (url, toast, config, extra={showToast: true}) => {
         const instance = axios.create(config.service);
         instance.defaults.headers = {...buildHeaders(config.requiresAuth), ...extra?.headers};
         try {
         const response = await instance.get(url);
-        return successHandler(response, toast);
+        return successHandler(response, toast, {showToast: extra.showToast,});
         } catch (error) {
-        return errorHandler(error, toast);
+        return errorHandler(error, toast, );
         }
   },
 }

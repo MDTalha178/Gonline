@@ -3,7 +3,7 @@ import CartHeader from "./CartHeader"
 import CartSummary from "./CartSummary";
 import CartItem from "./ItemCard";
 
-const StoreCartComponent = ({cartItems, updateQuantity, removeItem, moveToWishlist, appliedCoupon, applyCoupon, removeCoupon}) =>{
+const StoreCartComponent = ({cartItems, updateQuantity, removeItem, moveToWishlist, appliedCoupon, applyCoupon, removeCoupon, handleCheckout}) =>{
     return(
     <div className="min-h-screen bg-gray-50">
       <CartHeader itemCount={cartItems?.length} />
@@ -33,6 +33,7 @@ const StoreCartComponent = ({cartItems, updateQuantity, removeItem, moveToWishli
               appliedCoupon={appliedCoupon}
               onApplyCoupon={applyCoupon}
               onRemoveCoupon={removeCoupon}
+              handleCheckout={handleCheckout}
             />
           </div>
         </div>

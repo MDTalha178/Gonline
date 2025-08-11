@@ -1,4 +1,4 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProductComponent from "../../../component/marketplace/Product/ProductComponent"
 import { useToast } from "../../../hooks/useToast";
 import { fetchProductList } from "../../../service/marketPlace/product_service";
@@ -19,10 +19,14 @@ const StoreProduct = () =>{
     });
 
 
-    console.log(filter);
-
-
     useEffect(() => {
+    /**
+     * Fetches products from API given the current searchQuery and filter settings
+     * 
+     * @function
+     * @async
+     * @returns {void}
+     */
         const fetchProducts = async () => {
             try {
                 const response = await fetchProductList(toast, {search: searchQuery, category: filter.category, min_price: filter.priceRange[0], max_price: filter.priceRange[1], rating: filter.rating}); 
@@ -39,7 +43,7 @@ const StoreProduct = () =>{
 
 
     return(
-        <ProductComponent productData={productData} setSearchQuery={setSearchQuery} searchQuery={searchQuery} filter={filter} setFilter={setFilter}/>
+        <ProductComponent productData={productData} setSearchQuery={setSearchQuery} searchQuery={searchQuery} filter={filter} setFilter={setFilter} loading={loading}/>
     )
 }
 

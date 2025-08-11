@@ -3,7 +3,7 @@ import ProductHeaderComponent from "./ProductHeader";
 import ProductListComponent from "./ProductListComponent";
 import ProductSearchComponent from "./ProductSearchComponent";
 
-const ProductComponent = ({productData, setSearchQuery, searchQuery, filter, setFilter}) => {
+const ProductComponent = ({productData, setSearchQuery, searchQuery, filter, setFilter, loading}) => {
   return (
    <div className="min-h-screen bg-gray-50">
         <ProductHeaderComponent/>
@@ -18,7 +18,7 @@ const ProductComponent = ({productData, setSearchQuery, searchQuery, filter, set
 
                  {/* Product Grid */}
                 <div className="lg:w-4/5">
-                    <ProductListComponent productData={productData}/>
+                    <ProductListComponent productData={productData} loading={loading}/>
                 </div>
             </div>
         </div>

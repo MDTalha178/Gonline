@@ -6,6 +6,8 @@ import { useToast } from "../../../hooks/useToast";
 import { getStore } from "../../../service/marketPlace/store";
 import FullscreenLoader from "../../Loader/FullScreenLoader";
 import InfoCard from "../../common/InfoCard";
+import ComponentLoader from "../../common/ComponentLoader";
+import CardLoader from "../../common/ComLoader";
 
 const ShopDiscoverySection = () => {
   const {toast} = useToast();
@@ -39,7 +41,6 @@ const ShopDiscoverySection = () => {
   },[setShops])
   
   const filteredShops = selectedCategory === 'All' ? shops : shops.filter(shop => shop.category.name == selectedCategory);
-  if(loading) return <FullscreenLoader message='Loading Shops...' />
 
 
   return (
@@ -88,7 +89,8 @@ const ShopDiscoverySection = () => {
         </div>
 
         {/* Shop Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {loading ? <CardLoader isLoading={loading} message="Hang tight! We're finding the perfect product for you..."/> : 
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredShops && filteredShops.map((shop, index) => (
             <div
               key={index} 
@@ -121,6 +123,8 @@ const ShopDiscoverySection = () => {
           </div>}
           
         </div>
+        }
+        
 
         <div className="text-center mt-12">
           <button className="bg-white text-purple-600 px-8 py-4 rounded-full font-semibold text-lg border-2 border-purple-600 hover:bg-purple-600 hover:text-white transition-all duration-300 cursor-pointer">

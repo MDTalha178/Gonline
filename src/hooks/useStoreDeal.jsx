@@ -7,8 +7,10 @@ const useStoreDeal = (storeId) =>{
 
 
     const [data, seData] = useState(null);
+    const [loading, setLoading] = useState(true);
     
     useEffect(() => {
+        setLoading(true);
         const fetchStoreData = async () => {
           try {
             const response = await getStoredeals(toast, storeId);
@@ -19,12 +21,14 @@ const useStoreDeal = (storeId) =>{
             else seData(data);
           } catch (error) {
             toast.error(error.message || 'Failed to fetch store data');
+          }finally {
+            setLoading(false);
           }
         };
     
         fetchStoreData();
       }, [storeId, seData]);
-    return data;
+    return {data, loading};
 }
 
 export default useStoreDeal;
