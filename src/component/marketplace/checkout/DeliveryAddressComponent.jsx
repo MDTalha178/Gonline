@@ -1,8 +1,11 @@
 import { MapPin, Plus } from "lucide-react";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
+import { getaddress } from "../../../service/marketPlace/checkoutService";
+import { useToast } from "../../../hooks/useToast";
+import { SUPPORTED_ADDRESS } from "../../../utils/constant";
 
-const DeliveryAddress = ({ orderData, handleOnChange}) => {
-
+const DeliveryAddress = ({ user_address, handleOnChange}) => {
+  const {toast} = useToast()
   const [newAddress, setNewAddress] = useState({
     name: '',
     street: '',
@@ -13,7 +16,9 @@ const DeliveryAddress = ({ orderData, handleOnChange}) => {
     isDefault: false
   });
 
-  const[addresses, setSelectedAddress] = useState(null);
+  const[selectedAddress, setSelectedAddress] = useState(null);
+  const[addresses, setAddresses] = useState([]);
+
   const[isAddingNew, setIsAddingNew] = useState(false);
 
   const handleSaveNew = () => {
@@ -29,6 +34,23 @@ const DeliveryAddress = ({ orderData, handleOnChange}) => {
     });
     onToggleAdd(false);
   };
+
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      try {
+        const response = await getaddress(toast, {address_type:SUPPORTED_ADDRESS.CUSTOMER_ADDRESS}) 
+        if (response && response.success) {
+          setAddresses(response.data);
+        } else {
+          toast.error("Failed to fetch addresses");
+        }
+      } catch (error) {
+        toast.error("Failed to fetch addresses:", error);
+      }
+    };
+    fetchAddresses();
+  }, []);
+
 
   return (
     <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6">
@@ -48,7 +70,7 @@ const DeliveryAddress = ({ orderData, handleOnChange}) => {
 
       {/* Existing Addresses */}
       <div className="space-y-3 mb-4">
-        {addresses && addresses.map((address) => (
+        {user_address && user_address.map((address) => (
           <div 
             key={address.id}
             className={`p-4 border rounded-none cursor-pointer transition-colors duration-200 ${
@@ -56,7 +78,7 @@ const DeliveryAddress = ({ orderData, handleOnChange}) => {
                 ? 'border-gray-900 bg-gray-50' 
                 : 'border-gray-200 hover:border-gray-300'
             }`}
-            onClick={() => onSelectAddress(address)}
+            onClick={() => setSelectedAddress(address)}
           >
             <div className="flex items-start space-x-3">
               <div className={`w-4 h-4 rounded-none border-2 mt-1 ${
@@ -70,15 +92,15 @@ const DeliveryAddress = ({ orderData, handleOnChange}) => {
               </div>
               <div className="flex-1">
                 <div className="flex items-center space-x-2">
-                  <span className="font-medium text-gray-900">{address.name}</span>
-                  {address.isDefault && (
+                  <span className="font-medium text-gray-900">{address?.full_name}</span>
+                  {address?.is_default && (
                     <span className="bg-green-100 text-green-800 px-2 py-1 rounded-none text-xs font-medium">
                       Default
                     </span>
                   )}
                 </div>
                 <p className="text-gray-600 text-sm mt-1">
-                  {address.street}, {address.city}, {address.state} {address.zipCode}
+                  {address.address_line1}, {address.city}, {address.state} {address.postal_code} {address.country}
                 </p>
               </div>
             </div>

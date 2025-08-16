@@ -1,22 +1,25 @@
 import { Gift, Lock, Shield } from "lucide-react";
-import { useState } from "react";
+import { use, useEffect, useState } from "react";
 
-const OrderTotal = ({handlePlaceOrder}) => {
-    const [isProcessing, setIsProcessing] = useState(false);
-    const subtotal = 12
-    const discount = 8
-    const shipping = 40
-    const tax = 10
-    const total =100;
+const OrderTotal = ({billingData, handlePlaceOrder, setIsProcessing, isProcessing}) => {
+
     const appliedCoupon = {
         code: "SAVE20",
-        discount: 20
+        discount: billingData?.discount
     };
 
     const onPlaceOrder = async () => {
         setIsProcessing(true);
         handlePlaceOrder();
     };
+
+  useEffect(() => {
+
+  }, [setIsProcessing])
+
+  if (!billingData) {
+    return <div className="p-6 text-gray-500">Loading...</div>;
+  }
 
   return (
     <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6 sticky top-4">
@@ -25,30 +28,30 @@ const OrderTotal = ({handlePlaceOrder}) => {
       <div className="space-y-3 mb-6">
         <div className="flex justify-between text-gray-600">
           <span>Subtotal</span>
-          <span>₹{subtotal.toFixed(2)}</span>
+          <span>₹{billingData?.total_cart_value}</span>
         </div>
         
         {appliedCoupon && (
           <div className="flex justify-between text-green-600">
             <span>Discount ({appliedCoupon.code})</span>
-            <span>-₹{discount.toFixed(2)}</span>
+            <span>-₹{appliedCoupon?.discount}</span>
           </div>
         )}
         
         <div className="flex justify-between text-gray-600">
           <span>Shipping</span>
-          <span>{shipping === 0 ? 'FREE' : `₹${shipping.toFixed(2)}`}</span>
+          <span>{billingData?.is_shipping_free ? 'FREE' : `₹${40}`}</span>
         </div>
         
         <div className="flex justify-between text-gray-600">
           <span>GST (18%)</span>
-          <span>₹{tax.toFixed(2)}</span>
+          <span>₹{billingData?.gst}</span>
         </div>
         
         <div className="border-t border-gray-200 pt-3">
           <div className="flex justify-between font-bold text-xl text-gray-900">
             <span>Total</span>
-            <span>₹{total.toFixed(2)}</span>
+            <span>₹{billingData?.total_price}</span>
           </div>
         </div>
       </div>
@@ -66,7 +69,7 @@ const OrderTotal = ({handlePlaceOrder}) => {
         ) : (
           <>
             <Lock className="w-4 h-4" />
-            <span>Place Order</span>
+            <span className="cursor-pointer">Place Order</span>
           </>
         )}
       </button>

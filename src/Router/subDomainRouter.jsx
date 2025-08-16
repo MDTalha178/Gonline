@@ -2,6 +2,7 @@ import Unauthorized from "../component/common/unAuthrized";
 import StoreOtpVerification from "../component/marketplace/auth/OtpVerifcation";
 import StoreAuth from "../module/storeMarketPlace/auth/Auth";
 import StoreCheckout from "../module/storeMarketPlace/checkout/Checkout";
+import PlaceOrderSuccess from "../module/storeMarketPlace/Order/PlaceOrderSuccess";
 import StoreCart from "../module/storeMarketPlace/storeCart/StoreCart";
 import StoreHomeMarketPlace from "../module/storeMarketPlace/StoreHomeMarketPlace";
 import StoreProduct from "../module/storeMarketPlace/StoreProduct/StoreProduct";
@@ -63,6 +64,14 @@ const subDomainRoutes = [
     element: (
       <ProtectedRoute requiredRoles={[ROLE_TYPE.CUSTOMER]}>
         <StoreCheckout />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/order/success",
+    element: (
+      <ProtectedRoute requiredRoles={[ROLE_TYPE.CUSTOMER]}>
+        <PlaceOrderSuccess />
       </ProtectedRoute>
     ),
   },

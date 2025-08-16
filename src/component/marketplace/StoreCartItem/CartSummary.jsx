@@ -81,16 +81,21 @@ const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon , han
           <div className="flex-1 relative">
             <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
+              disabled={true}
               type="text"
-              placeholder="Enter coupon code"
-              value={couponCode}
+              placeholder="No Cupon Applied"
+              value={null}
               onChange={(e) => setCouponCode(e.target.value)}
               className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-900 focus:border-transparent"
             />
           </div>
           <button 
+            disabled={!couponCode.trim()} 
             onClick={handleApplyCoupon}
-            className="px-4 py-2 bg-gray-100 text-gray-700 rounded-none font-medium hover:bg-gray-200 transition-colors duration-200"
+            className="px-4 py-2 rounded-none font-medium transition-colors duration-200
+             bg-gray-100 text-gray-700 
+             hover:bg-gray-200
+             disabled:bg-gray-300 disabled:text-gray-500 disabled:cursor-not-allowed disabled:hover:bg-gray-300"
           >
             Apply
           </button>
@@ -98,7 +103,7 @@ const CartSummary = ({ items, appliedCoupon, onApplyCoupon, onRemoveCoupon , han
       </div>
 
       {/* Checkout Button */}
-      <button onClick={handleCheckout} className="w-full bg-gray-900 text-white py-3 px-6 rounded-none font-medium hover:bg-gray-800 flex items-center justify-center space-x-2 transition-all duration-300 uppercase tracking-wider">
+      <button onClick={handleCheckout} className="w-full bg-gray-900 text-white py-3 px-6 rounded-none font-medium hover:bg-gray-800 flex items-center justify-center space-x-2 transition-all duration-300 uppercase tracking-wider cursor-pointer">
         <Lock className="w-4 h-4" />
         <span>Secure Checkout</span>
         <ArrowRight className="w-4 h-4" />

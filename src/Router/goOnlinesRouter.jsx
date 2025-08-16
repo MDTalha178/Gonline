@@ -13,6 +13,7 @@ import StoreProductDetails from "../module/storeMarketPlace/StoreProductDetails"
 import StoreCart from "../module/storeMarketPlace/storeCart/StoreCart";
 import StoreProduct from "../module/storeMarketPlace/StoreProduct/StoreProduct";
 import StoreCheckout from "../module/storeMarketPlace/checkout/Checkout";
+import PlaceOrderSuccess from "../module/storeMarketPlace/Order/PlaceOrderSuccess";
 
 const gonliesRoutes = [
   {
@@ -108,6 +109,14 @@ const gonliesRoutes = [
     element: (
       <ProtectedRoute requiredRoles={[ROLE_TYPE.CUSTOMER]}>
         <StoreCheckout />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/order/success",
+    element: (
+      <ProtectedRoute requiredRoles={[ROLE_TYPE.CUSTOMER]}>
+        <PlaceOrderSuccess />
       </ProtectedRoute>
     ),
   },

@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import { addItemCartService, cartService } from "../../service/marketPlace/CartService";
+import { addItemCartService, cartService, removeItemCartService } from "../../service/marketPlace/CartService";
 import { useToast } from "../../hooks/useToast";
 import { useAuth } from "../authContext/authContext";
 import { useNavigate } from "react-router-dom";
@@ -32,7 +32,7 @@ export const CartProvider = ({ children }) => {
 
     }, [setCartItems, setCartItemCount, isAuthenticated]);
 
-    const addItemToCart = async (Item, quantity=1) =>{
+    const addItemToCart = async (Item, quantity=1, isSelected=true) =>{
         if(!isAuthenticated) {
             toast.info("Please login to add items to cart");
             navigate(`/login?&userType=${ROLE_TYPE.CUSTOMER}`);
@@ -42,7 +42,8 @@ export const CartProvider = ({ children }) => {
             product_id: Item?.id,
             store_id: Item?.store,
             quantity: quantity,
-            customer_id: user?.userId
+            customer_id: user?.userId,
+            is_selected: isSelected
         }
         try{
             const response = await addItemCartService(payload,toast, payload);
@@ -53,8 +54,23 @@ export const CartProvider = ({ children }) => {
         }
         }
     }
+
+    const removeItemFromCart = async (itemId) => {
+        const response = await removeItemCartService(itemId, toast);
+        if (!response?.success) {
+            toast.error("Failed to remove item from cart");
+            return;
+        }
+        setCartItems(prevItems => prevItems.filter(item => item.id !== itemId));
+        setCartItemCount(prevCount => prevCount - 1);
+
+    }
+    const clearCart = () =>{
+        setCartItems([]);
+        setCartItemCount(0);
+    }
     return (
-        <cartContext.Provider value={{cartItemCount, cartItems, addItemToCart}}>
+        <cartContext.Provider value={{cartItemCount, cartItems, addItemToCart, removeItemFromCart, clearCart}}>
             {children}
         </cartContext.Provider>
     );

@@ -6,40 +6,54 @@ import DeliveryOptions from "../../../component/marketplace/checkout/DeliveryOpt
 import OrderSummary from "../../../component/marketplace/checkout/OrderSummaryComponent";
 import OrderTotal from "../../../component/marketplace/checkout/ToatlOrder";
 import SupportedPayment from "../../../component/marketplace/Payment/SupportedPayment";
+import { useAuth } from "../../../context/authContext/authContext";
+import { getCheckoutItem } from "../../../service/marketPlace/checkoutService";
+import { useToast } from "../../../hooks/useToast";
+import { useNavigate } from "react-router-dom";
+import { placeOrderService } from "../../../service/marketPlace/OrderService";
 
 const StoreCheckout =() =>{
-
-    const [orderData, setOrderData] = useState({
-        cart_id: [],
-        customer_id: null,
-        address_id: null,
+    const navigate = useNavigate();
+    const { user } = useAuth();
+    const { toast } = useToast();
+    const [isProcessing, setIsProcessing] = useState(false);
+    const [checkoutdata, setcheckoutdata] = useState({
+        cart_item: [],
+        order_data: {},
+        user_address: null,
         delivery_option: null,
-        payment_option: null
+        user_contact: null
     })
 
     const handleOnChange = (field, value) => {
-        setOrderData(prevData => ({
+        console.log(`Field changed: ${field}, Value:`, typeof(value));
+        setcheckoutdata(prevData => ({
             ...prevData,
             [field]: value
         }));
     };
 
+
     const handlePlaceOrder = async () => {
-        setIsProcessing(true);
         try {
-            const orderData = {
-                cart_id: cartId,
-                customer_id: customerId,
-                address_id: addressId,        
-                delivery_option: selectedDeliveryOption,
-                payment_option: selectedPaymentOption,
+            const payload = {
+                cart_item: checkoutdata.cart_item.map(item => item.id),
+                user_contact: checkoutdata.user_contact.id,
+                shipping_address: checkoutdata.user_address.find(address => address.isDefault)?.id || checkoutdata.user_address[0]?.id,        
+                delivery_options: 1,
+                payment_option: "COD",
+                total_price: checkoutdata?.order_data?.total_price,
+                total_items: checkoutdata?.cart_item?.length,
+                sub_total: checkoutdata?.order_data?.total_cart_value,
+                discount: checkoutdata?.order_data?.discount || 0,
+                tax: checkoutdata?.order_data?.gst || 0,
+                shipping_charge: checkoutdata?.order_data?.is_shipping_free ? 0 : 40 || 0,
+                total_amount: checkoutdata?.order_data?.total_price
             };
-            const response = null; // Replace with actual API call to place order
+            const response = await placeOrderService(payload, toast, user?.userId);
             if (response?.success) {
                 toast.success("Order placed successfully!");
-                // Redirect to order confirmation page or clear cart
-            } else {
-                toast.error("Failed to place order. Please try again.");
+                navigate('/order/success');
             }
         } catch (error) {
             toast.error("An error occurred while placing the order.");
@@ -47,6 +61,25 @@ const StoreCheckout =() =>{
             setIsProcessing(false);
         }
     };
+
+   useEffect(() =>{
+      
+    const fetchCheckoutData = async () =>{
+        const response = await getCheckoutItem(toast, {user_id: user?.userId});
+        if(response?.data){
+            const { cart_data, order_data, user_address, delivery_option, user_contact } = response.data;
+            setcheckoutdata({
+                cart_item: cart_data || [],
+                order_data: order_data || {},
+                user_address: user_address || [],
+                delivery_option: delivery_option || null,
+                user_contact: user_contact || null
+            });
+        }
+    }
+    fetchCheckoutData();
+      console.log(checkoutdata); // Log the checkout data to the console for debuggin
+   }, [setcheckoutdata, user?.userId, setIsProcessing, ]);
     return (
         <div className="min-h-screen bg-gray-50">
             <CheckOutHeader />
@@ -57,28 +90,28 @@ const StoreCheckout =() =>{
                         {/* Order Summary (Mobile) */}
                         <div className="lg:hidden">
                             <OrderSummary
-                               orderData={orderData}
+                               orderData={checkoutdata.cart_item}
                                handleOnChange={handleOnChange}
                             />
                         </div>
 
                         <CustomerInformation
-                            orderData={orderData}
+                            user_contact={checkoutdata.user_contact}
                             handleOnChange={handleOnChange}
                         />
                         {/* Delivery Address */}
                         <DeliveryAddress
-                            orderData={orderData}
+                            user_address={checkoutdata.user_address}
                             handleOnChange={handleOnChange}
                         />
 
                         <DeliveryOptions
-                            orderData={orderData}
+                            checkoutdata={checkoutdata}
                             handleOnChange={handleOnChange}
                         />
                         {/* Payment Options */}
                         <SupportedPayment
-                            orderData={orderData}
+                            checkoutdata={checkoutdata}
                             handleOnChange={handleOnChange}
                         />
                     </div>
@@ -86,12 +119,17 @@ const StoreCheckout =() =>{
                     <div className="lg:col-span-1 space-y-6">
                         {/* Order Summary (Desktop) */}
                         <div className="hidden lg:block">
-                            <OrderSummary/>
+                            <OrderSummary 
+                            orderData={checkoutdata.cart_item}
+                               handleOnChange={handleOnChange}/>
                         </div>
 
                          {/* Order Total */}
                         <OrderTotal
+                            billingData={checkoutdata.order_data}
                             handlePlaceOrder={handlePlaceOrder}
+                            setIsProcessing={setIsProcessing}
+                            isProcessing={isProcessing}
                         />
 
                     </div>

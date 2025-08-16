@@ -74,3 +74,9 @@ export const REVIEWS_ANALYTICS_TYPE ={
     2: 'two_star_count',    
     1: 'one_star_count'
 }
+
+export const SUPPORTED_ADDRESS = {
+    STORE_CONTACT:'STORE_CONTACT',
+    CUSTOMER_ADDRESS:'CUSTOMER_ADDRESS',
+    VENDOR_ADDRESS:'VENDOR_ADDRESS'
+}

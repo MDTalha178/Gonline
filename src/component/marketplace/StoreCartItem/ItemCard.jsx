@@ -5,6 +5,16 @@ const CartItem = ({ item, onUpdateQuantity, onRemove, onMoveToWishlist }) => {
   return (
     <div className="bg-white rounded-none shadow-sm p-6 border border-gray-200">
       <div className="flex items-start space-x-4">
+        {/* Checkbox */}
+        <div className="flex items-start pt-1">
+          <input
+            type="checkbox"
+            onClick={(e) => onUpdateQuantity(item.product, item.quantity, e.target.checked)}
+            checked={item.is_selected}
+            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+          />
+        </div>
+
         {/* Product Image */}
         <div className="w-20 h-20 rounded-none overflow-hidden border border-gray-200">
           <img 
@@ -40,32 +50,32 @@ const CartItem = ({ item, onUpdateQuantity, onRemove, onMoveToWishlist }) => {
             <div className="flex items-center space-x-3">
               <div className="flex items-center border border-gray-300 rounded-none">
                 <button 
-                  onClick={() => onUpdateQuantity(item.product, item.quantity - 1)}
+                  onClick={() => onUpdateQuantity(item.product, item.quantity - 1, item.is_selected)}
                   className="px-3 py-2 text-gray-600 hover:bg-gray-100 disabled:opacity-50 transition-colors duration-200"
                   disabled={item.quantity <= 1}
                 >
-                  <Minus className="w-4 h-4" />
+                  <Minus className="w-4 h-4 cursor-pointer" />
                 </button>
                 <span className="px-4 py-2 border-x border-gray-300 min-w-[3rem] text-center">{item.quantity}</span>
                 <button 
                   onClick={() => onUpdateQuantity(item.product, item.quantity + 1)}
                   className="px-3 py-2 text-gray-600 hover:bg-gray-100 transition-colors duration-200"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-4 h-4 cursor-pointer"/>
                 </button>
               </div>
 
               {/* Action Buttons */}
               <button 
                 onClick={() => onMoveToWishlist(item.id)}
-                className="p-2 text-gray-400 hover:text-gray-900 transition-colors duration-200"
+                className="p-2 text-gray-400 hover:text-gray-900 transition-colors duration-200 cursor-pointer"
                 title="Move to Wishlist"
               >
                 <Heart className="w-4 h-4" />
               </button>
               <button 
                 onClick={() => onRemove(item.id)}
-                className="p-2 text-gray-400 hover:text-gray-900 transition-colors duration-200"
+                className="p-2 text-gray-400 hover:text-gray-900 transition-colors duration-200 cursor-pointer"
                 title="Remove Item"
               >
                 <Trash2 className="w-4 h-4" />

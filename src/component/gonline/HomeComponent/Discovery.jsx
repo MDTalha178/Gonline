@@ -89,7 +89,7 @@ const ShopDiscoverySection = () => {
         </div>
 
         {/* Shop Grid */}
-        {loading ? <CardLoader isLoading={loading} message="Hang tight! We're finding the perfect product for you..."/> : 
+        {loading ? <CardLoader isLoading={loading} message="Hang tight! We're finding the perfect store near by you..."/> : 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredShops && filteredShops.map((shop, index) => (
             <div

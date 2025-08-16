@@ -7,21 +7,27 @@ import { useState } from "react";
 
 const StoreCart = () =>{
 
-    const {cartItemCount, cartItems, addItemToCart} = useCartContext();
+    const {cartItemCount, cartItems, addItemToCart, removeItemFromCart} = useCartContext();
     const [checkout, setCheckout] = useState(false);
     const navigate = useNavigate();
 
-    const updateQuantity = (item, quantity) =>{
-        addItemToCart(item, quantity);
+    const updateQuantity = (item, quantity, is_selected) =>{
+        console.log("updateQuantity", item, quantity, is_selected);
+        addItemToCart(item, quantity, is_selected);
     }
+ 
     const handleCheckout = () => {
-        navigate('/checkout')
+        navigate(`/checkout`);
+    }
+
+    const removeItem = (itemId) => {
+        removeItemFromCart(itemId);
     }
 
 
 
    return (
-        cartItemCount === 0 ? <NoItemInCart /> : <StoreCartComponent cartItems={cartItems} updateQuantity={updateQuantity} handleCheckout={handleCheckout}/>
+        cartItemCount === 0 ? <NoItemInCart /> : <StoreCartComponent cartItems={cartItems} updateQuantity={updateQuantity} handleCheckout={handleCheckout} removeItem={removeItem}/>
     );
 }
 
