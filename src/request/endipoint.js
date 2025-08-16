@@ -33,7 +33,7 @@ export const endPoint = {
     order:{
         placeOrder: 'order/create-order/',
         getOrder: 'store-user/store-order/',
-        getOrderById: 'store-user/store-order/',
+        getOrderById: (orderId) => `order/${orderId}/success-order/`,
         getOrderByUserId: 'store-user/store-order/user/',
         getOrderByStoreId: 'store-user/store-order/store/'
     }

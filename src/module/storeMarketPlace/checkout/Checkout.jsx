@@ -53,7 +53,7 @@ const StoreCheckout =() =>{
             const response = await placeOrderService(payload, toast, user?.userId);
             if (response?.success) {
                 toast.success("Order placed successfully!");
-                navigate('/order/success');
+                navigate('/order/success?orderId=' + response?.data?.order_id);
             }
         } catch (error) {
             toast.error("An error occurred while placing the order.");

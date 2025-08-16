@@ -47,22 +47,22 @@ const PlaceOrderSuccessCompoent = ({ orderDetails = {} }) => {
           <div className="space-y-3">
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Order ID:</span>
-              <span className="font-medium text-gray-900">{orderDetails.orderId}</span>
+              <span className="font-medium text-gray-900">{orderDetails?.order_number}</span>
             </div>
             
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Total Amount:</span>
-              <span className="font-semibold text-gray-900 text-lg">{orderDetails.totalAmount}</span>
+              <span className="font-semibold text-gray-900 text-lg">{orderDetails?.total_amount}</span>
             </div>
             
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Items:</span>
-              <span className="font-medium text-gray-900">{orderDetails.items} items</span>
+              <span className="font-medium text-gray-900">{orderDetails?.total_items} items</span>
             </div>
             
             <div className="flex justify-between items-center">
               <span className="text-gray-600">Tracking Number:</span>
-              <span className="font-medium text-blue-600">{orderDetails.trackingNumber}</span>
+              <span className="font-medium text-blue-600">{orderDetails?.trackingNumber || 'Not generated yet it will be generated soon'}</span>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@ const PlaceOrderSuccessCompoent = ({ orderDetails = {} }) => {
               <Calendar className="w-5 h-5 text-gray-400 mt-1" />
               <div>
                 <p className="text-sm text-gray-600">Estimated Delivery</p>
-                <p className="font-medium text-gray-900">{orderDetails.estimatedDelivery}</p>
+                <p className="font-medium text-gray-900">{orderDetails?.delivery_type?.estimated_time}</p>
               </div>
             </div>
             
@@ -84,7 +84,7 @@ const PlaceOrderSuccessCompoent = ({ orderDetails = {} }) => {
               <MapPin className="w-5 h-5 text-gray-400 mt-1" />
               <div>
                 <p className="text-sm text-gray-600">Delivery Address</p>
-                <p className="font-medium text-gray-900">{orderDetails.deliveryAddress}</p>
+                <p className="font-medium text-gray-900">{orderDetails?.shipping_address?.address_line1} {orderDetails?.shipping_address?.city}</p>
               </div>
             </div>
             
@@ -92,7 +92,7 @@ const PlaceOrderSuccessCompoent = ({ orderDetails = {} }) => {
               <Package className="w-5 h-5 text-gray-400 mt-1" />
               <div>
                 <p className="text-sm text-gray-600">Order Status</p>
-                <p className="font-medium text-green-600">Confirmed & Processing</p>
+                <p className="font-medium text-green-600">{orderDetails?.status}</p>
               </div>
             </div>
           </div>

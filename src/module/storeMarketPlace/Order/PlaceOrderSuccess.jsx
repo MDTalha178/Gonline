@@ -1,41 +1,40 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PlaceOrderSuccessCompoent from "../../../component/marketplace/Order/OrderSuccess"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { getStoreName } from "../../../utils/utils";
 import { useCartContext } from "../../../context/cartContext/cartContext";
+import { getSuccessOrderService } from "../../../service/marketPlace/OrderService";
+import { useToast } from "../../../hooks/useToast";
 
 const PlaceOrderSuccess= () =>{
     const {clearCart} = useCartContext();
+    const { toast } = useToast();
     const navigate = useNavigate()
-    const order = {
-        orderId: '#ORD-2025-001',
-        totalAmount: '₹2,499',
-        items:  3,
-        estimatedDelivery:  '2-3 business days',
-        trackingNumber: 'TRK123456789',
-        deliveryAddress: 'Azamgarh, Uttar Pradesh',
-    };
+    const [searchParams] = useSearchParams();
+    const orderId = searchParams.get('orderId');
+    const[orderData, setOrderData] = useState({});
+    const[timeInterval, setTimeInterval] = useState(null);
+    console.log("Order ID:", orderId);
 
     useEffect(() =>{
         clearCart();
-        // window.history.pushState(null, "", window.location.href);
-
-
-        // const handleBack = () => {
-        //     navigate(`/store/${getStoreName()}`);
-        // };
-
-        // window.addEventListener("popstate", handleBack);
-
-        const timeInterval = setTimeout(() => navigate(`/store/${getStoreName()}`), 5000)
+        const fetchOrderDetails = async () => {
+            const response = await getSuccessOrderService(orderId, toast);
+            if (response?.data && response.success) {
+                setOrderData(response.data);
+            }
+            // const timeInterval = setTimeout(() => navigate(`/store/${getStoreName()}`), 5000)
+            setTimeInterval(timeInterval);
+        };
+        fetchOrderDetails();
 
         return () => clearTimeout(timeInterval);
-    },[])
+    },[setOrderData])
 
 
     return(
         <div className="cursor-not-allowed">
-            <PlaceOrderSuccessCompoent orderDetails={order}/>
+            <PlaceOrderSuccessCompoent orderDetails={orderData}/>
         </div>
         
     )
