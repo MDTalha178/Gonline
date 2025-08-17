@@ -9,6 +9,11 @@ const DeliveryOptions = ({ orderData, handleOnChange }) => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [storeDeliveryOptions, setStoreDeliveryOptions] = useState([]);
 
+  const handleOptionClick = (option) => {
+    setSelectedOption(option);
+    handleOnChange('delivery_option', option.id);
+  };
+
   useEffect(() =>{
     const fetchDeliveryOptions = async () => {
       try {
@@ -23,7 +28,7 @@ const DeliveryOptions = ({ orderData, handleOnChange }) => {
       }
     };
     fetchDeliveryOptions();
-  },[]);
+  },[setSelectedOption]);
 
 
   return (
@@ -42,7 +47,7 @@ const DeliveryOptions = ({ orderData, handleOnChange }) => {
                 ? 'border-gray-900 bg-gray-50' 
                 : 'border-gray-200 hover:border-gray-300'
             }`}
-            onClick={() => selectedOption?.id !== option.id ? setSelectedOption(option) : setSelectedOption(s)}
+            onClick={(e) => handleOptionClick(option)}
           >
             <div className="flex items-center space-x-3">
               <div className={`w-4 h-4 rounded-none border-2 ${

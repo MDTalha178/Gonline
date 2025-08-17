@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { User, Eye, Package, LogOut, ChevronDown } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 // Mock Link component for demonstration - replace with your actual Link component
-const Link = ({ to, children, className }) => (
-  <a href={to} className={className}>{children}</a>
-);
+const Link = ({ to, children, className, label }) => {
+  return <a href={to} className={className}>{children}</a>
+}
 
 const ProfileDropdown = ({ storeName, userName = "John Doe" }) => {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const dropdownItems = [
@@ -23,7 +25,7 @@ const ProfileDropdown = ({ storeName, userName = "John Doe" }) => {
     {
       icon: <LogOut size={16} />,
       label: "Logout",
-      link: `/logout?storeName=${storeName}`
+      link: `/logout?storeName=${storeName}`,
     }
   ];
 
@@ -31,7 +33,7 @@ const ProfileDropdown = ({ storeName, userName = "John Doe" }) => {
     <div 
       className="relative inline-block"
       onMouseEnter={() => setIsOpen(true)}
-      onMouseLeave={() => setIsOpen(false)}
+      onMouseLeave={() => setTimeout(() => setIsOpen(false), 2000)} // Delay to allow click events to register
     >
       {/* Profile Button */}
       <button className="bg-gradient-to-r from-gray-800 to-gray-700 text-white px-4 py-2 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 flex items-center gap-2">
@@ -60,6 +62,7 @@ const ProfileDropdown = ({ storeName, userName = "John Doe" }) => {
             key={index}
             to={item.link}
             className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-150"
+            label={item.label}
           >
             <span className="text-gray-400">{item.icon}</span>
             {item.label}

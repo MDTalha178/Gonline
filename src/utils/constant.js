@@ -80,3 +80,56 @@ export const SUPPORTED_ADDRESS = {
     CUSTOMER_ADDRESS:'CUSTOMER_ADDRESS',
     VENDOR_ADDRESS:'VENDOR_ADDRESS'
 }
+
+export const ORDER_STATUS_CONFIG = {
+    PENDING: {
+        statusColor: 'text-yellow-600',
+        statusBg: 'bg-yellow-100',
+        status: 'Pending',
+        server_status:'PENDING'
+
+    },
+    CONFIRMED: {
+        statusColor: 'text-green-600',
+        statusBg: 'bg-green-100',
+        status: 'Confirmed',
+        server_status:'CONFIRMED'
+    },
+    CANCELLED: {
+        statusColor: 'text-red-600',
+        statusBg: 'bg-red-100',
+        status: 'Cancelled',
+        server_status:'CANCELLED'
+    },
+    DELIVERED: {
+        statusColor: 'text-green-600',
+        statusBg: 'bg-green-100',
+        status: 'Delivered',
+        server_status:'DELIVERED'
+    },
+    SHIPPED: {
+        statusColor: 'text-blue-600',
+        statusBg: 'bg-blue-100',
+        status: 'Shipped',
+        server_status:'SHIPPED'
+    },
+    RETURNED:{
+        statusColor: 'text-red-600',
+        statusBg: 'bg-red-100',
+        status: 'Returned',
+        server_status:'RETURNED'
+    },
+    REJECTED: {
+        statusColor: 'text-red-600',
+        statusBg: 'bg-red-100',
+        status: 'Rejected',
+        server_status:'REJECTED'
+    },
+    FAILED:{
+        statusColor: 'text-red-600',
+        statusBg: 'bg-red-100',
+        status: 'Failed',
+        server_status:'FAILED'
+
+    }
+}

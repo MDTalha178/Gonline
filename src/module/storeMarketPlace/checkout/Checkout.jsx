@@ -26,7 +26,7 @@ const StoreCheckout =() =>{
     })
 
     const handleOnChange = (field, value) => {
-        console.log(`Field changed: ${field}, Value:`, typeof(value));
+        console.log(`Field changed: ${field}, Value:`, value);
         setcheckoutdata(prevData => ({
             ...prevData,
             [field]: value
@@ -35,12 +35,17 @@ const StoreCheckout =() =>{
 
 
     const handlePlaceOrder = async () => {
+         console.log('=== DEBUG: handlePlaceOrder called ===');
+        console.log('Full checkoutdata:', checkoutdata);
+        console.log('delivery_option value:', checkoutdata.delivery_option);
+        console.log('delivery_option type:', typeof checkoutdata.delivery_option);
+        console.log('===================================');
         try {
             const payload = {
                 cart_item: checkoutdata.cart_item.map(item => item.id),
                 user_contact: checkoutdata.user_contact.id,
                 shipping_address: checkoutdata.user_address.find(address => address.isDefault)?.id || checkoutdata.user_address[0]?.id,        
-                delivery_options: 1,
+                delivery_type: checkoutdata.delivery_option,
                 payment_option: "COD",
                 total_price: checkoutdata?.order_data?.total_price,
                 total_items: checkoutdata?.cart_item?.length,
@@ -50,6 +55,7 @@ const StoreCheckout =() =>{
                 shipping_charge: checkoutdata?.order_data?.is_shipping_free ? 0 : 40 || 0,
                 total_amount: checkoutdata?.order_data?.total_price
             };
+            console.log(payload);
             const response = await placeOrderService(payload, toast, user?.userId);
             if (response?.success) {
                 toast.success("Order placed successfully!");
@@ -78,8 +84,8 @@ const StoreCheckout =() =>{
         }
     }
     fetchCheckoutData();
-      console.log(checkoutdata); // Log the checkout data to the console for debuggin
-   }, [setcheckoutdata, user?.userId, setIsProcessing, ]);
+    console.log(checkoutdata.delivery_option, 'kkk');
+   }, [setcheckoutdata, user?.userId, setIsProcessing]);
     return (
         <div className="min-h-screen bg-gray-50">
             <CheckOutHeader />

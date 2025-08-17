@@ -61,3 +61,9 @@ export function saveStoreSlug(storeName){
 export function getStoreName(){
   return JSON.parse(localStorage.getItem('storeName'));
 }
+
+export function getUserId(){
+  const token = JSON.parse(localStorage.getItem('token'));
+  console.log(token.userId, 'token');
+  return token?.userId
+}
