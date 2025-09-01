@@ -36,8 +36,9 @@ export const domainSetupValidation = (domainData) => {
     if (domainData.domain_type == DOMAIN_TYPE_TEXT.SLUGDOMAIN) {
         return true;
     }
-    if(domainData.domain_type == DOMAIN_TYPE_TEXT.SUBDOMAIN && domainData.domain_name){
+    if(domainData.domain_type == DOMAIN_TYPE_TEXT.SUBDOMAIN && domainData.domain_name  && domainData.isDomainValid){
         return true;
     }
+
       return false;
 }

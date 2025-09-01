@@ -1,6 +1,7 @@
+import { useState } from "react";
 import NavigationButtons from "./NavigationButton";
 
-const ReviewSummary = ({ selectedPlan, storeData }) => {
+const ReviewSummary = ({ selectedPlan, storeData, isTermsAccepted, handleTermsChange }) => {
 
 
   const planDetails = {
@@ -103,6 +104,8 @@ const ReviewSummary = ({ selectedPlan, storeData }) => {
       <div className="mt-8 p-6 bg-gray-50 rounded-xl">
         <div className="flex items-center space-x-3">
           <input
+            onChange={(e) => handleTermsChange(isTermsAccepted)}
+            value={isTermsAccepted}
             type="checkbox"
             id="terms"
             className="w-4 h-4 text-purple-600 rounded"

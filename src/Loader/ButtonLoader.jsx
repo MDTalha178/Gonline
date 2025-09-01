@@ -17,28 +17,34 @@ export const Spinner = ({ size = 'md', className = '' }) => {
     );
   };
 
-const ButtonLoader = (
-    {   loading = true, 
-        children = "Submit", 
-        disabled = false, 
-        type = "button",
-        className='',
-        handleSubmit={handleSubmit}
-    }) => (
-    <button 
-      disabled={disabled || loading}
-      className={className}
-      type={type}
-      onClick={handleSubmit}
-    >
-      {loading ? (
-        <>
-          <Spinner size="sm" className="mr-2" />
-          Loading...
-        </>
-      ) : (
-        children
-      )}
-    </button>
-  );
-export default ButtonLoader
+
+const ButtonLoader = ({
+  loading = true,
+  children = "Submit",
+  disabled = false,
+  type = "button",
+  className = '',
+  handleSubmit
+}) => (
+  <button
+    disabled={disabled}
+    type={type}
+    onClick={handleSubmit}
+    className={`px-4 py-2 rounded w-full text-white font-semibold text-lg mt-6 flex items-center justify-center transition-all duration-300
+      ${disabled 
+        ? "bg-gradient-to-r from-purple-600 to-pink-600 opacity-50 cursor-not-allowed" 
+        : "bg-gradient-to-r from-purple-600 to-pink-600 hover:shadow-xl transform hover:-translate-y-1 cursor-pointer"} 
+      ${className}`}
+  >
+    {loading ? (
+      <>
+        <Spinner size="sm" className="mr-2" />
+        Loading...
+      </>
+    ) : (
+      children
+    )}
+  </button>
+);
+
+export default ButtonLoader;

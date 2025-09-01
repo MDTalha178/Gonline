@@ -1,3 +1,5 @@
+
+
 export const endPoint = {
     auth:{
         login: '/auth/login/',
@@ -15,7 +17,7 @@ export const endPoint = {
         storeLaunchSetting: 'shop/shop/create-store-setting/',
         checkStoreDomainAvailability: 'shop/shop/check-domain-available/',
         getStore:'shop/shop/get-store/',
-        storeDelivery:'shop/shop/get-store-delivery-options'
+        storeDelivery:'shop/shop/get-store-delivery-options',
     },
     marketPalce:{
         getStoreDetailsByName: 'store/',
@@ -36,5 +38,18 @@ export const endPoint = {
         getOrderById: (orderId) => `order/${orderId}/success-order/`,
         getOrderByUserId: 'store-user/store-order/user/',
         getOrderByStoreId: 'store-user/store-order/store/'
+    },
+    admin: {
+        dashboard: 'admin/dashboard/',
+        inventory: 'admin/inventory/',
+        saveProduct: '/stores/product/',
+        productStats:'/stores/product/product-stats/',
+        deleteProduct: (productId) => `stores/product/${productId}/`,
+        transaction: '/transaction/',
+        transactionStats: '/transaction/transaction-stats/',
+        transactionSummary: 'transaction/get-invoice/',
+        transactionDetails: (transactionId) => `transaction/${transactionId}/`,
+        order: 'order/',
+        orderDetails: (orderId) => `order/${orderId}/`,
     }
 }

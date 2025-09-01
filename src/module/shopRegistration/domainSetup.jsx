@@ -15,8 +15,10 @@ const DomainSetup = ({selectedPlan, currentStep, totalSteps, handleNext, handleP
     const [domainData, setdomainData] = useState({
         domain_name: '',
         store_id: storeId,
-        domain_type: DOMAIN_TYPE[selectedPlan]
+        domain_type: DOMAIN_TYPE[selectedPlan],
+        isDomainValid: false
     });
+    const [isLoading, setIsLoading] = useState(false);
 
     const data = useStoreDetail(storeId);
     
@@ -33,11 +35,14 @@ const DomainSetup = ({selectedPlan, currentStep, totalSteps, handleNext, handleP
 
 
     const handleOnSubmit = async () =>{
+        setIsLoading(true);
         try{
             const response = await createStoreDomainService(domainData, toast);
             if(response) handleNext({id:storeId});
         }catch(e){
             toast.error(e.message)
+        }finally{
+            setIsLoading(false);
         }
     }
 
@@ -72,6 +77,7 @@ const DomainSetup = ({selectedPlan, currentStep, totalSteps, handleNext, handleP
                 onNext={handleOnSubmit}
                 onPrevious={handlePrevious}
                 isNextDisabled={!domainSetupValidation(domainData)}
+                isLoading={isLoading}
             />
         </div>
     )

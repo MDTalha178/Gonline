@@ -21,7 +21,7 @@ const ShopAddress = ({currentStep, totalSteps, handleNext, handlePrevious, store
         store_id: storeId
     });
 
-    console.log(storeId)
+    const [isLoading, setIsLoading] = useState(false);
 
 
     const handleInputChange = (field, value) =>{
@@ -32,11 +32,14 @@ const ShopAddress = ({currentStep, totalSteps, handleNext, handlePrevious, store
     }
 
     const handleOnSubmit = async () =>{
+        setIsLoading(true);
         try {
             const response = await storeLocationService(formData, toast);
             if (response) handleNext({id:storeId});
         } catch (error) {
             toast.error(error.message);
+        }finally{
+            setIsLoading(false);
         }
     }
 
@@ -50,6 +53,7 @@ const ShopAddress = ({currentStep, totalSteps, handleNext, handlePrevious, store
             onNext={handleOnSubmit}
             onPrevious={handlePrevious}
             isNextDisabled={!shopAddressValidation(formData)}
+            isLoading={isLoading}
         />
         </>
         

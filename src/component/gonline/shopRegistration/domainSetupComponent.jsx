@@ -42,7 +42,7 @@ const handleCheckAvailability = async () => {
     setAvailabilityStatus(null);
 
     const payload = {
-        domain: domainName
+      domain: domainName
     }
     
     try {
@@ -51,6 +51,7 @@ const handleCheckAvailability = async () => {
       if(response?.data){
         if(response.data.status) {
           setAvailabilityStatus('available');
+          handleDomainChange('isDomainValid', true);
         } else {
           setAvailabilityStatus('unavailable');
         }
@@ -110,7 +111,8 @@ const handleCheckAvailability = async () => {
                 value={domainData?.domain_name || ''}
                 onChange={(e) => {
                     handleDomainChange('domain_name', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''));
-                    setAvailabilityStatus(null); // Reset status when input changes
+                    setAvailabilityStatus(null);
+                    handleDomainChange('isDomainValid', false); // Reset status when input changes
                 }}
               />
               <span className="text-gray-600 font-mono">.goline.com</span>

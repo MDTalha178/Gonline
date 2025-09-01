@@ -23,6 +23,7 @@ const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurren
     });
 
     const [isAddContact, setIsAddContact] = useState(false);
+    const[isloading, setIsLoading] = useState(false);
 
     const handleInputChange = (field, value) =>{
         setFormData((prev) => ({
@@ -33,6 +34,7 @@ const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurren
 
 
     const handleSubmit =  async() =>{
+        setIsLoading(true);
         try {
            const payload = {
             store_name: formData.shopName,
@@ -48,6 +50,8 @@ const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurren
            if(response) handleNext({id:response.data.id});
         } catch (error) {
             toast.error(error.message);
+        }finally{
+            setIsLoading(false);
         }
     }
     
@@ -67,6 +71,7 @@ const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurren
             onNext={handleSubmit}
             onPrevious={handlePrevious}
             isNextDisabled={!shopDetailsValidation(formData)}
+            isloading={isloading}
         />
         </>
        

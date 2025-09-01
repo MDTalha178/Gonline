@@ -1,6 +1,6 @@
 
 
-console.log('Store Service URL:',  import.meta.env.VITE_STORE_SERVICE_URL);
+console.log('Store Service URL:',  import.meta.env.VITE_ADMIN_SERVICE_URL);
 
 const SERVICE_CONFIGS = {
     USER_SERVICE: {
@@ -9,8 +9,10 @@ const SERVICE_CONFIGS = {
     },
     STORE_SERVICE: {
         baseURL: import.meta.env.VITE_STORE_SERVICE_URL,
-        timeout: 10000, // Longer timeout for payment processing
+        timeout: 10000, 
     },
+    ADMIN_SERVICE: import.meta.env.VITE_ADMIN_SERVICE_URL,
+    timeout: 10000, 
 };
 
 export default SERVICE_CONFIGS

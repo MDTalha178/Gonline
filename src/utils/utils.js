@@ -32,7 +32,7 @@ export const getUpcomingsales =(endTime) =>{
 export default setDoummntTitle
 
 
-export function convertISOToDateTime(isoString) {
+export function convertISOToDateTime(isoString, fullFormat=true) {
   const date = new Date(isoString);  // Parse the ISO timestamp
 
   // Get date and time parts
@@ -45,13 +45,10 @@ export function convertISOToDateTime(isoString) {
   const seconds = String(date.getSeconds()).padStart(2, '0');
 
   // Combine into readable format
-  return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return  fullFormat ? `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`: `${year}-${month}-${day}`
 }
 
 // Example usage
-const isoString = "2025-07-25T09:38:20.844584Z";
-console.log(convertISOToDateTime(isoString));
-// Output (in your local time): "2025-07-25 15:08:20"  (for IST)
 
 
 export function saveStoreSlug(storeName){
