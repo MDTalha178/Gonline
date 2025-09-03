@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import{ Menu, X , Store, ShoppingCart} from "lucide-react";
 import { Link } from "react-router-dom";
+import { useAuth } from "../../context/authContext/authContext";
+import ProfileDropdown from "../user/UserProfileIcon";
 
 const Header = ({leftContent, rightContent, leftbutton=[], rightbutton=[], options={}}) => {
+  const { isAuthenticated, user, isLoading } = useAuth();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const {setUserTypeModal} = options
@@ -39,8 +42,10 @@ const Header = ({leftContent, rightContent, leftbutton=[], rightbutton=[], optio
             {rightContent && rightContent.map((item, index) => 
                 <a key={index} href="#features" className="text-gray-700 hover:text-purple-600 transition-colors font-medium">{item}</a>
             )}
+
+            {isAuthenticated && ProfileDropdown({userName: user?.firstName + " " + user?.lastName} || "Guest")}
             
-            {rightbutton  && rightbutton.map((item, index) =>
+            {!isAuthenticated && rightbutton  && rightbutton.map((item, index) =>
                 <button key={index} onClick={() => setUserTypeModal(true)} className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 cursor-pointer">
                     {item}   
                 </button>

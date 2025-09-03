@@ -33,11 +33,11 @@ import ComingSoonBanner from '../../common/ComingSoon';
 const AuthPages = ({currentPage, loginMethod, setCurrentPage, handleSubmit, formData, setLoginMethod, handleInputChange, isloading, loginaction = 'signup'}) => {
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-purple-50 via-pink-50 to-orange-50 ">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden  from-purple-50 via-pink-50 to-orange-50 ">
       {/* Animated moving background elements */}
       <BackgroundAnimation />
 
-      <div className={`max-w-md w-full mx-4 relative z-10 my-8 ${currentPage == 'login' ? 'blur-sm' : ''}`} >
+      <div className={`max-w-md w-full mx-4 relative z-10 my-8`} >
         <div className="bg-white rounded-3xl shadow-2xl p-8 transform hover:scale-105 transition-transform duration-300">
           
           {/* Top header showing title and login method */}
@@ -68,10 +68,11 @@ const AuthPages = ({currentPage, loginMethod, setCurrentPage, handleSubmit, form
         <div className="absolute -bottom-4 -left-4 w-64 h-64 bg-gradient-to-r from-orange-400 to-pink-400 rounded-3xl opacity-20 animate-pulse -z-10"></div>
       
       </div>
-        {currentPage !== 'signup' && <ComingSoonBanner
+        {/* {currentPage !== 'signup' && <ComingSoonBanner
           text1={"Welcome back! We’re almost ready to help you manage your shop effortlessly."}
           text2={"Sign in soon and experience a smoother, smarter way to run your business."}
-        />}
+        />
+        } */}
 
     </section>
   );

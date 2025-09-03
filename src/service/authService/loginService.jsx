@@ -15,12 +15,13 @@ import request from "../../request/request";
  */
 
 
-const loginService = async (formData) => {
+const loginService = async (formData, toast) => {
     const data = {
         email: formData.email,
-        password: formData.password
+        password: formData.password,
+        role_name: formData.role_name
     };
-    const response = await request.create(endPoint.auth.login, data, {service: SERVICE_CONFIGS.USER_SERVICE, requiresAuth: false});
+    const response = await request.create(endPoint.auth.login, data, toast, {service: SERVICE_CONFIGS.USER_SERVICE, requiresAuth: false});
     try{
         if(response.success === true){
             setToken(response.data)

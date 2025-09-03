@@ -46,4 +46,17 @@ export const storeSignupService = async (formData, toast) => {
     
 }
 
+export const LoginService = async (formData, toast) =>{
+    const response = await request.create(endPoint.auth.login, formData, toast,  {service: SERVICE_CONFIGS.USER_SERVICE, requiresAuth: false});
+    try{
+        if(response.success === true){
+            setToken(response.data);
+            return response
+        }
+        return null
+    }catch{
+        return null;
+    }
+}
+
 export default signupService;

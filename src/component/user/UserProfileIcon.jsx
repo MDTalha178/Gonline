@@ -11,6 +11,19 @@ const ProfileDropdown = ({ storeName, userName = "John Doe" }) => {
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
+  const MainDropDown = [
+    {
+      icon: <Eye size={16} />,
+      label: "View Profile",
+      link: `/profile?storeName=${storeName}`
+    },
+     {
+      icon: <LogOut size={16} />,
+      label: "Logout",
+      link: `/logout?storeName=${storeName}`,
+    }
+  ]
+
   const dropdownItems = [
     {
       icon: <Eye size={16} />,
@@ -57,7 +70,18 @@ const ProfileDropdown = ({ storeName, userName = "John Doe" }) => {
         </div>
 
         {/* Menu Items */}
-        {dropdownItems.map((item, index) => (
+        {storeName && dropdownItems.map((item, index) => (
+          <Link
+            key={index}
+            to={item.link}
+            className="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors duration-150"
+            label={item.label}
+          >
+            <span className="text-gray-400">{item.icon}</span>
+            {item.label}
+          </Link>
+        ))}
+        {!storeName && MainDropDown.map((item, index) => (
           <Link
             key={index}
             to={item.link}

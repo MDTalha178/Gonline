@@ -3,6 +3,8 @@ import SignupForm from '../../../Form/SignupForm';
 import LoginForm from '../../../Form/LoginForm';
 import ButtonLoader, { Spinner } from '../../../Loader/ButtonLoader';
 import { validateData } from '../../../validation/AuthValidation/LoginValidation';
+
+
 const AuthAction = ({currentPage, loginMethod, handleSubmit, formData, setLoginMethod, handleInputChange, isloading}) =>{
     return(
     <div>
@@ -16,7 +18,7 @@ const AuthAction = ({currentPage, loginMethod, handleSubmit, formData, setLoginM
         <ButtonLoader 
             loading={isloading}
             children='Create Account'
-            disabled={validateData(formData)} 
+            disabled={validateData(formData, loginMethod)} 
             type="button" 
             handleSubmit={handleSubmit}
         />

@@ -57,7 +57,6 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
             try{
                 const response = userType == ROLE_TYPE.CUSTOMER ? await storeSignupService(formData, toast) : await signupService(formData, toast);
                 handlelogin(response?.data);
-                console.log("response", response, "userType", userType);
                 if(response) navigate(`/verification?email=${formData.email}&userType=${userType}`);
             }
             catch(error){
@@ -71,8 +70,10 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
         else{
             {   
             try{
-                const response = await loginService(formData);
-                if(response) navigate(`/dashboard`);
+                console.log(formData);
+                const response = await loginService(formData, toast);
+                handlelogin(response?.data);
+                if(response) navigate(`/`);
             }
             catch(error){
                 toast.error('Something went wrong');

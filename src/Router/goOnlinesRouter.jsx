@@ -40,7 +40,7 @@ const gonliesRoutes = [
     path: "/login",
     element: (
       <ProtectedRoute isPublic>
-        <AuthComponentModule loginaction="signup" />
+        <AuthComponentModule loginaction="login" />
       </ProtectedRoute>
     ),
   },
