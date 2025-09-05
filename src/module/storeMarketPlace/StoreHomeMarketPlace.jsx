@@ -23,7 +23,7 @@ const StoreHomeMarketPlace = () => {
         if(response?.data){
             setData(response.data);
             saveStoreSlug(storeName);
-            return;
+
         } 
         if(response?.error){
             setError(response.error);
