@@ -5,15 +5,6 @@ import ProductDetailsPage from "../component/admin/InventoryManage/InventoryDeta
 import TransactionDetails from "../component/admin/Transaction/TransactionDetails";
 import AdminTransactions from "../component/admin/Transaction/TransactionList";
 import Unauthorized from "../component/common/unAuthrized";
-import StoreOtpVerification from "../component/marketplace/auth/OtpVerifcation";
-import StoreAuth from "../module/storeMarketPlace/auth/Auth";
-import StoreCheckout from "../module/storeMarketPlace/checkout/Checkout";
-import OrderList from "../module/storeMarketPlace/Order/OrderList";
-import PlaceOrderSuccess from "../module/storeMarketPlace/Order/PlaceOrderSuccess";
-import StoreCart from "../module/storeMarketPlace/storeCart/StoreCart";
-import StoreHomeMarketPlace from "../module/storeMarketPlace/StoreHomeMarketPlace";
-import StoreProduct from "../module/storeMarketPlace/StoreProduct/StoreProduct";
-import StoreProductDetails from "../module/storeMarketPlace/StoreProductDetails";
 import { ROLE_TYPE } from "../utils/constant";
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -21,7 +12,7 @@ const AdminRoutes = [
   {
     path: "/",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute isPublic>
         <AdminLogin />
       </ProtectedRoute>
     ),
