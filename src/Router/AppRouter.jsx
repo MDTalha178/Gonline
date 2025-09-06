@@ -4,6 +4,7 @@ import FullscreenLoader from '../component/Loader/FullScreenLoader';
 import gonliesRoutes from './goOnlinesRouter';
 import subDomainRoutes from './subDomainRouter';
 import ShopStatusCardsDemo from '../component/common/StoreStatus';
+import AdminRoutes from './adminRouter';
 
 export const AppRouter = () => {
   const  {domainInfo, storeData, loading, error} = useDomainContext();
@@ -12,7 +13,7 @@ export const AppRouter = () => {
 
   if(error) return  <ShopStatusCardsDemo  data={error} />
 
-  if(!domainInfo.isSubdomain) 
+  if(domainInfo.isMainDomain) 
     return (
       <Routes>
          {gonliesRoutes.map((route,index) =>(
@@ -28,6 +29,19 @@ export const AppRouter = () => {
     return (
       <Routes>
          {subDomainRoutes.map((route,index) =>(
+          <Route
+            key={index}
+            path={route.path}
+            element={route.element}
+          />
+         ))}
+      </Routes>
+    );
+  
+  if(domainInfo.isAdmin) 
+    return (
+      <Routes>
+         {AdminRoutes.map((route,index) =>(
           <Route
             key={index}
             path={route.path}

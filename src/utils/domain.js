@@ -29,9 +29,12 @@ export default getSubdomain;
 export const getDomainInfo = () => {
   const hostname = window.location.hostname;
   const subdomain = hostname.split('.')[0];
-  const isMainDomain = hostname === 'gonlines.com' || hostname === 'www.gonlines.com' || hostname === 'localhost';
-   const isSubdomain = hostname.includes('.gonlines.com') && !isMainDomain;
-  const isCustomDomain = !hostname.includes('gonlines.com') && !isMainDomain && !isSubdomain;
+  const isAdmin = hostname === 'admin.gonlines.com';
+  const isMainDomain = (hostname === 'gonlines.com' || hostname === 'www.gonlines.com' || hostname === 'localhost') && !isAdmin;
+  const isSubdomain = hostname.includes('.gonlines.com') && !isMainDomain && !isAdmin;
+  const isCustomDomain = !hostname.includes('gonlines.com') && !isMainDomain && !isSubdomain && !isAdmin;
+
+  console.log(hostname, subdomain, isMainDomain, isSubdomain, isCustomDomain, isAdmin);
   
   return {
     hostname,
@@ -39,6 +42,7 @@ export const getDomainInfo = () => {
     isMainDomain,
     isSubdomain,
     isCustomDomain,
+    isAdmin,
     storeSlug: isSubdomain ? subdomain : (isCustomDomain ? hostname : null)
   };
 };

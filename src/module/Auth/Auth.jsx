@@ -8,6 +8,7 @@ import Header from "../../component/common/Header";
 import { ROLE_TYPE } from "../../utils/constant";
 import { useAuth } from "../../context/authContext/authContext";
 import UserTypeModal from "../../component/gonline/AuthCompoent/UserTypeModal";
+import { phoneValidation } from "../../validation/AuthValidation/LoginValidation";
 
 const AuthComponentModule = ({loginaction = 'signup'}) =>{
     const { toast } = useToast();
@@ -20,8 +21,6 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
 
     // Track login method type (password or OTP)
     const [loginMethod, setLoginMethod] = useState('password');
-
-    console.log("userType", ROLE_TYPE[userType], "actionFrom", actionFrom);
     
     // Manage all form field values
     const [formData, setFormData] = useState({
@@ -39,6 +38,9 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
      * Updates formData by matching input name and value.
      */
     const handleInputChange = (e) => {
+        if (e.target.name == 'phone') {
+            e = phoneValidation(e.target.name, e.target.value);
+        }
         setFormData({
         ...formData,
         [e.target.name]: e.target.value

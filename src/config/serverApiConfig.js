@@ -11,8 +11,11 @@ const SERVICE_CONFIGS = {
         baseURL: import.meta.env.VITE_STORE_SERVICE_URL,
         timeout: 10000, 
     },
-    ADMIN_SERVICE: import.meta.env.VITE_ADMIN_SERVICE_URL,
-    timeout: 10000, 
+    ADMIN_SERVICE: {
+        baseURL: import.meta.env.VITE_ADMIN_SERVICE_URL,
+        timeout: 10000, 
+    }
+    
 };
 
 export default SERVICE_CONFIGS

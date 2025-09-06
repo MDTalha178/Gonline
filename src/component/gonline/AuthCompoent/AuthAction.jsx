@@ -6,9 +6,10 @@ import { validateData } from '../../../validation/AuthValidation/LoginValidation
 
 
 const AuthAction = ({currentPage, loginMethod, handleSubmit, formData, setLoginMethod, handleInputChange, isloading}) =>{
+    const errorInformation = validateData(formData, currentPage);
     return(
     <div>
-        {currentPage === 'signup' ? <SignupForm  formData={formData} handleInputChange={handleInputChange}/> : <LoginForm loginMethod={loginMethod} setLoginMethod={setLoginMethod} formData={formData} handleInputChange={handleInputChange}/>}
+        {currentPage === 'signup' ? <SignupForm  formData={formData} handleInputChange={handleInputChange}  errors={errorInformation}/> : <LoginForm loginMethod={loginMethod} setLoginMethod={setLoginMethod} formData={formData} handleInputChange={handleInputChange}/>}
 
         {/* Submit Button */}
         {/* <button
@@ -17,8 +18,8 @@ const AuthAction = ({currentPage, loginMethod, handleSubmit, formData, setLoginM
         > */}
         <ButtonLoader 
             loading={isloading}
-            children='Create Account'
-            disabled={validateData(formData, loginMethod)} 
+            children={currentPage == 'signup' ? 'Create Account' : loginMethod == 'otp' ? 'Send OTP' : 'Sign In'}
+            disabled={errorInformation?.isError} 
             type="button" 
             handleSubmit={handleSubmit}
         />

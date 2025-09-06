@@ -2,7 +2,7 @@ import { Eye, EyeOff, Mail, Phone, User, Lock } from 'lucide-react';
 import { InputField } from '../component/common/Inputfield';
 import { useState } from 'react';
 
-const SignupForm = ({formData, handleInputChange}) => {
+const SignupForm = ({formData, handleInputChange, }) => {
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -64,21 +64,47 @@ const SignupForm = ({formData, handleInputChange}) => {
             </div>
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-                Phone Number
-            </label>
-            <div className="relative">
-            <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-            <InputField
-                type="tel"
-                name="phone"
-                value={formData.phone}
-                onChange={handleInputChange}
-                className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
-                placeholder="Enter phone number"
-                required={true}
-            />
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+            Phone Number
+        </label>
+        <div className="flex gap-2">
+            <div className="relative w-20">
+                <select 
+                    className="w-full px-3 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 appearance-none bg-white"
+                    defaultValue="+91"
+                >
+                    <option value="+91">+91</option>
+                </select>
             </div>
+            <div className="relative flex-1">
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                <InputField
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    onKeyPress={(e) => {
+                        // Only allow numbers
+                        if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && e.key !== 'Tab') {
+                            e.preventDefault();
+                        }
+                    }}
+                    onPaste={(e) => {
+                        // Prevent pasting non-numeric content
+                        const pastedText = e.clipboardData.getData('text');
+                        if (!/^\d+$/.test(pastedText)) {
+                            e.preventDefault();
+                        }
+                    }}
+                    inputMode="numeric"
+                    pattern="[0-9]*"
+                    maxLength={10}
+                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300"
+                    placeholder="Enter 10-digit mobile number"
+                    required={true}
+                />
+            </div>
+        </div>
         </div>
 
         <div>

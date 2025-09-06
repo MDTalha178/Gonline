@@ -5,7 +5,7 @@ import { getStoreName } from "../../../utils/utils";
 
 export const saveProduct = async(formData, toast) => {
     try {
-        const response =  await request.create(endPoint.admin.saveProduct, formData, toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
+        const response =  await request.create(endPoint.admin.saveProduct, formData, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);
@@ -25,7 +25,7 @@ export const getProductStats = async(formData, toast) => {
 
 export const deleteProductService = async (productId, toast) => {
      try {
-        const response =  await request.delete(endPoint.admin.deleteProduct(productId), toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
+        const response =  await request.delete(endPoint.admin.deleteProduct(productId), toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { 
   ShoppingCart, 
   User, 
@@ -26,19 +26,13 @@ import {
   LogOut
 } from "lucide-react";
 import AdminSidebar from "../Sidebar";
+import { fetchProductList } from "../../../service/marketPlace/product_service";
+import { useToast } from "../../../hooks/useToast";
 
 const CheckoutComponent = () => {
-  // Sample product inventory
-  const [products] = useState([
-    { id: 1, name: "Premium Headphones", sku: "HP001", price: 2999, stock: 15, barcode: "123456789012" },
-    { id: 2, name: "Wireless Mouse", sku: "MS002", price: 799, stock: 25, barcode: "123456789013" },
-    { id: 3, name: "Bluetooth Speaker", sku: "SP003", price: 1599, stock: 8, barcode: "123456789014" },
-    { id: 4, name: "USB Cable Type-C", sku: "CB004", price: 299, stock: 50, barcode: "123456789015" },
-    { id: 5, name: "Power Bank 10000mAh", sku: "PB005", price: 1299, stock: 12, barcode: "123456789016" },
-    { id: 6, name: "Phone Case", sku: "PC006", price: 399, stock: 30, barcode: "123456789017" },
-    { id: 7, name: "Screen Protector", sku: "SP007", price: 199, stock: 40, barcode: "123456789018" },
-    { id: 8, name: "Wireless Charger", sku: "WC008", price: 899, stock: 18, barcode: "123456789019" }
-  ]);
+  const {toast} = useToast()
+  // Sample product inventory data
+   const [products, setproducts] = useState([]);
 
   const [cartItems, setCartItems] = useState([]);
   const [customer, setCustomer] = useState(null);
@@ -48,6 +42,7 @@ const CheckoutComponent = () => {
   const [discount, setDiscount] = useState(0);
   const [tax, setTax] = useState(18);
   const [amountReceived, setAmountReceived] = useState('');
+
   
   // Product search states
   const [searchQuery, setSearchQuery] = useState('');
@@ -64,12 +59,23 @@ const CheckoutComponent = () => {
 
   // Filter products based on search query
   const filteredProducts = products.filter(product =>
-    product.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.sku.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product.barcode.includes(searchQuery)
+    product?.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    product?.sku.toLowerCase().includes(searchQuery.toLowerCase()) 
   );
 
-  const subtotal = cartItems.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+  const fetchProdouct = async () => {
+    const response = await fetchProductList(toast);
+    console.log(response);
+    if(response?.data){
+      setproducts(response.data);
+    }
+  }
+
+  useEffect(() =>{
+    fetchProdouct();
+  },[setproducts])
+
+  const subtotal = cartItems.reduce((sum, item) => sum + (item.product_price * item.quantity), 0);
   const discountAmount = discountType === 'percentage' 
     ? (subtotal * discount / 100) 
     : discount;
@@ -222,13 +228,20 @@ const CheckoutComponent = () => {
                                 <Package className="w-5 h-5 text-gray-400" />
                               </div>
                               <div>
-                                <p className="font-medium text-gray-900">{product.name}</p>
-                                <p className="text-sm text-gray-500">SKU: {product.sku} | Stock: {product.stock}</p>
+                                <p className="font-medium text-gray-900">{product?.product_name}</p>
+                                  <p className="text-sm text-gray-500">
+                                      SKU: {product?.sku} | Stock: 
+                                      <span className={`ml-1 font-medium ${
+                                          product?.product_quantity < 10 ? 'text-red-500' : 'text-green-600'
+                                      }`}>
+                                          {product?.product_quantity}
+                                      </span>
+                                  </p>
                               </div>
                             </div>
                             <div className="text-right">
-                              <p className="font-semibold text-gray-900">₹{product.price.toLocaleString()}</p>
-                              <button className="text-gray-600 hover:text-gray-700 text-sm font-medium">
+                              <p className="font-semibold text-gray-900">₹{product?.product_price}</p>
+                              <button className="text-gray-600 hover:text-gray-700 text-sm font-medium cursor-pointer">
                                 Add to Cart
                               </button>
                             </div>
@@ -294,9 +307,9 @@ const CheckoutComponent = () => {
                                 <Package className="w-6 h-6 text-gray-400" />
                               </div>
                               <div>
-                                <h3 className="font-medium text-gray-900">{item.name}</h3>
-                                <p className="text-sm text-gray-500">SKU: {item.sku}</p>
-                                <p className="text-sm font-medium text-gray-700">₹{item.price.toLocaleString()} each</p>
+                                <h3 className="font-medium text-gray-900">{item?.product_name}</h3>
+                                <p className="text-sm text-gray-500">SKU: {item?.sku}</p>
+                                <p className="text-sm font-medium text-gray-700">₹{item?.product_price} each</p>
                                 <p className="text-xs text-gray-500">Stock: {item.stock}</p>
                               </div>
                             </div>
@@ -325,7 +338,7 @@ const CheckoutComponent = () => {
                               </button>
                               <div className="text-right min-w-[4rem]">
                                 <p className="font-semibold text-gray-900">
-                                  ₹{(item.price * item.quantity).toLocaleString()}
+                                  ₹{(item?.product_price * item.quantity).toLocaleString()}
                                 </p>
                               </div>
                             </div>

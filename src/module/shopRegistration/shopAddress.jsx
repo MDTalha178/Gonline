@@ -16,8 +16,8 @@ const ShopAddress = ({currentStep, totalSteps, handleNext, handlePrevious, store
         state: '',
         country: '',
         postal_code: '',
-        latitude: '',
-        longitude: '',
+        latitude: '11',
+        longitude: '11',
         store_id: storeId
     });
 
