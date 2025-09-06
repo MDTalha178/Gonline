@@ -20,7 +20,7 @@ const AdminRoutes = [
   {
     path: "/admin-dashboard/",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute redirectTo="/">
         <AdminDashboard />
       </ProtectedRoute>
     ),
@@ -28,7 +28,7 @@ const AdminRoutes = [
   {
     path: "/inventory/",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute redirectTo="/">
         <AdminInventory />
       </ProtectedRoute>
     ),
@@ -36,7 +36,7 @@ const AdminRoutes = [
   {
     path: "/inventory/:id",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute redirectTo="/">
         <ProductDetailsPage />
       </ProtectedRoute>
     ),
@@ -44,7 +44,7 @@ const AdminRoutes = [
     {
     path: "/transaction/",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute redirectTo="/">
         <AdminTransactions />
       </ProtectedRoute>
     ),
@@ -56,7 +56,7 @@ const AdminRoutes = [
   {
     path: "/transaction/:id",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute redirectTo="/">
         <TransactionDetails />
       </ProtectedRoute>
     ),
