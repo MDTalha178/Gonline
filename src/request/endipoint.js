@@ -51,5 +51,6 @@ export const endPoint = {
         transactionDetails: (transactionId) => `transaction/${transactionId}/`,
         order: 'order/',
         orderDetails: (orderId) => `order/${orderId}/`,
+        adminLogin: '/admin-login/'
     }
 }

@@ -22,7 +22,7 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
     {
       name: "Dashboard",
       icon: LayoutDashboard,
-      path: "/admin-dashboard"
+      path: "/dashboard"
     },
     {
       name: "Inventory",

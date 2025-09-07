@@ -99,7 +99,7 @@ const subDomainRoutes = [
     ),
   },
   {
-    path: "/admin-dashboard/",
+    path: "/dashboard/",
     element: (
       <ProtectedRoute>
         <AdminDashboard />

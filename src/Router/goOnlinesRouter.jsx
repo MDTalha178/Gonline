@@ -149,7 +149,7 @@ const gonliesRoutes = [
     ),
   },
   {
-    path: "/admin-dashboard/",
+    path: "/dashboard/",
     element: (
       <ProtectedRoute>
         <AdminDashboard />

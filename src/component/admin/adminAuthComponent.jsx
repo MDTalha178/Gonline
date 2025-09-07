@@ -1,7 +1,15 @@
 import { User, Lock, Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
+import { useToast } from "../../hooks/useToast";
+import { AdminloginService } from "../../service/admin/auth/authService";
+import { useAuth } from "../../context/authContext/authContext";
+import { ROLE_TYPE } from "../../utils/constant";
+import { useNavigate } from "react-router-dom";
 
 const AdminLogin = () => {
+  const {toast} = useToast();
+  const navigate = useNavigate();
+  const { handlelogin } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -9,11 +17,29 @@ const AdminLogin = () => {
 
   
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
-    // Add your login logic here
-    setTimeout(() => setIsLoading(false), 2000); // Demo animation
+
+    console.log(email, password);
+
+    const payload = {
+      email: email,
+      password:password,
+      role_name:ROLE_TYPE.ADMIN
+    };
+
+    const response = await AdminloginService(payload, toast);
+    console.log(response);
+    if(response?.data){
+      handlelogin(response?.data);
+      console.log(response?.data, 'idd');
+      navigate(`/dashboard`);
+
+    }
+    setIsLoading(false);
+   
+    
   };
 
   return (
