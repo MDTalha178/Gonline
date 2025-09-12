@@ -4,7 +4,7 @@ import codeMessage from "./codeMessage";
 const errorHandler = (error, toast = null, options = {}) => {
     const { response } = error;
     const { showToast = true, redirectOnUnauth = true } = options;
-    
+    console.log(error, 'error');
     if (!response) {
         const message = codeMessage[503] || "Network error occurred";
         
@@ -24,7 +24,8 @@ const errorHandler = (error, toast = null, options = {}) => {
     }
     else if (response && response.status) {
         // response?.data?.data?.non_field_errors[0]
-        const message = response?.data?.data?.non_field_errors[0] || response?.data?.error || response.data && response.data.message || codeMessage[response.status];
+        console.log(response?.data, 'response');
+        const message = response?.data?.data?.non_field_errors[0] || response?.data?.error || response.data && response.data.message ||response?.data[0]|| codeMessage[response.status];
         const { status } = response;
 
         // Show toast notification based on status
@@ -61,7 +62,7 @@ const errorHandler = (error, toast = null, options = {}) => {
             }
             else if (status === 400) {
                 toast.error(message || "Something went wrong on our end. Please try again later.", {
-                    title: "Something Went wrong",
+                    title: 'Request failed',
                     duration: 6000
                 });
             }

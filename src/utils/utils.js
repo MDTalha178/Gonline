@@ -55,12 +55,27 @@ export function saveStoreSlug(storeName){
   localStorage.setItem('storeName', JSON.stringify(storeName))
 }
 
+export function saveStoreId(storeId){
+  localStorage.setItem('storeId', JSON.stringify(storeId))
+}
+
 export function getStoreName(){
   return JSON.parse(localStorage.getItem('storeName'));
+}
+
+export function getStoreId(){
+  return JSON.parse(localStorage.getItem('storeId'));
 }
 
 export function getUserId(){
   const token = JSON.parse(localStorage.getItem('token'));
   console.log(token.userId, 'token');
   return token?.userId
+}
+
+export const handleLogout = (redirect='/login') =>{
+  localStorage.removeItem('token');
+  localStorage.removeItem('storeId');
+  localStorage.removeItem('storeName');
+  window.location.href = redirect;
 }

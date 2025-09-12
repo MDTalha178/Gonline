@@ -89,8 +89,11 @@ const CheckoutComponent = () => {
     
     if (existingItem) {
       const newQuantity = existingItem.quantity + quantity;
-      if (newQuantity > product.stock) {
-        alert(`Only ${product.stock} items available in stock`);
+      if (newQuantity > product?.product_quantity) {
+       toast.info(`Only ${product.product_quantity} items available in stock`, {
+                    title: "Stock Limit",
+                    duration: 6000
+                });
         return;
       }
       setCartItems(cartItems.map(item => 
@@ -100,9 +103,13 @@ const CheckoutComponent = () => {
       ));
     } else {
       if (quantity > product.stock) {
-        alert(`Only ${product.stock} items available in stock`);
+        toast.info(`Only ${product?.product_quantity} items available in stock`, {
+                    title: "Stock Limit",
+                    duration: 6000
+                });
         return;
       }
+      setTax(product?.tax_percentage || tax);
       setCartItems([...cartItems, { ...product, quantity }]);
     }
     setSearchQuery('');
@@ -127,8 +134,12 @@ const CheckoutComponent = () => {
       setCartItems(cartItems.filter(item => item.id !== id));
     } else {
       const product = products.find(p => p.id === id);
-      if (newQuantity > product.stock) {
-        alert(`Only ${product.stock} items available in stock`);
+      if (newQuantity > product?.product_quantity) {
+        console.log(newQuantity);
+        toast.info(`Only ${product.product_quantity} items available in stock`, {
+                    title: "Stock Limit",
+                    duration: 6000
+                });
         return;
       }
       setCartItems(cartItems.map(item => 
@@ -518,7 +529,7 @@ const CheckoutComponent = () => {
                     <div className="border-t pt-3">
                       <div className="flex justify-between text-xl font-bold text-gray-900">
                         <span>Total</span>
-                        <span>₹{total.toLocaleString()}</span>
+                        <span>₹{Math.ceil(total).toLocaleString()}</span>
                       </div>
                     </div>
                   </div>
@@ -530,7 +541,7 @@ const CheckoutComponent = () => {
                     className="w-max bg-green-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
                     >
                 <CreditCard className="w-5 h-5 mr-2" />
-                {cartItems.length === 0 ? 'Add Items to Cart' : `Process Payment (₹${total.toLocaleString()})`}
+                {cartItems.length === 0 ? 'Add Items to Cart' : `Process Payment (₹${Math.ceil(total).toLocaleString()})`}
             </button>
               </div>
               

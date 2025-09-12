@@ -43,7 +43,7 @@ const ProductList = ({product, handleOnDelete}) =>{
             </span>
             </td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-light">{product.category?.name}</td>
-            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-light">{product?.brand}</td>
+            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600 font-light">{product?.supplier?.supplier_name}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-light">{convertISOToDateTime(product.updated_at)}</td>
             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
             <div className="flex items-center space-x-2">

@@ -29,6 +29,7 @@ export const DomainProvider = ({ children }) => {
         const intialize = async () => {
             try{
                 const domainInfo = getDomainInfo();
+                console.log(domainInfo,'domainInfo');
                 setDomainInfo(domainInfo);
                 if(domainInfo.storeSlug){
                     const response = await getStoreService(toast, domainInfo.storeSlug);
@@ -49,7 +50,14 @@ export const DomainProvider = ({ children }) => {
                             store_status:STORE_STATUS.NOT_FOUND
                         })
                     }
-                }else{
+                }
+                else if(domainInfo.isMainDomain){
+                    setDoummntTitle(document, 'Gonlines - Build Your Online Store');
+                }
+                else if(domainInfo.isAdmin){
+                    setDoummntTitle(document, 'Admin Panel - Manage Your Store from one place' );
+                }
+                else{
                     setDoummntTitle(document, 'Gonlines - Build Your Online Store');
                 }
             }catch(error) {

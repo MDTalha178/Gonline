@@ -1,71 +1,136 @@
-import { ImagePlus, Save, X } from "lucide-react";
-import { useState } from "react";
-import { saveProduct } from "../../../service/admin/inventory/InventoryService";
+import { ImagePlus, Save, X, User, Building2, Phone, Mail, MapPin, FileText } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useToast } from "../../../hooks/useToast";
+import { getProductSupplier, getProductUnits, saveProduct, saveSupplier } from "../../../service/admin/inventory/InventoryService";
 
 const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
-    const {toast} =  useToast();
-    const [newProduct, setNewProduct] = useState({
-        product_name: '',
-        sku:'',
-        images: [],
-        product_price: '',
-        product_quantity: '',
-        category: '',
-        sku: '',
-        brand: '',
-        unit: 'Piece',
-        product_description: '',
-        minStock: '',
-        maxStock: '',
-        
-    });
+  const {toast} =  useToast();
+  const[productUnits, setProductUnits] = useState(
+    ['Piece', 'Kg', 'Gram', 'Liter', 'Box', 'Packet', 'Dozen', 'Meter', 'Centimeter', 'Inch', 'Roll', 'Set', 'Pair']);
 
+  const [suppliers, setSuppliers] = useState([]);
+  const [showSupplierModal, setShowSupplierModal] = useState(false);
 
-    const handleImageUpload = (e) => {
-        const files = Array.from(e.target.files);
-        const imagePromises = files.map(file => {
-        return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onload = (event) => {
-            resolve({
-                file,
-                url: event.target.result,
-                name: file.name
-            });
-            };
-            reader.readAsDataURL(file);
+  const [newProduct, setNewProduct] = useState({
+      product_name: '',
+      sku:'',
+      images: [],
+      product_price: '',
+      original_price: '',
+      product_quantity: '',
+      category: '',
+      sku: '',
+      brand: '',
+      supplier_id: '',
+      unit: '',
+      product_description: '',
+      low_stock_threshold: '',
+      dimensions: '',
+      product_serial_no: '',
+      dimensions: '',
+      weight: '',
+      shipping_charge: 0,
+  });
+
+  const [newSupplier, setNewSupplier] = useState({
+    supplier_name: '',
+    company_name: '',
+    supplier_contact: '',
+    supplier_email: '',
+    supplier_address: '',
+    supplier_gst_number: ''
+  });
+
+  const handleImageUpload = (e) => {
+      const files = Array.from(e.target.files);
+      const imagePromises = files.map(file => {
+      return new Promise((resolve) => {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+          resolve({
+              file,
+              url: event.target.result,
+              name: file.name
+          });
+          };
+          reader.readAsDataURL(file);
+      });
+      });
+
+      Promise.all(imagePromises).then(images => {
+      setNewProduct(prev => ({
+          ...prev,
+          images: [...prev.images, ...images].slice(0, 5) 
+      }));
+      });
+  };
+
+  const removeImage = (index) => {
+      setNewProduct(prev => ({
+      ...prev,
+      images: prev.images.filter((_, i) => i !== index)
+      }));
+  };
+
+  const handleSaveProduct = async () =>{
+      // Here you would typically save to your backend
+      const payload = {
+          ...newProduct,
+          slug: newProduct.product_name.replace(/\s+/g, '-').toLowerCase(),
+          category_id:'c241529a-17e4-418a-8309-c11cb19387b7'
+      }
+      const response =  await saveProduct(payload, toast);
+      if(response.success === true) setShowAddModal(false)
+  }
+
+  const handleSaveSupplier = async () => {
+    try {
+      const response = await saveSupplier(newSupplier, toast);
+      if(response?.data) {
+        // Add the new supplier to the list
+        setSuppliers(prev => [...prev, response.data]);
+
+        // Select the new supplier in the product form
+        setNewProduct(prev => ({ ...prev, supplier_id: response.data.id }));
+
+        // Reset supplier form and close modal
+        setNewSupplier({
+          supplier_name: '',
+          company_name: '',
+          phone_number: '',
+          email: '',
+          address: '',
+          gst_number: ''
         });
-        });
-
-        Promise.all(imagePromises).then(images => {
-        setNewProduct(prev => ({
-            ...prev,
-            images: [...prev.images, ...images].slice(0, 5) 
-        }));
-        });
-    };
-
-    const removeImage = (index) => {
-        setNewProduct(prev => ({
-        ...prev,
-        images: prev.images.filter((_, i) => i !== index)
-        }));
-    };
-
-    const handleSaveProduct = async () =>{
-        // Here you would typically save to your backend
-        const payload = {
-            ...newProduct,
-            slug: newProduct.product_name.replace(/\s+/g, '-').toLowerCase(),
-            category_id:'c241529a-17e4-418a-8309-c11cb19387b7'
-        }
-        const response =  await saveProduct(payload, toast);
-        if(response.success === true) setShowAddModal(false)
+        setShowSupplierModal(false);
+      }
+    } catch (error) {
+      console.error('Error saving supplier:', error);
     }
+  };
 
+  const fetchProductUnits = async () =>{
+    // Fetch product units from backend (mocked here)
+    const response = await getProductUnits(toast)
+    if(response?.data){
+      setProductUnits([...productUnits, ...response.data])
+    }
+  }
+
+  const fetchSuppliers = async () => {
+    const response = await getProductSupplier(toast);
+    if(response?.data) {
+      setSuppliers(response.data);
+    }
+  };
+
+  useEffect(() =>{
+    fetchProductUnits();
+    fetchSuppliers();
+  }, [setSuppliers, setShowSupplierModal])
 
     return (
+        <>
         <div className="fixed inset-0 bg-white bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-none shadow-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto">
             {/* Modal Header */}
@@ -118,7 +183,22 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
-                        Price (₹) *
+                        Cost Price (₹) *
+                      </label>
+                      <input
+                        type="number"
+                        value={newProduct.original_price}
+                        onChange={(e) => setNewProduct(prev => ({ ...prev, original_price: e.target.value }))}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                        placeholder="0"
+                        min="0"
+                        step="0.01"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                        Selling Price (₹) *
                       </label>
                       <input
                         type="number"
@@ -140,18 +220,32 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
                         onChange={(e) => setNewProduct(prev => ({ ...prev, unit: e.target.value }))}
                         className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
                       >
-                        {/* {units.map(unit => (
+                        {productUnits.map(unit => (
                           <option key={unit} value={unit}>{unit}</option>
-                        ))} */}
+                        ))}
                       </select>
                     </div>
+                     <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                        Dimensions
+                      </label>
+                      <input
+                        type="text"
+                        value={newProduct.dimensions}
+                        onChange={(e) => setNewProduct(prev => ({ ...prev, dimensions: e.target.value }))}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                        placeholder="10x5x3 cm"
+                        min="0"
+                      />
+                    </div>
                   </div>
+
 
                   {/* Quantity & Stock Levels */}
                   <div className="grid grid-cols-3 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
-                        Initial Qty *
+                        Stock Qty *
                       </label>
                       <input
                         type="number"
@@ -169,8 +263,8 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
                       </label>
                       <input
                         type="number"
-                        value={newProduct.minStock}
-                        onChange={(e) => setNewProduct(prev => ({ ...prev, minStock: e.target.value }))}
+                        value={newProduct.low_stock_threshold}
+                        onChange={(e) => setNewProduct(prev => ({ ...prev, low_stock_threshold: e.target.value }))}
                         className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
                         placeholder="5"
                         min="0"
@@ -178,14 +272,14 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
-                        Max Stock
+                        Shipping (₹) *
                       </label>
                       <input
                         type="number"
-                        value={newProduct.maxStock}
-                        onChange={(e) => setNewProduct(prev => ({ ...prev, maxStock: e.target.value }))}
+                        value={newProduct.shipping_charge}
+                        onChange={(e) => setNewProduct(prev => ({ ...prev, shipping_charge: e.target.value }))}
                         className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
-                        placeholder="100"
+                        placeholder=""
                         min="0"
                       />
                     </div>
@@ -225,13 +319,29 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
                     <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
                       Supplier
                     </label>
-                    <input
-                      type="text"
-                      value={newProduct.brand}
-                      onChange={(e) => setNewProduct(prev => ({ ...prev, brand: e.target.value }))}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
-                      placeholder="Enter supplier name"
-                    />
+                    <div className="relative">
+                      <select
+                        value={newProduct.supplier_id}
+                        onChange={(e) => {
+                          if (e.target.value === 'add_new') {
+                            setShowSupplierModal(true);
+                          } else {
+                            setNewProduct(prev => ({ ...prev, supplier_id: e.target.value }));
+                          }
+                        }}
+                        className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                      >
+                        <option value="">Select Supplier</option>
+                        {suppliers.map(supplier => (
+                          <option key={supplier.id} value={supplier.id}>
+                            {supplier.supplier_name} - {supplier.company_name}
+                          </option>
+                        ))}
+                        <option value="add_new" className="font-medium text-gray-900 border-t border-gray-200">
+                          + Add New Supplier
+                        </option>
+                      </select>
+                    </div>
                   </div>
                 </div>
 
@@ -322,6 +432,140 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
             </div>
           </div>
         </div>
+
+        {/* Add Supplier Modal */}
+        {showSupplierModal && (
+          <div className="fixed inset-0 bg-white bg-opacity-80 backdrop-blur-sm flex items-center justify-center z-[60] p-4">
+            <div className="bg-white rounded-none shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+              {/* Supplier Modal Header */}
+              <div className="flex items-center justify-between p-6 border-b border-gray-200">
+                <h3 className="text-xl font-light text-gray-900 tracking-tight uppercase">Add New Supplier</h3>
+                <button
+                  onClick={() => setShowSupplierModal(false)}
+                  className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Supplier Modal Body */}
+              <div className="p-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  {/* Supplier Name */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                      <User className="w-4 h-4 inline mr-2" />
+                      Supplier Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={newSupplier.supplier_name}
+                      onChange={(e) => setNewSupplier(prev => ({ ...prev, supplier_name: e.target.value }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                      placeholder="Enter supplier name"
+                      required
+                    />
+                  </div>
+
+                  {/* Company Name */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                      <Building2 className="w-4 h-4 inline mr-2" />
+                      Company Name *
+                    </label>
+                    <input
+                      type="text"
+                      value={newSupplier.company_name}
+                      onChange={(e) => setNewSupplier(prev => ({ ...prev, company_name: e.target.value }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                      placeholder="Enter company name"
+                      required
+                    />
+                  </div>
+
+                  {/* Phone Number */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                      <Phone className="w-4 h-4 inline mr-2" />
+                      Phone Number *
+                    </label>
+                    <input
+                      type="tel"
+                      value={newSupplier.supplier_contact}
+                      onChange={(e) => setNewSupplier(prev => ({ ...prev, supplier_contact: e.target.value }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                      placeholder="Enter phone number"
+                      required
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                      <Mail className="w-4 h-4 inline mr-2" />
+                      Email
+                    </label>
+                    <input
+                      type="email"
+                      value={newSupplier.supplier_email}
+                      onChange={(e) => setNewSupplier(prev => ({ ...prev, supplier_email: e.target.value }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                      placeholder="Enter email address"
+                    />
+                  </div>
+
+                  {/* GST Number */}
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                      <FileText className="w-4 h-4 inline mr-2" />
+                      GST Number
+                    </label>
+                    <input
+                      type="text"
+                      value={newSupplier.supplier_gst_number}
+                      onChange={(e) => setNewSupplier(prev => ({ ...prev, supplier_gst_number: e.target.value.toUpperCase() }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-mono focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                      placeholder="e.g., 29ABCDE1234F1Z5"
+                    />
+                  </div>
+
+                  {/* Address */}
+                  <div className="md:col-span-2">
+                    <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                      <MapPin className="w-4 h-4 inline mr-2" />
+                      Address
+                    </label>
+                    <textarea
+                      value={newSupplier.address}
+                      onChange={(e) => setNewSupplier(prev => ({ ...prev, supplier_address: e.target.value }))}
+                      rows={3}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200 resize-none"
+                      placeholder="Enter complete address"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Supplier Modal Footer */}
+              <div className="flex items-center justify-end space-x-4 p-6 border-t border-gray-200 bg-gray-50">
+                <button
+                  onClick={() => setShowSupplierModal(false)}
+                  className="px-6 py-2 border border-gray-300 text-gray-700 hover:bg-gray-50 transition-colors duration-200 rounded-none font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSaveSupplier}
+                  className="flex items-center space-x-2 px-6 py-2 bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-200 rounded-none font-medium uppercase tracking-wider"
+                >
+                  <Save className="w-4 h-4" />
+                  <span>Save Supplier</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+        </>
     )
 }
 

@@ -11,7 +11,9 @@ import {
   ShoppingBag
 } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
+import { getToken } from "../../module/Auth/token";
+import { handleLogout } from "../../utils/utils";
 
 const AdminSidebar = ({currentPage='Dashboard'}) => {
   const navigate = useNavigate();
@@ -42,7 +44,7 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
      {
       name: "Checkout",
       icon: ShoppingBag,
-      path: "/admin-checkout/"
+      path: "/checkout/"
     },
     {
       name: "Audit",
@@ -73,7 +75,7 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
               <User className="w-5 h-5 text-gray-900" />
             </div>
             <div>
-              <h3 className="font-medium text-sm uppercase tracking-wider">Admin Panel</h3>
+              <h3 className="font-medium text-sm uppercase tracking-wider">{getToken()?.firstName} {getToken()?.lastName}</h3>
               <p className="text-xs text-gray-400 font-light">Management System</p>
             </div>
           </div>
@@ -158,13 +160,13 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
               <User className="w-4 h-4 text-gray-300" />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-medium">Admin User</p>
-              <p className="text-xs text-gray-400">admin@system.com</p>
+              <p className="text-sm font-medium">{getToken()?.firstName} {getToken()?.lastName}</p>
+              <p className="text-xs text-gray-400">{getToken()?.email}</p>
             </div>
           </div>
         </div>
         
-        <button className={`w-full flex items-center px-3 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition-all duration-200 group ${
+        <button onClick={() => handleLogout('/')} className={`w-full cursor-pointer flex items-center px-3 py-3 text-gray-300 hover:bg-gray-800 hover:text-white transition-all duration-200 group ${
           isCollapsed ? 'justify-center' : ''
         }`}>
           <LogOut className={`w-5 h-5 group-hover:scale-105 transition-transform duration-200 ${

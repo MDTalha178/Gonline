@@ -4,6 +4,7 @@ import NavigationButtons from "../../component/gonline/shopRegistration/Navigati
 import { shopDetailsValidation } from "../../validation/shopRegistartionValidation/shopRegistrationValidation";
 import { useToast } from "../../hooks/useToast";
 import { storeCreationService } from "../../service/store/storeCreationService";
+import { getUserId } from "../../utils/utils";
 
 const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurrentStep, handlePrevious}) =>{
 
@@ -39,7 +40,7 @@ const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurren
            const payload = {
             store_name: formData.shopName,
             store_category_id: formData.store_category_id,
-            owner_id: formData.ownerName,
+            store_owner_id: getUserId(),
             phone_number: formData.phone,
             description: formData.description,
             short_description: formData.short_description,

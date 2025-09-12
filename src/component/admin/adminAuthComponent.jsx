@@ -5,6 +5,7 @@ import { AdminloginService } from "../../service/admin/auth/authService";
 import { useAuth } from "../../context/authContext/authContext";
 import { ROLE_TYPE } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
+import { saveStoreId, saveStoreSlug } from "../../utils/utils";
 
 const AdminLogin = () => {
   const {toast} = useToast();
@@ -21,19 +22,19 @@ const AdminLogin = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    console.log(email, password);
 
     const payload = {
       email: email,
       password:password,
-      role_name:ROLE_TYPE.ADMIN
+      role_name:ROLE_TYPE.VENDOR
     };
 
     const response = await AdminloginService(payload, toast);
     console.log(response);
     if(response?.data){
       handlelogin(response?.data);
-      console.log(response?.data, 'idd');
+      saveStoreSlug(response?.data?.slug);
+      saveStoreId(response?.data?.id);
       navigate(`/dashboard`);
 
     }
@@ -116,9 +117,9 @@ const AdminLogin = () => {
                     id="remember-me"
                     name="remember-me"
                     type="checkbox"
-                    className="h-4 w-4 text-gray-900 focus:ring-gray-900 border-gray-300 rounded-none"
+                    className="h-4 w-4 text-gray-900 focus:ring-gray-900 border-gray-300 rounded-none cursor-pointer"
                   />
-                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 font-light">
+                  <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-700 font-light ">
                     Remember me
                   </label>
                 </div>
@@ -133,7 +134,7 @@ const AdminLogin = () => {
               <button
                 onClick={handleSubmit}
                 disabled={isLoading}
-                className="w-full bg-gray-900 text-white py-3 px-4 rounded-none font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition-all duration-300 uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group"
+                className="w-full bg-gray-900 text-white py-3 px-4 rounded-none font-medium hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2 transition-all duration-300 uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed relative overflow-hidden group cursor-pointer"
               >
                 <span className={`transition-opacity duration-200 ${isLoading ? 'opacity-0' : 'opacity-100'}`}>
                   Sign In

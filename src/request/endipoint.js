@@ -51,6 +51,10 @@ export const endPoint = {
         transactionDetails: (transactionId) => `transaction/${transactionId}/`,
         order: 'order/',
         orderDetails: (orderId) => `order/${orderId}/`,
-        adminLogin: '/admin-login/'
+        adminLogin: '/admin-login/',
+        productUnits: '/utility/product-unit/',
+        productSuppliers: '/stores/product/create-supplier/',
+        getProductSupplier: '/stores/product/get-supplier/'
+
     }
 }

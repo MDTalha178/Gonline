@@ -205,7 +205,7 @@ const gonliesRoutes = [
     ),
   },
     {
-    path: "/admin-checkout/",
+    path: "/checkout/",
     element: (
       <ProtectedRoute>
         <CheckoutComponent />

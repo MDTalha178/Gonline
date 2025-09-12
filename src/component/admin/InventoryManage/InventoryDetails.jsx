@@ -1,9 +1,18 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ArrowLeft, Edit2, Trash2, Package, DollarSign, TrendingUp, Calendar, User, MapPin, Tag, AlertCircle, CheckCircle, XCircle, Clock } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { fetchProductDetails } from '../../../service/marketPlace/product_service';
+import { useToast } from '../../../hooks/useToast';
+import { convertISOToDateTime } from '../../../utils/utils';
+import SubscriptionPaywall from './InventoryAnalytics';
 
 const ProductDetailsPage = () => {
+  const {toast} = useToast();
   const [activeTab, setActiveTab] = useState('overview');
   const [showEditModal, setShowEditModal] = useState(false);
+  const [products, setProduct] = useState(null);
+
+  const {productId} = useParams() 
 
   // Sample product data - in real app, this would come from props/API
   const product = {
@@ -50,8 +59,8 @@ const ProductDetailsPage = () => {
   ];
 
   const getStockStatus = () => {
-    if (product.quantity === 0) return { status: 'Out of Stock', color: 'text-red-600', bg: 'bg-red-100', icon: XCircle };
-    if (product.quantity <= product.reorderPoint) return { status: 'Low Stock', color: 'text-yellow-600', bg: 'bg-yellow-100', icon: AlertCircle };
+    if (products?.product_quantity === 0) return { status: 'Out of Stock', color: 'text-red-600', bg: 'bg-red-100', icon: XCircle };
+    if (products?.product_quantity <= 5) return { status: 'Low Stock', color: 'text-yellow-600', bg: 'bg-yellow-100', icon: AlertCircle };
     return { status: 'In Stock', color: 'text-green-600', bg: 'bg-green-100', icon: CheckCircle };
   };
 
@@ -72,6 +81,18 @@ const ProductDetailsPage = () => {
     { id: 'supplier', label: 'Supplier' },
     { id: 'history', label: 'History' }
   ];
+
+  const fetchProduct = async (productId) => {
+    const response = await fetchProductDetails(productId, toast);
+    if(response?.data){
+      setProduct(response.data);
+    }
+  }
+
+  useEffect(() => {
+    console.log("Product ID from URL:", productId);
+    fetchProduct(productId);
+  }, [setProduct]);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8">
@@ -99,13 +120,13 @@ const ProductDetailsPage = () => {
         
         <div className="flex items-start justify-between">
           <div>
-            <h1 className="text-3xl font-light text-gray-900 mb-2 uppercase tracking-wider">{product.name}</h1>
+            <h1 className="text-3xl font-light text-gray-900 mb-2 uppercase tracking-wider">{products?.product_name}</h1>
             <div className="flex items-center space-x-4 text-sm text-gray-500">
-              <span>SKU: {product.sku}</span>
+              <span>SKU: {products?.sku}</span>
+              {/* <span>•</span> */}
+              {/* <span>ID: {product.id}</span> */}
               <span>•</span>
-              <span>ID: {product.id}</span>
-              <span>•</span>
-              <span>Last updated: {product.lastUpdated}</span>
+              <span>Last updated: {convertISOToDateTime(products?.updated_at)}</span>
             </div>
           </div>
           <div className={`flex items-center space-x-2 px-3 py-2 ${stockStatus.bg} rounded-none`}>
@@ -147,7 +168,7 @@ const ProductDetailsPage = () => {
                     </div>
                     <span className="text-sm text-gray-600 uppercase tracking-wider">Selling Price</span>
                   </div>
-                  <span className="text-lg font-medium text-gray-900">{formatCurrency(product.sellingPrice)}</span>
+                  <span className="text-lg font-medium text-gray-900">{formatCurrency(products?.product_price)}</span>
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -167,7 +188,7 @@ const ProductDetailsPage = () => {
                     </div>
                     <span className="text-sm text-gray-600 uppercase tracking-wider">Current Stock</span>
                   </div>
-                  <span className="text-lg font-medium text-gray-900">{product.quantity} {product.unit}</span>
+                  <span className="text-lg font-medium text-gray-900">{products?.product_quantity} {product.unit}</span>
                 </div>
               </div>
             </div>
@@ -206,37 +227,37 @@ const ProductDetailsPage = () => {
                       <div className="space-y-4">
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Category</label>
-                          <p className="text-sm font-medium text-gray-900">{product.category}</p>
+                          <p className="text-sm font-medium text-gray-900">{products?.category?.name}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Barcode</label>
-                          <p className="text-sm font-medium text-gray-900">{product.barcode}</p>
+                          <p className="text-sm font-medium text-gray-900">{products?.barcode || 'Not added'}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Weight</label>
-                          <p className="text-sm font-medium text-gray-900">{product.weight}</p>
+                          <p className="text-sm font-medium text-gray-900">{products?.weight || 'Not added'}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Color</label>
-                          <p className="text-sm font-medium text-gray-900">{product.color}</p>
+                          <p className="text-sm font-medium text-gray-900">{products?.color || 'Not added'}</p>
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Dimensions</label>
-                          <p className="text-sm font-medium text-gray-900">{product.dimensions}</p>
+                          <p className="text-sm font-medium text-gray-900">{products?.dimensions || 'Not added'}</p>
                         </div>
                         <div>
-                          <label className="text-xs text-gray-500 uppercase tracking-wider">Warranty</label>
-                          <p className="text-sm font-medium text-gray-900">{product.warranty}</p>
+                          <label className="text-xs text-gray-500 uppercase tracking-wider">Warranty/Expiry</label>
+                          <p className="text-sm font-medium text-gray-900">{products?.warranty || 'Not added'}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Location</label>
-                          <p className="text-sm font-medium text-gray-900">{product.location}</p>
+                          <p className="text-sm font-medium text-gray-900">{products?.location || 'Not added'}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Date Added</label>
-                          <p className="text-sm font-medium text-gray-900">{product.dateAdded}</p>
+                          <p className="text-sm font-medium text-gray-900">{convertISOToDateTime(products?.updated_at)}</p>
                         </div>
                       </div>
                     </div>
@@ -244,7 +265,7 @@ const ProductDetailsPage = () => {
                   
                   <div>
                     <label className="text-xs text-gray-500 uppercase tracking-wider">Description</label>
-                    <p className="text-sm text-gray-700 mt-2 leading-relaxed">{product.description}</p>
+                    <p className="text-sm text-gray-700 mt-2 leading-relaxed">{products?.product_description || 'Not added'}</p>
                   </div>
 
                   <div>
@@ -269,31 +290,31 @@ const ProductDetailsPage = () => {
                       <div className="space-y-4">
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Current Stock</label>
-                          <p className="text-2xl font-light text-gray-900">{product.quantity}</p>
+                          <p className="text-2xl font-light text-gray-900">{products.product_quantity}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Unit</label>
-                          <p className="text-sm font-medium text-gray-900">{product.unit}</p>
+                          <p className="text-sm font-medium text-gray-900">{products?.unit || 'Not added'}</p>
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Minimum Stock</label>
-                          <p className="text-lg font-medium text-gray-900">{product.minimumStock}</p>
+                          <p className="text-lg font-medium text-gray-900">{products?.low_stock_threshold || 'Not added'}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Maximum Stock</label>
-                          <p className="text-lg font-medium text-gray-900">{product.maximumStock}</p>
+                          <p className="text-lg font-medium text-gray-900">{products?.product_quantity || 'Not added'}</p>
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Reorder Point</label>
-                          <p className="text-lg font-medium text-yellow-600">{product.reorderPoint}</p>
+                          <p className="text-lg font-medium text-yellow-600">{products?.reorderPoint || 'Not added'}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Stock Value</label>
-                          <p className="text-lg font-medium text-green-600">{formatCurrency(product.quantity * product.costPrice)}</p>
+                          <p className="text-lg font-medium text-green-600">{formatCurrency(products.product_quantity * products.product_price)}</p>
                         </div>
                       </div>
                     </div>
@@ -304,15 +325,15 @@ const ProductDetailsPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div>
                         <label className="text-xs text-gray-500 uppercase tracking-wider">Cost Price</label>
-                        <p className="text-lg font-medium text-gray-900">{formatCurrency(product.costPrice)}</p>
+                        <p className="text-lg font-medium text-gray-900">{formatCurrency(products?.original_price)}</p>
                       </div>
                       <div>
                         <label className="text-xs text-gray-500 uppercase tracking-wider">Selling Price</label>
-                        <p className="text-lg font-medium text-gray-900">{formatCurrency(product.sellingPrice)}</p>
+                        <p className="text-lg font-medium text-gray-900">{formatCurrency(products?.product_price)}</p>
                       </div>
                       <div>
                         <label className="text-xs text-gray-500 uppercase tracking-wider">Profit Margin</label>
-                        <p className="text-lg font-medium text-green-600">{product.profitMargin}</p>
+                        <p className="text-lg font-medium text-green-600">{`${products?.profit_margin}%` || 'Not Calculated yet'}</p>
                       </div>
                     </div>
                   </div>
@@ -327,23 +348,36 @@ const ProductDetailsPage = () => {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="space-y-4">
                         <div>
+                          <label className="text-xs text-gray-500 uppercase tracking-wider">Company Name</label>
+                          <p className="text-lg font-medium text-gray-900">{products?.supplier?.supplier_name || 'Not added'}</p>
+                        </div>
+                        <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Supplier Name</label>
-                          <p className="text-lg font-medium text-gray-900">{product.supplier}</p>
+                          <p className="text-lg font-medium text-gray-900">{products?.supplier?.supplier_name || 'Not added'}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Contact Number</label>
-                          <p className="text-sm font-medium text-blue-600">{product.supplierContact}</p>
+                          <p className="text-sm font-medium text-blue-600">{products?.supplier?.supplier_contact || 'Not added'}</p>
+                        </div>
+                        <div>
+                          <label className="text-xs text-gray-500 uppercase tracking-wider">Last Order Date</label>
+                          <p className="text-sm font-medium text-gray-900">{convertISOToDateTime(products?.updated_at || 'Not added')}</p>
                         </div>
                       </div>
                       <div className="space-y-4">
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Email</label>
-                          <p className="text-sm font-medium text-blue-600">{product.supplierEmail}</p>
+                          <p className="text-sm font-medium text-blue-600">{products?.supplier?.supplier_email || 'Not added'}</p>
                         </div>
                         <div>
-                          <label className="text-xs text-gray-500 uppercase tracking-wider">Last Order Date</label>
-                          <p className="text-sm font-medium text-gray-900">{product.lastUpdated}</p>
+                          <label className="text-xs text-gray-500 uppercase tracking-wider">Supplier Address</label>
+                          <p className="text-lg font-medium text-gray-900">{products?.supplier?.supplier_address || 'Not added'}</p>
                         </div>
+                        <div>
+                          <label className="text-xs text-gray-500 uppercase tracking-wider">Supplier GST Number</label>
+                          <p className="text-lg font-medium text-gray-900">{products?.supplier?.supplier_gst_number || 'Not added'}</p>
+                        </div>
+                      
                       </div>
                     </div>
                   </div>
@@ -352,45 +386,7 @@ const ProductDetailsPage = () => {
 
               {/* History Tab */}
               {activeTab === 'history' && (
-                <div className="space-y-4">
-                  <h4 className="text-sm font-medium text-gray-900 uppercase tracking-wider">Stock Movement History</h4>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-gray-50 border-b border-gray-200">
-                        <tr>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Date</th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Type</th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Quantity</th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Reason</th>
-                          <th className="px-4 py-3 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Balance</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-200">
-                        {stockMovements.map((movement, index) => (
-                          <tr key={index} className="hover:bg-gray-50">
-                            <td className="px-4 py-3 text-sm text-gray-900">{movement.date}</td>
-                            <td className="px-4 py-3">
-                              <span className={`px-2 py-1 text-xs rounded-none ${
-                                movement.type === 'Stock In' ? 'bg-green-100 text-green-600' :
-                                movement.type === 'Sale' ? 'bg-blue-100 text-blue-600' :
-                                'bg-yellow-100 text-yellow-600'
-                              }`}>
-                                {movement.type}
-                              </span>
-                            </td>
-                            <td className={`px-4 py-3 text-sm font-medium ${
-                              movement.quantity > 0 ? 'text-green-600' : 'text-red-600'
-                            }`}>
-                              {movement.quantity > 0 ? '+' : ''}{movement.quantity}
-                            </td>
-                            <td className="px-4 py-3 text-sm text-gray-600">{movement.reason}</td>
-                            <td className="px-4 py-3 text-sm font-medium text-gray-900">{movement.balance}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
+                <SubscriptionPaywall />
               )}
             </div>
           </div>

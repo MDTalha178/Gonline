@@ -28,7 +28,7 @@ const OrderStats = ({ ordersStats }) => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-600">Processing</p>
-            <p className="text-2xl font-bold text-blue-600">{ordersStats?.processing}</p>
+            <p className="text-2xl font-bold text-blue-600">{ordersStats?.total_process}</p>
           </div>
           <RefreshCw className="w-8 h-8 text-blue-500" />
         </div>
@@ -68,7 +68,7 @@ const OrderStats = ({ ordersStats }) => {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-sm text-gray-600">Revenue</p>
-            <p className="text-2xl font-bold text-green-600">₹{ordersStats?.total_revenue.toLocaleString()}</p>
+            <p className="text-2xl font-bold text-green-600">₹{ordersStats?.total_revenue}</p>
           </div>
           <Download className="w-8 h-8 text-green-500" />
         </div>

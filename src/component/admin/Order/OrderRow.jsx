@@ -55,9 +55,9 @@ return(
         <button className="text-green-600 hover:text-green-800 transition-colors">
           <Edit className="w-4 h-4" />
         </button>
-        <button className="text-red-600 hover:text-red-800 transition-colors">
+        {/* <button className="text-red-600 hover:text-red-800 transition-colors">
           <Trash2 className="w-4 h-4" />
-        </button>
+        </button> */}
       </div>
     </td>
   </tr>

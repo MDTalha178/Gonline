@@ -11,6 +11,7 @@ export const setToken = (data) =>{
         firstName:data?.user?.first_name || data?.first_name, 
         lastName:data?.user?.last_name || data?.last_name,
         userId:data?.id,
+        email:data?.user?.email || data?.email
 
     };
     localStorage.setItem('token', JSON.stringify(token));
