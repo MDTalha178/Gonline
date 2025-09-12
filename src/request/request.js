@@ -66,7 +66,18 @@ const request = {
         } catch (error) {
             return errorHandler(error, toast);
         }
-    }
+    },
+
+    update: async (url, jsonData, toast, config, extra={}) => {
+        const instance = axios.create(config.service);
+        instance.defaults.headers = {...buildHeaders(config.requiresAuth), ...extra?.headers};
+        try {
+            const response = await instance.put(url, jsonData);
+            return successHandler(response, toast)
+        } catch (error) {
+            return errorHandler(error, toast)
+        }
+    }   
 }
 
 export default request;

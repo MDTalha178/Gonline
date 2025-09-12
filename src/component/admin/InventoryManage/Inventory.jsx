@@ -27,11 +27,12 @@ import CategoryFilter from "../Filter/Inventory/CategoryFilter";
 import StockFilter from "../Filter/Inventory/StockFilter";
 import DateRangeFilter from "../Filter/Inventory/DateRangeFilter";
 import ProductStats from "./ProductStats";
-import ProductList from "./ProductList";
+import ProductList, { ProductCard } from "./ProductList";
 import AddNewProduct from "./AddNewProduct";
 import { getStoreproduct } from "../../../service/marketPlace/product_service";
 import { useToast } from "../../../hooks/useToast";
 import { deleteProductService } from "../../../service/admin/inventory/InventoryService";
+import UpdateProduct from "./updateProduct";
 
 const AdminInventory = () => {
   const {toast} = useToast()
@@ -47,6 +48,8 @@ const AdminInventory = () => {
   const [showNewCategoryModal, setShowNewCategoryModal] = useState(false);
   const [newCategoryName, setNewCategoryName] = useState('');
   const [product, setProduct] = useState([]);
+  const [editProductData, setEditProductData] = useState(null);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [dynamicCategories, setDynamicCategories] = useState(["Electronics", "Clothing", "Home & Garden", "Books", "Sports", "Health"]);
 
   const categories = ["All", ...dynamicCategories];
@@ -151,9 +154,21 @@ const AdminInventory = () => {
         }
   }
 
+  const handleUpdateProduct = (product, isClose=false) => {
+    if (isClose){
+      setEditProductData(null);
+      return setShowUpdateModal(false);
+    }
+    console.log(product);
+    setEditProductData(product);
+    setShowUpdateModal(true);
+  }
+
   useEffect(() =>{
     fetchProduct();
-  }, [showAddModal, setProduct])
+  }, [showAddModal, setProduct, showUpdateModal, editProductData]);
+
+
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -186,39 +201,56 @@ const AdminInventory = () => {
         {/* Stats Cards */}
         <ProductStats product={product}/>
 
-        {/* Products Table */}
-        <div className="bg-white rounded-none shadow-sm border border-gray-200 overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                    <button className="flex items-center space-x-1 hover:text-gray-900 transition-colors">
-                      <span>Product</span>
-                      <ArrowUpDown className="w-3 h-3" />
-                    </button>
-                  </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">SKU</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Price</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Quantity</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Stock Status</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Category</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Supplier</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Last Updated</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {product.map((product, index) => {
-                  return (
-                    <ProductList key={index} product={product} handleOnDelete={handleOnDelete}/>
-                  );
-                })}
-              </tbody>
-            </table>
+        <div className="lg:hidden space-y-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Products ({filteredProducts.length})</h2>
+            </div>
+            {product.map((product) => (
+              <ProductCard 
+                key={product.id}
+                product={product} 
+                handleOnDelete={handleOnDelete}
+                handleUpdateProduct={handleUpdateProduct}
+              />
+            ))}
           </div>
-        </div>
 
+        {/* Products Table */}
+        <div className="hidden lg:block bg-white rounded-none shadow-sm border border-gray-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead className="bg-gray-50 border-b border-gray-200">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                      <button className="flex items-center space-x-1 hover:text-gray-900 transition-colors">
+                        <span>Product</span>
+                        <ArrowUpDown className="w-3 h-3" />
+                      </button>
+                    </th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">SKU</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Price</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Quantity</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Stock Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Category</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Supplier</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Last Updated</th>
+                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {product.map((product) => (
+                    <ProductList 
+                      key={product.id}
+                      product={product} 
+                      handleOnDelete={handleOnDelete}
+                      handleUpdateProduct={handleUpdateProduct}
+  
+                    />
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
         {/* Results Summary */}
         <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
           <span>Showing {filteredProducts.length} of {sampleProducts.length} products</span>
@@ -237,6 +269,11 @@ const AdminInventory = () => {
       {/* Add Product Modal */}
       {showAddModal && (
        <AddNewProduct setShowAddModal={setShowAddModal} dynamicCategories={dynamicCategories}/>
+      )}
+
+      {/* Update Product Modal */}
+      {showUpdateModal && (
+       <UpdateProduct setShowUpdateModal={setShowUpdateModal} productData={editProductData} dynamicCategories={dynamicCategories}/>
       )}
 
       {/* Add New Category Modal */}

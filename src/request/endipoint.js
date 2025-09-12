@@ -54,7 +54,8 @@ export const endPoint = {
         adminLogin: '/admin-login/',
         productUnits: '/utility/product-unit/',
         productSuppliers: '/stores/product/create-supplier/',
-        getProductSupplier: '/stores/product/get-supplier/'
+        getProductSupplier: '/stores/product/get-supplier/',
+        productUpdate: (productId) => `stores/product/${productId}/`,
 
     }
 }

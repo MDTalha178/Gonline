@@ -62,3 +62,14 @@ export const getProductSupplier = async (toast) => {
     }
     return null;
 }
+
+export const updateProduct = async(productId, formData, toast) => {
+    try {
+        const response =  await request.update(endPoint.admin.productUpdate(productId), formData, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
+        if (response.success === true) return response
+    }
+    catch (error) {
+        toast.error(error.message);
+    }
+    null
+}
