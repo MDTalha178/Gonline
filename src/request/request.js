@@ -45,7 +45,7 @@ const request = {
      * @param {Boolean} extra.showToast - Whether to show the toast notification or not. Default true.
      * @returns {Object} - The response object.
      */    
-    read: async (url, toast, config, extra={showToast: true}) => {
+    read: async (url, toast, config, extra={showToast: false}) => {
         const instance = axios.create(config.service);
         instance.defaults.headers = {...buildHeaders(config.requiresAuth), ...extra?.headers};
         try {

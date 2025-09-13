@@ -341,8 +341,8 @@ const UpdateProduct = ({ setShowUpdateModal, productData, dynamicCategories }) =
                       required
                     >
                       <option value="">{updatedProduct.category.name}</option>
-                      {dynamicCategories.map(category => (
-                        <option key={category} value={category}>{category}</option>
+                      {dynamicCategories && dynamicCategories.map(category => (
+                        <option key={category.id} value={category.id}>{category?.name}</option>
                       ))}
                       <option value="add_new" className="font-medium text-gray-900 border-t border-gray-200">
                         + Add New Category

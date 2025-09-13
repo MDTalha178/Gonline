@@ -73,6 +73,11 @@ export function getUserId(){
   return token?.userId
 }
 
+export function getUserRole(){
+  const token = JSON.parse(localStorage.getItem('token'));
+  return token?.role_type
+}
+
 export const handleLogout = (redirect='/login') =>{
   localStorage.removeItem('token');
   localStorage.removeItem('storeId');

@@ -25,7 +25,7 @@ const TransactionRow = ({ transaction }) => {
       <tr className="hover:bg-gray-50 transition-colors duration-200">
         <td className="px-6 py-4 whitespace-nowrap">
           <div>
-            <div className="text-sm font-medium text-gray-900">{transaction.order_id}</div>
+            <div className="text-sm font-medium text-gray-900">{transaction?.transaction_id}</div>
             <div className="text-sm text-gray-500 font-light font-mono">{convertISOToDateTime(transaction.created_at, false)}</div>
           </div>
         </td>

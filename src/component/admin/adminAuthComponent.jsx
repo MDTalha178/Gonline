@@ -1,16 +1,16 @@
 import { User, Lock, Eye, EyeOff } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "../../hooks/useToast";
 import { AdminloginService } from "../../service/admin/auth/authService";
 import { useAuth } from "../../context/authContext/authContext";
 import { ROLE_TYPE } from "../../utils/constant";
 import { useNavigate } from "react-router-dom";
-import { saveStoreId, saveStoreSlug } from "../../utils/utils";
+import { getUserRole, handleLogout, saveStoreId, saveStoreSlug } from "../../utils/utils";
 
 const AdminLogin = () => {
   const {toast} = useToast();
   const navigate = useNavigate();
-  const { handlelogin } = useAuth();
+  const { handlelogin, isAuthenticated, } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -30,7 +30,6 @@ const AdminLogin = () => {
     };
 
     const response = await AdminloginService(payload, toast);
-    console.log(response);
     if(response?.data){
       handlelogin(response?.data);
       saveStoreSlug(response?.data?.slug);
@@ -42,6 +41,20 @@ const AdminLogin = () => {
    
     
   };
+
+  useEffect(() =>{
+
+    if(isAuthenticated){
+      if (getUserRole() == ROLE_TYPE.VENDOR){
+        navigate(`/dashboard`);
+      } 
+      else handleLogout('/')
+  } 
+
+  }, [isAuthenticated])
+
+  
+
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">

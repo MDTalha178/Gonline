@@ -18,6 +18,7 @@ export const endPoint = {
         checkStoreDomainAvailability: 'shop/shop/check-domain-available/',
         getStore:'shop/shop/get-store/',
         storeDelivery:'shop/shop/get-store-delivery-options',
+        category:'shop/category/'
     },
     marketPalce:{
         getStoreDetailsByName: 'store/',
@@ -27,7 +28,8 @@ export const endPoint = {
         storeCart:"store-user/store-cart/",
         storeProductList: 'stores/product/',
         userContact:'store-user/user-contact/',
-        checkoutItem:'store-user/user-checkout/'
+        checkoutItem:'store-user/user-checkout/',
+        product_category:'stores/product/get-store-product-category/'
     },
     address:{
         address: 'address/'

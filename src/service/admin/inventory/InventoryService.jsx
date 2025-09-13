@@ -15,7 +15,7 @@ export const saveProduct = async(formData, toast) => {
 
 export const getProductStats = async(formData, toast) => {
     try {
-        const response =  await request.read(endPoint.admin.productStats, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
+        const response =  await request.read(endPoint.admin.productStats, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}, showToast: false});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);
@@ -35,7 +35,7 @@ export const deleteProductService = async (productId, toast) => {
 
 export const getProductUnits = async (toast) => {
     try {
-        const response =  await request.read(endPoint.admin.productUnits, toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreId()}});
+        const response =  await request.read(endPoint.admin.productUnits, toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreId()}, showToast: false});
          if (response.success === true) return response
     } catch (error) {
             toast.error(error.message);
@@ -45,7 +45,7 @@ export const getProductUnits = async (toast) => {
 
 export const saveSupplier = async(formData, toast) => {
     try{
-        const response =  await request.create(endPoint.admin.productSuppliers, formData, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
+        const response =  await request.create(endPoint.admin.productSuppliers, formData, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}, showToast: false});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);
@@ -55,7 +55,7 @@ export const saveSupplier = async(formData, toast) => {
 
 export const getProductSupplier = async (toast) => {
     try {
-        const response =  await request.read(endPoint.admin.getProductSupplier, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
+        const response =  await request.read(endPoint.admin.getProductSupplier, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}, showToast: false});
         if (response.success === true) return response
     } catch (error) {
             toast.error(error.message);
@@ -72,4 +72,15 @@ export const updateProduct = async(productId, formData, toast) => {
         toast.error(error.message);
     }
     null
+}
+
+
+export const getProductCategory = async (toast) => {
+    try {
+        const response =  await request.read(endPoint.marketPalce.product_category, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}, showToast: false});
+        if (response.success === true) return response
+    } catch (error) {
+            toast.error(error.message);
+    }
+    return null;
 }

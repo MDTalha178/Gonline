@@ -2,7 +2,7 @@ import React from 'react';
 import { Camera, MapPin, Plus, X } from 'lucide-react';
 import contactTypes from '../data/contactType';
 
-const ShopDetailsForm = ({formData, handleInputChange, isAddContact, setIsAddContact}) => {
+const ShopDetailsForm = ({formData, handleInputChange, isAddContact, setIsAddContact, category}) => {
  return (
     <div className="bg-white rounded-2xl shadow-lg p-8">
       <div className="mb-8">
@@ -40,18 +40,11 @@ const ShopDetailsForm = ({formData, handleInputChange, isAddContact, setIsAddCon
           <select
             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
             value={formData.category || ''}
-            onChange={(e) => handleInputChange('category', e.target.value)}
+            onChange={(e) => handleInputChange('store_category_id', e.target.value)}
           >
-            <option value="">Select category</option>
-            <option value="clothing">Clothing & Fashion</option>
-            <option value="electronics">Electronics</option>
-            <option value="grocery">Grocery & Food</option>
-            <option value="books">Books & Stationery</option>
-            <option value="jewelry">Jewelry & Accessories</option>
-            <option value="home">Home & Garden</option>
-            <option value="health">Health & Beauty</option>
-            <option value="sports">Sports & Fitness</option>
-            <option value="other">Other</option>
+            {category &&category.map((item) => (
+              <option key={item.id} value={item?.id}>{item?.name}</option>
+            ))}
           </select>
         </div>
 

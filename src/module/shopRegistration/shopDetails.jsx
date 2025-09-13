@@ -1,9 +1,9 @@
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import ShopDetailsForm from "../../Form/ShopResgistrationFrom"
 import NavigationButtons from "../../component/gonline/shopRegistration/NavigationButton";
 import { shopDetailsValidation } from "../../validation/shopRegistartionValidation/shopRegistrationValidation";
 import { useToast } from "../../hooks/useToast";
-import { storeCreationService } from "../../service/store/storeCreationService";
+import { getCategory, storeCreationService } from "../../service/store/storeCreationService";
 import { getUserId } from "../../utils/utils";
 
 const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurrentStep, handlePrevious}) =>{
@@ -19,19 +19,33 @@ const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurren
         whatsapp: '',
         description: '',
         short_description: '',
-        store_category_id:'53d4e1bd-71e2-4a00-8d6e-8c06c3392f74',
+        store_category_id:'',
         contact_type:''
     });
 
     const [isAddContact, setIsAddContact] = useState(false);
     const[isloading, setIsLoading] = useState(false);
+    const [category, setCategory] = useState(null);
 
     const handleInputChange = (field, value) =>{
+        console.log(field, value);
         setFormData((prev) => ({
             ...prev,
             [field]: value
         }))
     }
+
+    const fetchCategory = async() =>{
+
+        const response = await getCategory(toast, {limit:100, offset:0});
+        if(response?.data){
+            setCategory(response?.data);
+        }
+    }
+
+    useEffect(() =>{
+        fetchCategory();
+    },[setCategory])
 
 
     const handleSubmit =  async() =>{
@@ -65,6 +79,7 @@ const ShopDetailsRegistration = ({currentStep, totalSteps, handleNext, setCurren
             handlePrevious={handlePrevious}
             isAddContact={isAddContact}
             setIsAddContact={setIsAddContact}
+            category={category}
         />
          <NavigationButtons
             currentStep={currentStep}

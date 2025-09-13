@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { User, Eye, Package, LogOut, ChevronDown } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { redirect, useNavigate } from 'react-router-dom';
+import { handleLogout } from '../../utils/utils';
 
 // Mock Link component for demonstration - replace with your actual Link component
 const Link = ({ to, children, className, label }) => {
@@ -20,7 +21,7 @@ const ProfileDropdown = ({ storeName, userName = "John Doe" }) => {
      {
       icon: <LogOut size={16} />,
       label: "Logout",
-      link: `/logout?storeName=${storeName}`,
+      link: '/',
     }
   ]
 
@@ -38,7 +39,7 @@ const ProfileDropdown = ({ storeName, userName = "John Doe" }) => {
     {
       icon: <LogOut size={16} />,
       label: "Logout",
-      link: `/logout?storeName=${storeName}`,
+      link: '/'
     }
   ];
 

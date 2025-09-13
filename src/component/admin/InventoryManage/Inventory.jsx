@@ -1,24 +1,3 @@
-import { 
-  Search, 
-  Filter, 
-  Plus, 
-  Edit3, 
-  Trash2, 
-  Eye,
-  ChevronDown,
-  Calendar,
-  Package,
-  AlertTriangle,
-  CheckCircle,
-  XCircle,
-  ArrowUpDown,
-  Download,
-  Upload,
-  X,
-  Camera,
-  Save,
-  ImagePlus
-} from "lucide-react";
 import { useEffect, useState } from "react";
 import AdminSidebar from "../Sidebar";
 import InventoryHeader from "./InventoryHeader";
@@ -31,8 +10,10 @@ import ProductList, { ProductCard } from "./ProductList";
 import AddNewProduct from "./AddNewProduct";
 import { getStoreproduct } from "../../../service/marketPlace/product_service";
 import { useToast } from "../../../hooks/useToast";
-import { deleteProductService } from "../../../service/admin/inventory/InventoryService";
+import { deleteProductService, getProductCategory } from "../../../service/admin/inventory/InventoryService";
 import UpdateProduct from "./updateProduct";
+import { getCategory } from "../../../service/store/storeCreationService";
+import { ArrowUpDown } from "lucide-react";
 
 const AdminInventory = () => {
   const {toast} = useToast()
@@ -50,80 +31,19 @@ const AdminInventory = () => {
   const [product, setProduct] = useState([]);
   const [editProductData, setEditProductData] = useState(null);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
-  const [dynamicCategories, setDynamicCategories] = useState(["Electronics", "Clothing", "Home & Garden", "Books", "Sports", "Health"]);
+  const [category, setCategory] = useState([]);
+  const [productCategory, setProductCategory] = useState([]);
 
-  const categories = ["All", ...dynamicCategories];
+
   const stockOptions = ["All", "In Stock", "Out of Stock", "Low Stock"];
 
-   const fetchProduct = async () => {
-      const response = await getStoreproduct(toast, null, {});
+  const fetchProduct = async () => {
+      const response = await getStoreproduct(toast, null, {'search': searchTerm});
       if (response?.data){
           setProduct(response.data);
       }
-    }
-
-  const sampleProducts = [
-    {
-      id: "P001",
-      name: "Samsung Galaxy S24",
-      price: 89999,
-      quantity: 45,
-      inStock: true,
-      category: "Electronics",
-      unit: "Piece",
-      sku: "SAM-S24-256",
-      supplier: "Samsung India",
-      lastUpdated: "2024-08-15"
-    },
-    {
-      id: "P002",
-      name: "Nike Air Max Shoes",
-      price: 8999,
-      quantity: 0,
-      inStock: false,
-      category: "Sports",
-      unit: "Pair",
-      sku: "NIK-AM-42",
-      supplier: "Nike Store",
-      lastUpdated: "2024-08-14"
-    },
-    {
-      id: "P003",
-      name: "Cotton T-Shirt",
-      price: 799,
-      quantity: 5,
-      inStock: true,
-      category: "Clothing",
-      unit: "Piece",
-      sku: "COT-TS-M",
-      supplier: "Fashion Hub",
-      lastUpdated: "2024-08-16"
-    },
-    {
-      id: "P004",
-      name: "Wireless Earbuds",
-      price: 2999,
-      quantity: 120,
-      inStock: true,
-      category: "Electronics",
-      unit: "Piece",
-      sku: "WRL-EB-BT",
-      supplier: "Tech World",
-      lastUpdated: "2024-08-15"
-    },
-    {
-      id: "P005",
-      name: "Yoga Mat",
-      price: 1299,
-      quantity: 8,
-      inStock: true,
-      category: "Sports",
-      unit: "Piece",
-      sku: "YOG-MAT-6MM",
-      supplier: "Fitness Store",
-      lastUpdated: "2024-08-13"
-    }
-  ];
+  }
+  
 
 
   const handleAddNewCategory = () => {
@@ -135,18 +55,6 @@ const AdminInventory = () => {
     }
   };
 
-  const filteredProducts = sampleProducts.filter(product => {
-    const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         product.sku.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory === "All" || product.category === selectedCategory;
-    const matchesStock = selectedStock === "All" || 
-                        (selectedStock === "In Stock" && product.quantity > 10) ||
-                        (selectedStock === "Low Stock" && product.quantity > 0 && product.quantity <= 10) ||
-                        (selectedStock === "Out of Stock" && product.quantity === 0);
-    
-    return matchesSearch && matchesCategory && matchesStock;
-  });
-
   const handleOnDelete = async (productId) => {
     const response =  await deleteProductService(productId, toast);
         if (response?.success === true){
@@ -154,19 +62,43 @@ const AdminInventory = () => {
         }
   }
 
+ const fetchCategory = async() =>{
+ 
+    const response = await getCategory(toast, {limit:100, offset:0});
+    if(response?.data){
+        setCategory(response?.data);
+    }
+  }
+
+  const fetchProductategory = async () => {
+    const response = await getProductCategory(toast)
+    if(response?.data){
+      setProductCategory(response?.data);
+    }
+  }
+
   const handleUpdateProduct = (product, isClose=false) => {
     if (isClose){
       setEditProductData(null);
       return setShowUpdateModal(false);
     }
-    console.log(product);
     setEditProductData(product);
     setShowUpdateModal(true);
   }
 
   useEffect(() =>{
     fetchProduct();
-  }, [showAddModal, setProduct, showUpdateModal, editProductData]);
+    fetchCategory();
+    fetchProductategory();
+
+    const delayDebounce = setTimeout(() => {
+      if (searchTerm) {
+        fetchProduct(searchTerm); 
+      }
+    }, 1000); 
+    return () => clearTimeout(delayDebounce);
+
+  }, [showAddModal, setProduct, showUpdateModal, editProductData, searchTerm]);
 
 
 
@@ -188,7 +120,7 @@ const AdminInventory = () => {
 
 
             {/* Category Filter */}
-            <CategoryFilter selectedCategory={selectedCategory} setShowCategoryFilter={setShowCategoryFilter} setSelectedCategory={setSelectedCategory} categories={dynamicCategories}/>
+            <CategoryFilter selectedCategory={selectedCategory} setShowCategoryFilter={setShowCategoryFilter} setSelectedCategory={setSelectedCategory} categories={productCategory} showCategoryFilter={showCategoryFilter}/>
 
             {/* Stock Filter */}
             <StockFilter selectedStock={selectedStock} setShowStockFilter={setShowStockFilter} setSelectedStock={setSelectedStock} stockOptions={stockOptions} showStockFilter={showStockFilter}/>
@@ -203,7 +135,7 @@ const AdminInventory = () => {
 
         <div className="lg:hidden space-y-4">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Products ({filteredProducts.length})</h2>
+              <h2 className="text-lg font-semibold text-gray-900">Products ({product.length})</h2>
             </div>
             {product.map((product) => (
               <ProductCard 
@@ -253,7 +185,7 @@ const AdminInventory = () => {
           </div>
         {/* Results Summary */}
         <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-          <span>Showing {filteredProducts.length} of {sampleProducts.length} products</span>
+          <span>Showing {product.length} of {product.length} products</span>
           <div className="flex items-center space-x-2">
             <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 rounded-none">
               Previous
@@ -268,12 +200,12 @@ const AdminInventory = () => {
 
       {/* Add Product Modal */}
       {showAddModal && (
-       <AddNewProduct setShowAddModal={setShowAddModal} dynamicCategories={dynamicCategories}/>
+       <AddNewProduct setShowAddModal={setShowAddModal} dynamicCategories={category}/>
       )}
 
       {/* Update Product Modal */}
       {showUpdateModal && (
-       <UpdateProduct setShowUpdateModal={setShowUpdateModal} productData={editProductData} dynamicCategories={dynamicCategories}/>
+       <UpdateProduct setShowUpdateModal={setShowUpdateModal} productData={editProductData} dynamicCategories={category}/>
       )}
 
       {/* Add New Category Modal */}

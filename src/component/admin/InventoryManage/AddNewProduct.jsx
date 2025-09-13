@@ -18,7 +18,7 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
       product_price: '',
       original_price: '',
       product_quantity: '',
-      category: '',
+      category_id: '',
       sku: '',
       brand: '',
       supplier_id: '',
@@ -77,7 +77,7 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
       const payload = {
           ...newProduct,
           slug: newProduct.product_name.replace(/\s+/g, '-').toLowerCase(),
-          category_id:'c241529a-17e4-418a-8309-c11cb19387b7'
+  
       }
       const response =  await saveProduct(payload, toast);
       if(response.success === true) setShowAddModal(false)
@@ -297,15 +297,15 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
                           if (e.target.value === 'add_new') {
                             setShowNewCategoryModal(true);
                           } else {
-                            setNewProduct(prev => ({ ...prev, category: e.target.value }));
+                            setNewProduct(prev => ({ ...prev, category_id: e.target.value }));
                           }
                         }}
                         className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
                         required
                       >
                         <option value="">Select Category</option>
-                        {dynamicCategories.map(category => (
-                          <option key={category} value={category}>{category}</option>
+                        {dynamicCategories && dynamicCategories.map(category => (
+                          <option key={category.id} value={category.id}>{category?.name}</option>
                         ))}
                         <option value="add_new" className="font-medium text-gray-900 border-t border-gray-200">
                           + Add New Category

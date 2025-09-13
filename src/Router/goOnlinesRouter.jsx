@@ -15,16 +15,6 @@ import StoreProduct from "../module/storeMarketPlace/StoreProduct/StoreProduct";
 import StoreCheckout from "../module/storeMarketPlace/checkout/Checkout";
 import PlaceOrderSuccess from "../module/storeMarketPlace/Order/PlaceOrderSuccess";
 import OrderList from "../module/storeMarketPlace/Order/OrderList";
-import AdminLogin from "../component/admin/adminAuthComponent";
-import AdminDashboard from "../component/admin/Dasboard";
-import AdminInventory from "../component/admin/InventoryManage/Inventory";
-import ProductDetailsPage from "../component/admin/InventoryManage/InventoryDetails";
-import AdminTransactions from "../component/admin/Transaction/TransactionList";
-import TransactionDetails from "../component/admin/Transaction/TransactionDetails";
-import AdminOrderList from "../component/admin/Order/OrderListing";
-import AdminOrderDetails from "../component/admin/Order/OrderDetails";
-import CheckoutComponent from "../component/admin/Checkout/Checkout";
-import CompactUpcomingCard from "../component/UpcomingRelease/UpocmingRealese";
 import UpcomingReleaseCard from "../component/UpcomingRelease/UpocmingRealese";
 
 const gonliesRoutes = [
@@ -140,78 +130,8 @@ const gonliesRoutes = [
       </ProtectedRoute>
     ),
   },
-  {
-    path: "/admin-login/",
-    element: (
-      <ProtectedRoute>
-        <AdminLogin />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/dashboard/",
-    element: (
-      <ProtectedRoute>
-        <AdminDashboard />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/inventory/",
-    element: (
-      <ProtectedRoute>
-        <AdminInventory />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/inventory/:id",
-    element: (
-      <ProtectedRoute>
-        <ProductDetailsPage />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/transaction/",
-    element: (
-      <ProtectedRoute>
-        <AdminTransactions />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/transaction/:transactionId",
-    element: (
-      <ProtectedRoute>
-        <TransactionDetails />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/admin-orders/",
-    element: (
-      <ProtectedRoute>
-        <AdminOrderList />
-      </ProtectedRoute>
-    ),
-  },
-  {
-    path: "/admin-orders/:orderId",
-    element: (
-      <ProtectedRoute>
-        <AdminOrderDetails />
-      </ProtectedRoute>
-    ),
-  },
-    {
-    path: "/checkout/",
-    element: (
-      <ProtectedRoute>
-        <CheckoutComponent />
-      </ProtectedRoute>
-    ),
-  },
+
+   
   {
     path: "/unauthorized",
     element: <Unauthorized />,
