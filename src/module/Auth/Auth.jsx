@@ -74,7 +74,7 @@ const AuthComponentModule = ({loginaction = 'signup'}) =>{
             try{
                 const response = await loginService(formData, toast);
                 handlelogin(response?.data);
-                // if(response) navigate(`/`);
+                if(response) navigate(`/`);
             }
             catch(error){
                 toast.error('Something went wrong');
