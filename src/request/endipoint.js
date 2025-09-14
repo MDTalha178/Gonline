@@ -58,6 +58,7 @@ export const endPoint = {
         productSuppliers: '/stores/product/create-supplier/',
         getProductSupplier: '/stores/product/get-supplier/',
         productUpdate: (productId) => `stores/product/${productId}/`,
+        checkout: 'order/pos-checkout/',
 
     }
 }

@@ -115,7 +115,7 @@ const AdminOrderDetails = ({onBack }) => {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-6">
-              <OrderItemsCard order={order?.order_details} />
+              <OrderItemsCard order={order?.order_details}  orderdetails={order?.order_details?.order_item}/>
               <PaymentShippingCard order={order?.order_details} />
               <StatusUpdateActions order={order?.order_details} onStatusUpdate={handleStatusUpdate} /> 
             </div>
@@ -123,7 +123,7 @@ const AdminOrderDetails = ({onBack }) => {
             {/* Right Column */}
             <div className="space-y-6">
               <CustomerInfoCard order={order?.order_details} />
-              <OrderTimelineCard order={sampleOrder} />
+              <OrderTimelineCard order={order?.order_details} />
             </div>
           </div>
         </div>

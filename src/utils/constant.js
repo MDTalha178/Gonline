@@ -133,3 +133,11 @@ export const ORDER_STATUS_CONFIG = {
 
     }
 }
+
+export const PAYMENT = {
+    'COD':'Cash on Delivery',
+    'ONLINE':'Online Payment',
+    'WALLET':'Wallet Payment',
+    'UPI':'UPI Payment',
+    'CARD':'Card Payment'
+}

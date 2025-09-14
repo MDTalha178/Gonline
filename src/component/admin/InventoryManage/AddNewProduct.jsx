@@ -136,11 +136,11 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
             {/* Modal Header */}
             <div className="flex items-center justify-between p-6 border-b border-gray-200">
               <h2 className="text-2xl font-light text-gray-900 tracking-tight uppercase">Add New Product</h2>
-              <button
+             <button
                 onClick={() => setShowAddModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
+                className="text-red-400/60 hover:text-red-500 hover:bg-red-50/50 transition-all duration-200 rounded-full p-1.5 group"
               >
-                <X className="w-6 h-6" />
+                <X className="w-6 h-6 group-hover:rotate-90 transition-transform duration-200 cursor-pointer" />
               </button>
             </div>
 
@@ -410,6 +410,33 @@ const AddNewProduct = ({setShowAddModal, dynamicCategories}) =>{
                       placeholder="Enter product description, features, specifications..."
                     />
                   </div>
+                   <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                      Serial Number
+                    </label>
+                    <input
+                      type="text"
+                      value={newProduct.product_serial_no}
+                      onChange={(e) => setUpdatedProduct(prev => ({ ...prev, product_serial_no: e.target.value }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                      placeholder="Enter serial number"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                      Weight
+                    </label>
+                    <input
+                      type="text"
+                      value={newProduct.weight}
+                      onChange={(e) => setUpdatedProduct(prev => ({ ...prev, weight: e.target.value }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                      placeholder="e.g., 2.5 kg"
+                    />
+                  </div>
+                </div>
+                  
                 </div>
               </div>
             </div>

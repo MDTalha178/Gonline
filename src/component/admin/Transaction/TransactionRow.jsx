@@ -1,6 +1,7 @@
 import { AlertTriangle, CheckCircle, Clock, Eye, FileText, XCircle } from "lucide-react";
 import { convertISOToDateTime } from "../../../utils/utils";
 import { useNavigate } from "react-router-dom";
+import { PAYMENT } from "../../../utils/constant";
 
 const TransactionRow = ({ transaction }) => {
     const navigate = useNavigate();
@@ -31,7 +32,7 @@ const TransactionRow = ({ transaction }) => {
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm font-medium text-gray-900">₹{transaction.amount.toLocaleString('en-IN')}</div>
-          <div className="text-sm text-gray-500 font-light">{transaction.payment_mode}</div>
+          <div className="text-sm text-gray-500 font-light">{PAYMENT[transaction.payment_mode]}</div>
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <div className="text-sm text-gray-900">{convertISOToDateTime(transaction.created_at, false)}</div>

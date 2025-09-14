@@ -3,6 +3,7 @@ import OrderStatusBadge from "./OrderStatusBadge";
 import PaymentStatusBadge from "./PaymentStatusBage";
 import { convertISOToDateTime } from "../../../utils/utils";
 import { useNavigate } from "react-router-dom";
+import { PAYMENT } from "../../../utils/constant";
 
 const OrderRow = ({ order }) => {
 
@@ -36,7 +37,7 @@ return(
       <PaymentStatusBadge status={order?.payment_status} />
     </td>
     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-      {order?.payment_method || 'N/A'}
+      {order?.payment_method && PAYMENT[order?.payment_method] || 'N/A'}
     </td>
     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
       {order.trackingNumber || 'Not generated yet'}

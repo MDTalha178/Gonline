@@ -1,46 +1,44 @@
 import { CheckCircle, Clock, CreditCard, Package, RefreshCw, Truck } from "lucide-react";
+import { convertISOToDateTime } from "../../../utils/utils";
 
 const OrderTimelineCard = ({ order }) => {
   const timeline = [
     { 
       status: 'Order Placed', 
-      date: order.orderDate, 
-      time: order.orderTime, 
+      date: convertISOToDateTime(order?.created_at), 
       completed: true,
       icon: CheckCircle,
       description: 'Order has been placed successfully'
     },
     { 
       status: 'Payment Confirmed', 
-      date: order.orderDate, 
-      time: order.orderTime, 
-      completed: order.paymentStatus === 'Paid',
+      date: convertISOToDateTime(order?.created_at), 
+      completed: order?.payment_status === 'SUCCESS',
       icon: CreditCard,
-      description: 'Payment has been processed'
-    },
+      description: order?.payment_status === 'SUCCESS' ? 'Payment has been processed': 'Awaiting payment confirmation'
+    }, 
     { 
       status: 'Processing', 
-      date: order.processingDate || null, 
-      time: order.processingTime || null, 
-      completed: ['Processing', 'Shipped', 'Delivered'].includes(order.status),
+      date: convertISOToDateTime(order?.created_at) || null, 
+      completed: ['CONFIRMED', 'SHIPPED', 'DELIVERED'].includes(order?.status),
       icon: RefreshCw,
       description: 'Order is being prepared'
     },
     { 
       status: 'Shipped', 
-      date: order.shippedDate || null, 
-      time: order.shippedTime || null, 
-      completed: ['Shipped', 'Delivered'].includes(order.status),
+      date: order?.shippedDate || null, 
+      time: order?.shippedTime || null, 
+      completed: ['SHIPPED', 'DELIVERED'].includes(order?.status),
       icon: Truck,
-      description: 'Order has been shipped'
+      description: ['SHIPPED', 'DELIVERED'].includes(order?.status) ? 'Order has been shipped': 'Awaiting shipment'
     },
     { 
       status: 'Delivered', 
-      date: order.deliveredDate || null, 
-      time: order.deliveredTime || null, 
-      completed: order.status === 'Delivered',
+      date: order?.deliveredDate || null, 
+      time: order?.deliveredTime || null, 
+      completed: order?.status === 'DELIVERED',
       icon: Package,
-      description: 'Order has been delivered'
+      description: order?.status === 'DELIVERED'? 'Order has been delivered' : 'Awaiting for shipment'
     }
   ];
 

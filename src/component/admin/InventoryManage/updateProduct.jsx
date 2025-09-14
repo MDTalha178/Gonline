@@ -174,11 +174,11 @@ const UpdateProduct = ({ setShowUpdateModal, productData, dynamicCategories }) =
               </h2>
             </div>
             <button
-              onClick={() => setShowUpdateModal(false)}
-              className="text-gray-400 hover:text-gray-600 transition-colors duration-200"
-            >
-              <X className="w-6 h-6"  onClick={() => setShowUpdateModal(false)}/>
-            </button>
+                onClick={() => setShowUpdateModal(false)}
+                className="text-red-400/60 hover:text-red-500 hover:bg-red-50/50 transition-all duration-200 rounded-full p-1.5 group"
+              >
+                <X className="w-6 h-6 group-hover:rotate-90 transition-transform duration-200 cursor-pointer" />
+              </button>
           </div>
 
           {/* Modal Body */}

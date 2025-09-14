@@ -178,7 +178,7 @@ const ProductDetailsPage = () => {
                     </div>
                     <span className="text-sm text-gray-600 uppercase tracking-wider">Profit</span>
                   </div>
-                  <span className="text-lg font-medium text-green-600">{formatCurrency(product.profit)}</span>
+                  <span className="text-lg font-medium text-green-600">{formatCurrency(products?.total_profit)}</span>
                 </div>
                 
                 <div className="flex items-center justify-between">
@@ -230,8 +230,8 @@ const ProductDetailsPage = () => {
                           <p className="text-sm font-medium text-gray-900">{products?.category?.name}</p>
                         </div>
                         <div>
-                          <label className="text-xs text-gray-500 uppercase tracking-wider">Barcode</label>
-                          <p className="text-sm font-medium text-gray-900">{products?.barcode || 'Not added'}</p>
+                          <label className="text-xs text-gray-500 uppercase tracking-wider">Barcode/Serial</label>
+                          <p className="text-sm font-medium text-gray-900">{products?.product_serial_no || 'Not added'}</p>
                         </div>
                         <div>
                           <label className="text-xs text-gray-500 uppercase tracking-wider">Weight</label>

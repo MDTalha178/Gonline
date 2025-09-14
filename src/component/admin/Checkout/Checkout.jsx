@@ -28,6 +28,7 @@ import {
 import AdminSidebar from "../Sidebar";
 import { fetchProductList } from "../../../service/marketPlace/product_service";
 import { useToast } from "../../../hooks/useToast";
+import { checkoutService } from "../../../service/admin/Checkout/checkoutService";
 
 const CheckoutComponent = () => {
   const {toast} = useToast()
@@ -83,6 +84,32 @@ const CheckoutComponent = () => {
   const total = subtotal - discountAmount + taxAmount;
   const changeAmount = amountReceived ? Math.max(0, parseFloat(amountReceived) - total) : 0;
 
+
+  const handleCheckout = async() => {
+    // Implement checkout logic here
+    const payload = {
+      ...customer,
+      sub_total: subtotal,
+      discount_amount: Math.ceil(discountAmount),
+      tax: Math.ceil(taxAmount),
+      total_bill_amount: Math.ceil(total),
+      total_items: cartItems.length,
+      product_id:cartItems.map((item) => {
+        return {product_id: item.id, quantity: item.quantity}
+      })
+    }
+    const response = await checkoutService(payload, toast);
+    if(response?.data){
+      setCartItems([]);
+      setCustomer(null);
+      setAmountReceived('');
+      setDiscount(0);
+      setTax(0);
+      fetchProdouct();
+      toast.success("Order placed successfully");
+    }
+  }
+
   // Add product to cart
   const addToCart = (product, quantity = 1) => {
     const existingItem = cartItems.find(item => item.id === product.id);
@@ -102,7 +129,7 @@ const CheckoutComponent = () => {
           : item
       ));
     } else {
-      if (quantity > product.stock) {
+      if (quantity > product.product_quantity) {
         toast.info(`Only ${product?.product_quantity} items available in stock`, {
                     title: "Stock Limit",
                     duration: 6000
@@ -252,9 +279,9 @@ const CheckoutComponent = () => {
                             </div>
                             <div className="text-right">
                               <p className="font-semibold text-gray-900">₹{product?.product_price}</p>
-                              <button className="text-gray-600 hover:text-gray-700 text-sm font-medium cursor-pointer">
+                              {product?.product_quantity > 0 && <button className="text-gray-600 hover:text-gray-700 text-sm font-medium cursor-pointer">
                                 Add to Cart
-                              </button>
+                              </button>}
                             </div>
                           </div>
                         ))
@@ -517,13 +544,13 @@ const CheckoutComponent = () => {
                     {discountAmount > 0 && (
                       <div className="flex justify-between text-green-600">
                         <span>Discount</span>
-                        <span>-₹{discountAmount.toLocaleString()}</span>
+                        <span>-₹{Math.ceil(discountAmount).toLocaleString()}</span>
                       </div>
                     )}
                     
                     <div className="flex justify-between text-gray-600">
                       <span>Tax ({tax}%)</span>
-                      <span>₹{taxAmount.toLocaleString()}</span>
+                      <span>₹{Math.ceil(taxAmount).toLocaleString()}</span>
                     </div>
                     
                     <div className="border-t pt-3">
@@ -536,7 +563,7 @@ const CheckoutComponent = () => {
                 </div>
 
                 <button
-                    onClick={processPayment}
+                    onClick={handleCheckout}
                     disabled={cartItems.length === 0}
                     className="w-max bg-green-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
                     >
