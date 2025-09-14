@@ -1,9 +1,10 @@
 import { AlertTriangle, CheckCircle, Package, XCircle } from "lucide-react"
 import { useEffect, useState } from "react";
 import { getProductStats } from "../../../service/admin/inventory/InventoryService";
+import StatsCardShimmer from "../Shimmer/StatsShimmer";
 
 const ProductStats = ({product}) => {
-    const [prdductStats, setproductStats] = useState({});
+    const [prdductStats, setproductStats] = useState(null);
 
     useEffect(() =>{
     const fetchProductStats = async () => {
@@ -16,6 +17,15 @@ const ProductStats = ({product}) => {
 
     fetchProductStats()
     },[setproductStats, product])
+
+    console.log(prdductStats);
+    if(prdductStats === null){ 
+      return(
+        <>
+          <StatsCardShimmer />
+        </>
+      )
+    }
     return(
        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
           <div className="bg-white rounded-none shadow-sm border border-gray-200 p-4">

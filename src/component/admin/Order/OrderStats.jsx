@@ -1,6 +1,15 @@
 import { CheckCircle, Clock, Download, Package, RefreshCw, Truck, XCircle } from "lucide-react";
+import StatsCardShimmer from "../Shimmer/StatsShimmer";
 
 const OrderStats = ({ ordersStats }) => {
+
+  if(!ordersStats){ 
+      return(
+        <>
+          <StatsCardShimmer />
+        </>
+      )
+    }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-7 gap-4 mb-6">

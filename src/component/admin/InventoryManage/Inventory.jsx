@@ -14,6 +14,7 @@ import { deleteProductService, getProductCategory } from "../../../service/admin
 import UpdateProduct from "./updateProduct";
 import { getCategory } from "../../../service/store/storeCreationService";
 import { ArrowUpDown } from "lucide-react";
+import { RowLoader } from "../Shimmer/rowLoader";
 
 const AdminInventory = () => {
   const {toast} = useToast()
@@ -170,7 +171,7 @@ const AdminInventory = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {product.map((product) => (
+                  {product.length === 0? <RowLoader />: product.map((product) => (
                     <ProductList 
                       key={product.id}
                       product={product} 

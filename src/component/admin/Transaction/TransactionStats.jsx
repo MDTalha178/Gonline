@@ -1,10 +1,11 @@
 import { CheckCircle, Clock, CreditCard, XCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getTransactionStats } from "../../../service/admin/TransactionService/transactions";
+import StatsCardShimmer from "../Shimmer/StatsShimmer";
 
 const TransactionStats = ({sampleTransactions}) => {
     
-    const [transactionStats, setTransactionStats] = useState({});
+    const [transactionStats, setTransactionStats] = useState(null);
 
     useEffect(() =>{
         const fetchTransactionStats = async () => {
@@ -18,6 +19,13 @@ const TransactionStats = ({sampleTransactions}) => {
         fetchTransactionStats();
     },[setTransactionStats]);
 
+    if(transactionStats === null){ 
+      return(
+        <>
+          <StatsCardShimmer />
+        </>
+      )
+    }
 
     return(
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">

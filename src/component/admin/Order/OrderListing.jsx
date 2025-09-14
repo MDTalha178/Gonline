@@ -6,9 +6,10 @@ import SearchOrder from './SearchOrder';
 import DropdownFilter from '../DropDrown/DropDownFilter';
 import DateRangeFilter from '../Filter/Inventory/DateRangeFilter';
 import OrderStats from './OrderStats';
-import OrderRow from './OrderRow';
+import OrderRow, { OrderResponsiveRow } from './OrderRow';
 import { useToast } from '../../../hooks/useToast';
 import { getOrder } from '../../../service/admin/OrderService/OrderService';
+import { RowLoader } from '../Shimmer/rowLoader';
 
 
 // Main OrderList Component
@@ -221,8 +222,19 @@ const AdminOrderList = () => {
         {/* Stats Cards */}
         <OrderStats ordersStats={orderData?.order_stats} />
 
+        {/* Responsive Table */}
+         <div className="lg:hidden space-y-4">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-lg font-semibold text-gray-900">Order ({orderData?.order_list?.length})</h2>
+          </div>
+           {orderData?.order_list && orderData?.order_list.map((order) =>(
+          <OrderResponsiveRow key={order.id} order={order} />
+        ))}
+        </div>
+       
+
         {/* Orders Table */}
-        <div className="bg-white shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white shadow-sm border border-gray-200 overflow-hidden hidden lg:block">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
@@ -249,7 +261,7 @@ const AdminOrderList = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {orderData?.order_list && orderData?.order_list.map((order) => (
+                {orderData.length === 0? <RowLoader /> : orderData?.order_list && orderData?.order_list.map((order) => (
                   <OrderRow key={order.id} order={order} />
                 ))}
               </tbody>

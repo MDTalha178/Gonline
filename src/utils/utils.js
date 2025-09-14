@@ -84,3 +84,14 @@ export const handleLogout = (redirect='/login') =>{
   localStorage.removeItem('storeName');
   window.location.href = redirect;
 }
+
+export const saveSidebarState = (isCollapsed) =>{
+  console.log(isCollapsed);
+  localStorage.setItem('isSidebarCollapsed', JSON.stringify(isCollapsed));
+
+  return isCollapsed
+}
+
+export const getSidebarState = () =>{
+  return JSON.parse(localStorage.getItem('isSidebarCollapsed')) || false;
+}

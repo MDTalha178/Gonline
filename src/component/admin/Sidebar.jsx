@@ -13,11 +13,11 @@ import {
 import { useState } from "react";
 import { redirect, useNavigate } from "react-router-dom";
 import { getToken } from "../../module/Auth/token";
-import { handleLogout } from "../../utils/utils";
+import { getSidebarState, handleLogout, saveSidebarState } from "../../utils/utils";
 
 const AdminSidebar = ({currentPage='Dashboard'}) => {
   const navigate = useNavigate();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(getSidebarState());
   const [activeItem, setActiveItem] = useState(currentPage);
 
   const menuItems = [
@@ -81,7 +81,7 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
           </div>
           
           <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
+            onClick={() => setIsCollapsed(saveSidebarState(!isCollapsed))}
             className="p-1.5 hover:bg-gray-800 rounded-none transition-all duration-200 hover:scale-110"
           >
             {isCollapsed ? (

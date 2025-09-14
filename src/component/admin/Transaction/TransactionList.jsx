@@ -5,13 +5,14 @@ import { useEffect, useState } from "react";
 import AdminSidebar from "../Sidebar";
 import DateRangeFilter from "./DateRangeFilter";
 import SearchTransaction from "./SearchTransaction";
-import TransactionRow from "./TransactionRow";
+import TransactionRow, { TransactionResponsiveRow } from "./TransactionRow";
 import TransactionStats from "./TransactionStats";
 import TransactionHeader from "./TransactionHeader";
 import DropdownFilter from "./DropDownFilter";
 import { useToast } from "../../../hooks/useToast";
 import { getTransaction } from "../../../service/admin/TransactionService/transactions";
 import { useNavigate } from "react-router-dom";
+import { RowLoader } from "../Shimmer/rowLoader";
 
 const AdminTransactions = () => {
   const {toast} = useToast();
@@ -168,8 +169,21 @@ const AdminTransactions = () => {
         {/* Stats Cards */}
         <TransactionStats  sampleTransactions={filteredTransactions}/>
 
+
+        {/* Responsive Transaction Rows */}
+         <div className="lg:hidden space-y-4">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-lg font-semibold text-gray-900">Transaction ({transactionData && transactionData.length})</h2>
+            </div>
+              {transactionData.length === 0 ? <RowLoader /> :transactionData.map((transaction) => (
+                  <TransactionResponsiveRow transaction={transaction}/>
+              ))}
+        </div>
+
+      
+
         {/* Transactions Table */}
-        <div className="bg-white rounded-none shadow-sm border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-none shadow-sm border border-gray-200 overflow-hidden hidden lg:block">
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
@@ -200,7 +214,7 @@ const AdminTransactions = () => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {transactionData.map((transaction) => (
+                {transactionData.length === 0 ? <RowLoader /> : transactionData.map((transaction) => (
                   <TransactionRow key={transaction.id} transaction={transaction}  />
                 ))}
               </tbody>
