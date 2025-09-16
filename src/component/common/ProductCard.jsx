@@ -52,10 +52,14 @@ const ProductCard = ({product}) => {
                 
                 {/* Quick Actions */}
                 <div className="flex items-center justify-between text-xs text-gray-500"  onClick={() => navigate(`/product/${product.id}`)}>
-                    <span className="flex items-center">
-                        <div className="w-2 h-2 bg-green-500 rounded-full mr-1"></div>
-                        {product.is_in_stock ? "In Stock" : "Out of Stock"}
-                    </span>
+                   <span className="flex items-center">
+                        <div
+                            className={`w-2 h-2 rounded-full mr-1 ${
+                            product.product_quantity > 0 ? "bg-green-500" : "bg-red-500"
+                            }`}
+                        ></div>
+                        {product.product_quantity > 0 ? "In Stock" : "Out of Stock"}
+                        </span>
                     <span>{product.free_shipping ? "Free Shipping" : "Shipping Charges"}</span>
                 </div>
             </div>
