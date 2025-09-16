@@ -43,6 +43,7 @@ const CheckoutComponent = () => {
   const [discount, setDiscount] = useState(0);
   const [tax, setTax] = useState(18);
   const [amountReceived, setAmountReceived] = useState('');
+  const [processing, setProcessing] = useState(false);
 
   
   // Product search states
@@ -74,7 +75,7 @@ const CheckoutComponent = () => {
 
   useEffect(() =>{
     fetchProdouct();
-  },[setproducts])
+  },[setproducts, setProcessing])
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.product_price * item.quantity), 0);
   const discountAmount = discountType === 'percentage' 
@@ -87,6 +88,7 @@ const CheckoutComponent = () => {
 
   const handleCheckout = async() => {
     // Implement checkout logic here
+    setProcessing(true);
     const payload = {
       ...customer,
       sub_total: subtotal,
@@ -108,6 +110,7 @@ const CheckoutComponent = () => {
       fetchProdouct();
       toast.success("Order placed successfully");
     }
+    setProcessing(false);
   }
 
   // Add product to cart
@@ -564,11 +567,11 @@ const CheckoutComponent = () => {
 
                 <button
                     onClick={handleCheckout}
-                    disabled={cartItems.length === 0}
+                    disabled={cartItems.length === 0 || processing}
                     className="w-max bg-green-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
                     >
                 <CreditCard className="w-5 h-5 mr-2" />
-                {cartItems.length === 0 ? 'Add Items to Cart' : `Process Payment (₹${Math.ceil(total).toLocaleString()})`}
+                {cartItems.length === 0 ? 'Add Items to Cart' : !processing ? `Process Payment (₹${Math.ceil(total).toLocaleString()})` : 'Processing...'}
             </button>
               </div>
               
