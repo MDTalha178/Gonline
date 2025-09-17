@@ -3,9 +3,10 @@ import { endPoint } from "../../../request/endipoint";
 import request from "../../../request/request";
 import { getStoreName } from "../../../utils/utils";
 
-export const getOrder = async (toast) => {
+
+export const getOrder = async (toast, queryParams={}) => {
     try {
-        const response =  await request.read(endPoint.admin.order, toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
+        const response =  await request.read(`${endPoint.admin.order}?${new URLSearchParams(queryParams).toString()}`, toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);

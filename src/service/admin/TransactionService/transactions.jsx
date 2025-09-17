@@ -38,7 +38,7 @@ export const getTransactionSummary = async (toast) => {
 
 export const getTransactionDetails = async (tarnsactionId, toast) => {
     try {
-        const response =  await request.read(endPoint.admin.transactionDetails(tarnsactionId), toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreId()}});
+        const response =  await request.read(endPoint.admin.transactionDetails(tarnsactionId), toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);

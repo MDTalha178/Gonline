@@ -168,7 +168,7 @@ const AdminOrderList = () => {
   });
 
   const fetchOrders = async () => {
-    const response = await getOrder(toast);
+    const response = await getOrder(toast, {'search': searchTerm});
     if (response?.data) {
       setOrderData(response.data);
     }
@@ -176,7 +176,7 @@ const AdminOrderList = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, [dateRange, sortBy, sortOrder]);
+  }, [dateRange, sortBy, sortOrder, searchTerm]);
 
   return (
     <div className="flex h-screen bg-gray-50">

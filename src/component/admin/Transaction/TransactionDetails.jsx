@@ -171,9 +171,9 @@ const TransactionDetails = ({ onBack }) => {
            <OrderDetails orderData={transactionDatas?.order_details}/>
 
             {/* Order Timeline */}
-            <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6">
+            <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6 ">
               <h2 className="text-lg font-medium text-gray-900 mb-4 uppercase tracking-wider">Order Timeline</h2>
-              <div className="space-y-4">
+              <div className="space-y-4 blur-xs">
                 {transactionData.orderTimeline.map((step, index) => (
                   <div key={index} className="flex items-center space-x-4">
                     <div className={`w-8 h-8 rounded-none flex items-center justify-center ${
