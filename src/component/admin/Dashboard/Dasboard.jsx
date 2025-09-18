@@ -10,8 +10,11 @@ import {
   ArrowDownRight,
   ChevronDown
 } from "lucide-react";
-import { useState } from "react";
-import AdminSidebar from "./Sidebar";
+import { useEffect, useState } from "react";
+import AdminSidebar from "../Sidebar";
+import StatsCard from "./StatsCard";
+import DropdownButton from "./DropDownButton";
+import { getDashBoardStats } from "../../../service/admin/DashBoardService/dashboardService";
 
 const AdminDashboard = () => {
   const [revenueFilter, setRevenueFilter] = useState("Monthly");
@@ -20,9 +23,10 @@ const AdminDashboard = () => {
   const [showRevenueDropdown, setShowRevenueDropdown] = useState(false);
   const [showProfitDropdown, setShowProfitDropdown] = useState(false);
   const [showOrderDropdown, setShowOrderDropdown] = useState(false);
+  const [dashboardDatas, setdashboardData] = useState(null)
 
   const timeFilters = ["Monthly", "Quarterly", "Yearly"];
-  const orderFilters = ["All", "Online", "Offline"];
+  const orderFilters = ["All"];
 
   const dashboardData = {
     revenue: {
@@ -42,63 +46,18 @@ const AdminDashboard = () => {
     }
   };
 
-  const DropdownButton = ({ value, options, isOpen, setIsOpen, onChange, filterType }) => (
-    <div className="relative">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-1 px-2 py-1 text-xs bg-gray-100 hover:bg-gray-200 transition-colors duration-200 rounded-none uppercase tracking-wider"
-      >
-        <span className="text-gray-700 font-medium">{value}</span>
-        <ChevronDown className={`w-3 h-3 text-gray-500 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
-      </button>
-      {isOpen && (
-        <div className="absolute top-full left-0 mt-1 bg-white border border-gray-200 shadow-sm rounded-none z-10 min-w-full">
-          {options.map((option) => (
-            <button
-              key={option}
-              onClick={() => {
-                onChange(option);
-                setIsOpen(false);
-              }}
-              className={`w-full text-left px-3 py-2 text-xs hover:bg-gray-50 transition-colors duration-200 uppercase tracking-wider ${
-                value === option ? 'bg-gray-100 font-medium' : 'font-light'
-              }`}
-            >
-              {option}
-            </button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
+  const fetchgetDashBoardStats = async () =>{
+    const response =await getDashBoardStats();
+    if(response?.data){
+      setdashboardData(response?.data);
+    }
+  }
 
-  const StatsCard = ({ title, value, growth, isPositive, icon: Icon, children }) => (
-    <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 group">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-sm font-medium text-gray-700 uppercase tracking-wider">{title}</h3>
-        <div className="flex items-center space-x-2">
-          {children}
-          <div className="w-10 h-10 bg-gray-100 rounded-none flex items-center justify-center group-hover:bg-gray-900 group-hover:text-white transition-all duration-300">
-            <Icon className="w-5 h-5" />
-          </div>
-        </div>
-      </div>
-      <div className="space-y-2">
-        <p className="text-2xl font-light text-gray-900 tracking-tight">{value}</p>
-        <div className="flex items-center space-x-1">
-          {isPositive ? (
-            <ArrowUpRight className="w-4 h-4 text-green-600" />
-          ) : (
-            <ArrowDownRight className="w-4 h-4 text-red-600" />
-          )}
-          <span className={`text-sm font-medium ${isPositive ? 'text-green-600' : 'text-red-600'}`}>
-            {growth}
-          </span>
-          <span className="text-sm text-gray-500 font-light">vs last period</span>
-        </div>
-      </div>
-    </div>
-  );
+  useEffect(() =>{
+    fetchgetDashBoardStats();
+  }, [setdashboardData])
+
+  console.log(dashboardDatas, "dashboardDatas")
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -118,9 +77,9 @@ const AdminDashboard = () => {
           {/* Total Revenue */}
           <StatsCard
             title="Total Revenue"
-            value={dashboardData.revenue[revenueFilter].value}
-            growth={dashboardData.revenue[revenueFilter].growth}
-            isPositive={dashboardData.revenue[revenueFilter].isPositive}
+            value={dashboardDatas?.revenue[revenueFilter].value}
+            growth={dashboardDatas?.revenue[revenueFilter].growth}
+            isPositive={dashboardDatas?.revenue[revenueFilter].isPositive}
             icon={IndianRupee}
           >
             <DropdownButton
@@ -135,7 +94,7 @@ const AdminDashboard = () => {
           {/* Total Inventory */}
           <StatsCard
             title="Total Inventory"
-            value="2,845"
+            value={dashboardDatas?.total_inventory}
             growth="+3.2%"
             isPositive={true}
             icon={Package}
@@ -144,9 +103,9 @@ const AdminDashboard = () => {
           {/* Total Orders */}
           <StatsCard
             title="Total Orders"
-            value={dashboardData.orders[orderFilter].value}
-            growth={dashboardData.orders[orderFilter].growth}
-            isPositive={dashboardData.orders[orderFilter].isPositive}
+            value={dashboardDatas?.total_order[orderFilter].value}
+            growth={dashboardDatas?.total_order[orderFilter].growth}
+            isPositive={dashboardDatas?.total_order[orderFilter].isPositive}
             icon={ShoppingCart}
           >
             <DropdownButton
@@ -186,9 +145,9 @@ const AdminDashboard = () => {
 
           {/* Page Views */}
           <StatsCard
-            title="Page Views"
-            value="45,678"
-            growth="+15.3%"
+            title="Data Not Available Yet"
+            value="Available from Q4 Release"
+            growth=""
             isPositive={true}
             icon={Eye}
           />
@@ -205,7 +164,7 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <p className="text-2xl font-light text-gray-900 tracking-tight">23</p>
+              <p className="text-2xl font-light text-gray-900 tracking-tight">{dashboardDatas?.low_stock}</p>
               <p className="text-sm text-red-600 font-medium">Items need restocking</p>
             </div>
           </div>

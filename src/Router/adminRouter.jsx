@@ -1,6 +1,6 @@
 import AdminLogin from "../component/admin/adminAuthComponent";
 import CheckoutComponent from "../component/admin/Checkout/Checkout";
-import AdminDashboard from "../component/admin/Dasboard";
+import AdminDashboard from "../component/admin/Dashboard/Dasboard";
 import AdminInventory from "../component/admin/InventoryManage/Inventory";
 import ProductDetailsPage from "../component/admin/InventoryManage/InventoryDetails";
 import AdminOrderDetails from "../component/admin/Order/OrderDetails";
