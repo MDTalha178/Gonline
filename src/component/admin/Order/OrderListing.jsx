@@ -24,6 +24,7 @@ const AdminOrderList = () => {
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
   const [sortBy, setSortBy] = useState("orderDate");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [loading, setLoading] = useState(false);
 
   const statusOptions = ["All", "Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"];
   const paymentOptions = ["All", "Paid", "Pending", "Failed", "Refunded"];
@@ -168,10 +169,12 @@ const AdminOrderList = () => {
   });
 
   const fetchOrders = async () => {
+    setLoading(true);
     const response = await getOrder(toast, {'search': searchTerm});
     if (response?.data) {
       setOrderData(response.data);
     }
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -260,17 +263,38 @@ const AdminOrderList = () => {
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              {loading? <RowLoader /> : orderData?.order_list?.length > 0 ?<tbody className="divide-y divide-gray-200">
                 {orderData.length === 0? <RowLoader /> : orderData?.order_list && orderData?.order_list.map((order) => (
                   <OrderRow key={order.id} order={order} />
                 ))}
-              </tbody>
+              </tbody>:
+              <tr>
+                <td colSpan="9" className="px-6 py-16">
+                  <div className="flex flex-col items-center justify-center text-center space-y-4">
+                    {/* Icon */}
+                    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                      <Package className="w-8 h-8 text-gray-400" />
+                    </div>
+                    
+                    {/* Text */}
+                    <div className="space-y-2">
+                      <h3 className="text-lg font-medium text-gray-900">
+                        No transactions found
+                      </h3>
+                      <p className="text-sm text-gray-500 max-w-sm mx-auto">
+                        You don’t have any transactions yet. Once transactions are made, they’ll appear here for easy tracking and review.
+                      </p>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              }
             </table>
           </div>
         </div>
 
         {/* Results Summary */}
-        <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+        {orderData?.order_list &&<div className="mt-4 flex items-center justify-between text-sm text-gray-600">
           <span>Showing {filteredOrders.length} of {sampleOrders.length} orders</span>
           <div className="flex items-center space-x-2">
             <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200">
@@ -281,7 +305,7 @@ const AdminOrderList = () => {
               Next
             </button>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );

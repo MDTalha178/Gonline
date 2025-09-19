@@ -5,9 +5,11 @@ import StatsCardShimmer from "../Shimmer/StatsShimmer";
 
 const TransactionStats = ({sampleTransactions}) => {
     
-    const [transactionStats, setTransactionStats] = useState(null);
+    const [transactionStats, setTransactionStats] = useState({});
+    const [loading, setLoading] = useState(true);
 
     useEffect(() =>{
+        setLoading(true);
         const fetchTransactionStats = async () => {
             const response = await getTransactionStats();
             console.log(response);
@@ -15,18 +17,21 @@ const TransactionStats = ({sampleTransactions}) => {
                 setTransactionStats(response?.data);
             }
         }
-
+        
         fetchTransactionStats();
+        setLoading(false);
     },[setTransactionStats]);
 
-    if(transactionStats === null){ 
+    if(loading){ 
       return(
         <>
           <StatsCardShimmer />
         </>
       )
     }
-
+    if (!transactionStats || Object.keys(transactionStats).length === 0){
+      return
+    }
     return(
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-6">
         <div className="bg-white rounded-none shadow-sm border border-gray-200 p-4">

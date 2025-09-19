@@ -13,7 +13,7 @@ import { useToast } from "../../../hooks/useToast";
 import { deleteProductService, getProductCategory } from "../../../service/admin/inventory/InventoryService";
 import UpdateProduct from "./updateProduct";
 import { getCategory } from "../../../service/store/storeCreationService";
-import { ArrowUpDown } from "lucide-react";
+import { ArrowUpDown, Package, Plus } from "lucide-react";
 import { RowLoader } from "../Shimmer/rowLoader";
 
 const AdminInventory = () => {
@@ -34,15 +34,18 @@ const AdminInventory = () => {
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [category, setCategory] = useState([]);
   const [productCategory, setProductCategory] = useState([]);
+  const [islaoding, setIsLoading] = useState(false);
 
 
   const stockOptions = ["All", "In Stock", "Out of Stock", "Low Stock"];
 
   const fetchProduct = async () => {
+    setIsLoading(true); 
       const response = await getStoreproduct(toast, null, {'search': searchTerm});
       if (response?.data){
           setProduct(response.data);
       }
+      setIsLoading(false);
   }
   
 
@@ -115,7 +118,7 @@ const AdminInventory = () => {
 
         {/* Search and Filters */}
         <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex flex-wrap items-center gap-4">
+          {product.length > 0 && <div className="flex flex-wrap items-center gap-4">
             {/* Search */}
             <SearchInventory searchTerm={searchTerm} setSearchTerm={setSearchTerm}/>
 
@@ -128,11 +131,11 @@ const AdminInventory = () => {
 
             {/* Date Range */}
             <DateRangeFilter dateRange={dateRange} setDateRange={setDateRange}/>
-          </div>
+          </div>}
         </div>
 
         {/* Stats Cards */}
-        <ProductStats product={product}/>
+        {islaoding ?<RowLoader />: product.length > 0 && <ProductStats product={product}/>}
 
         <div className="lg:hidden space-y-4">
             <div className="flex items-center justify-between mb-4">
@@ -150,42 +153,75 @@ const AdminInventory = () => {
 
         {/* Products Table */}
         <div className="hidden lg:block bg-white rounded-none shadow-sm border border-gray-200 overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-gray-50 border-b border-gray-200">
-                  <tr>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
-                      <button className="flex items-center space-x-1 hover:text-gray-900 transition-colors">
-                        <span>Product</span>
-                        <ArrowUpDown className="w-3 h-3" />
-                      </button>
-                    </th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">SKU</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Price</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Quantity</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Stock Status</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Category</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Supplier</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Last Updated</th>
-                    <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {product.length === 0? <RowLoader />: product.map((product) => (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              {product.length > 0 && <thead className="bg-gray-50 border-b border-gray-200">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
+                    <button className="flex items-center space-x-1 hover:text-gray-900 transition-colors">
+                      <span>Product</span>
+                      <ArrowUpDown className="w-3 h-3" />
+                    </button>
+                  </th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">SKU</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Price</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Quantity</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Stock Status</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Category</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Supplier</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Last Updated</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>}
+              <tbody className="divide-y divide-gray-200">
+                {islaoding ? (
+                  <RowLoader />
+                ) : product.length > 0 ? (
+                  product.map((product) => (
                     <ProductList 
                       key={product.id}
                       product={product} 
                       handleOnDelete={handleOnDelete}
                       handleUpdateProduct={handleUpdateProduct}
-  
                     />
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="9" className="px-6 py-16">
+                      <div className="flex flex-col items-center justify-center text-center space-y-4">
+                        {/* Icon */}
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                          <Package className="w-8 h-8 text-gray-400" />
+                        </div>
+                        
+                        {/* Text */}
+                        <div className="space-y-2">
+                          <h3 className="text-lg font-medium text-gray-900">
+                            No inventory items found
+                          </h3>
+                          <p className="text-sm text-gray-500 max-w-sm">
+                            You haven't added any products to your inventory yet. Start building your catalog by adding your first product.
+                          </p>
+                        </div>
+                        
+                        {/* Button */}
+                        <button 
+                          onClick={() => setShowAddModal(true)}
+                          className="flex items-center space-x-2 px-6 py-2 bg-gray-900 hover:bg-gray-800 text-white transition-colors duration-200 rounded-none"
+                        >
+                          <Plus className="w-4 h-4" />
+                          <span className="text-sm font-medium uppercase tracking-wider">Add Product</span>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
           </div>
+        </div>
         {/* Results Summary */}
-        <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+        {product.length > 0 && <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
           <span>Showing {product.length} of {product.length} products</span>
           <div className="flex items-center space-x-2">
             <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 rounded-none">
@@ -196,7 +232,7 @@ const AdminInventory = () => {
               Next
             </button>
           </div>
-        </div>
+        </div>}
       </div>
 
       {/* Add Product Modal */}

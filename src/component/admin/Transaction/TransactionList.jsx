@@ -1,5 +1,7 @@
 import { 
   ArrowUpDown,
+  IndianRupee,
+  Package,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import AdminSidebar from "../Sidebar";
@@ -25,6 +27,7 @@ const AdminTransactions = () => {
   const [dateRange, setDateRange] = useState({ from: "", to: "" });
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
+  const [isLoading, setIsLoading] = useState(false);
 
   const statusOptions = ["All", "Success", "Pending", "Failed", "Refunded"];
   const paymentOptions = ["All", "Credit Card", "Debit Card", "UPI", "Net Banking", "Wallet", "Cash"];
@@ -114,10 +117,12 @@ const AdminTransactions = () => {
   });
 
   const fetchTransactions = async () =>{
+    setIsLoading(true);
     const response = await getTransaction(toast);
     if(response?.data){
       settransactionData(response.data);
     }
+    setIsLoading(false);
   }
 
   useEffect(() =>{
@@ -137,7 +142,7 @@ const AdminTransactions = () => {
 
         {/* Search and Filters */}
         <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6 mb-6">
-          <div className="flex flex-wrap items-center gap-4">
+          {transactionData.length > 0 && <div className="flex flex-wrap items-center gap-4">
             {/* Search */}
             <SearchTransaction />
 
@@ -163,7 +168,7 @@ const AdminTransactions = () => {
 
             {/* Date Range */}
             <DateRangeFilter />
-          </div>
+          </div>}
         </div>
 
         {/* Stats Cards */}
@@ -187,7 +192,7 @@ const AdminTransactions = () => {
           <div className="overflow-x-auto">
             <table className="w-full">
               <thead className="bg-gray-50 border-b border-gray-200">
-                <tr>
+               {transactionData.length > 0 && <tr>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">
                     <button className="flex items-center space-x-1 hover:text-gray-900 transition-colors">
                       <span>Transaction ID</span>
@@ -206,24 +211,43 @@ const AdminTransactions = () => {
                       <ArrowUpDown className="w-3 h-3" />
                     </button>
                   </th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Order ID</th>
+                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Order ID</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Customer</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Invoice</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
-                </tr>
+                </tr>}
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              {isLoading ? <RowLoader /> : transactionData.length > 0 ? <tbody className="divide-y divide-gray-200">
                 {transactionData.length === 0 ? <RowLoader /> : transactionData.map((transaction) => (
                   <TransactionRow key={transaction.id} transaction={transaction}  />
                 ))}
-              </tbody>
+              </tbody>:  <tr>
+                    <td colSpan="9" className="px-6 py-16">
+                      <div className="flex flex-col items-center justify-center text-center space-y-4">
+                        {/* Icon */}
+                        <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+                          <IndianRupee className="w-8 h-8 text-gray-400" />
+                        </div>
+                        
+                        {/* Text */}
+                       <div className="space-y-2 text-center">
+                          <h3 className="text-lg font-semibold text-gray-900">
+                            No transactions yet
+                          </h3>
+                          <p className="text-sm text-gray-500 max-w-sm mx-auto">
+                            You haven’t made any transactions so far. Once you start, your history will appear here for easy tracking.
+                          </p>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>}
             </table>
           </div>
         </div>
 
         {/* Results Summary */}
-        <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+        {transactionData.length > 0 && <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
           <span>Showing {filteredTransactions.length} of {sampleTransactions.length} transactions</span>
           <div className="flex items-center space-x-2">
             <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 rounded-none">
@@ -234,7 +258,7 @@ const AdminTransactions = () => {
               Next
             </button>
           </div>
-        </div>
+        </div>}
       </div>
     </div>
   );

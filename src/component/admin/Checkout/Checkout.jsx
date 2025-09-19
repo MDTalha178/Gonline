@@ -44,6 +44,7 @@ const CheckoutComponent = () => {
   const [tax, setTax] = useState(18);
   const [amountReceived, setAmountReceived] = useState('');
   const [processing, setProcessing] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   
   // Product search states
@@ -66,10 +67,18 @@ const CheckoutComponent = () => {
   );
 
   const fetchProdouct = async () => {
-    const response = await fetchProductList(toast);
-    console.log(response);
-    if(response?.data){
-      setproducts(response.data);
+    setLoading(true);
+    try{
+      const response = await fetchProductList(toast);
+      console.log(response);
+      if(response?.data){
+        setproducts(response.data);
+      }
+    }
+    catch (error) {
+      toast.error(error.message || 'Failed to fetch product list');
+    }finally{
+      setLoading(false);
     }
   }
 
@@ -257,7 +266,7 @@ const CheckoutComponent = () => {
                   {/* Product Search Results */}
                   {showProductSearch && searchQuery && (
                     <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-none shadow-lg max-h-64 overflow-y-auto">
-                      {filteredProducts.length > 0 ? (
+                      {loading ? <div className="p-4">Loading...</div> : filteredProducts.length > 0 ? (
                         filteredProducts.map(product => (
                           <div
                             key={product.id}

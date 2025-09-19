@@ -32,6 +32,7 @@ const UpdateProduct = ({ setShowUpdateModal, productData, dynamicCategories }) =
     product_serial_no: '',
     weight: '',
     shipping_charge: 0,
+    tax_percentage: 0
   });
 
   const [newSupplier, setNewSupplier] = useState({
@@ -65,6 +66,7 @@ const UpdateProduct = ({ setShowUpdateModal, productData, dynamicCategories }) =
         product_serial_no: productData.product_serial_no || '',
         weight: productData.weight || '',
         shipping_charge: productData.shipping_charge || 0,
+        tax_percentage: productData.tax_percentage || 0
       });
     }
   }, [productData]);
@@ -504,6 +506,18 @@ const UpdateProduct = ({ setShowUpdateModal, productData, dynamicCategories }) =
                       placeholder="e.g., 2.5 kg"
                     />
                   </div>
+                   <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2 uppercase tracking-wider">
+                      GST (%)
+                    </label>
+                    <input
+                      type="number"
+                      value={updatedProduct.tax_percentage}
+                      onChange={(e) => setUpdatedProduct(prev => ({ ...prev, tax_percentage: e.target.value }))}
+                      className="w-full px-4 py-3 border border-gray-300 rounded-none font-light focus:ring-0 focus:border-gray-900 transition-colors duration-200"
+                      placeholder="e.g., 2.5 kg"
+                    />
+                  </div>
                 </div>
               </div>
             </div>
@@ -652,11 +666,12 @@ const UpdateProduct = ({ setShowUpdateModal, productData, dynamicCategories }) =
                 Cancel
               </button>
               <button
+                disabled={isLoading}
                 onClick={handleSaveSupplier}
-                className="flex items-center space-x-2 px-6 py-2 bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-200 rounded-none font-medium uppercase tracking-wider"
+                className="flex items-center space-x-2 px-6 py-2 bg-gray-900 text-white hover:bg-gray-800 transition-colors duration-200 rounded-none font-medium uppercase tracking-wider disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <Save className="w-4 h-4" />
-                <span>Save Supplier</span>
+                <span>{isLoading ? "Updating..." : "Update"}</span>
               </button>
             </div>
           </div>
