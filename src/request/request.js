@@ -9,7 +9,7 @@ const buildHeaders = (requiresAuth = false) => {
         'Content-Type': 'application/json',
     };
     if (requiresAuth) {
-        const token = getToken();
+        const token = getToken()?.accessToken;
         if(token) {
             baseHeaders['Authorization'] = `Bearer ${token}`;
         }
@@ -21,8 +21,8 @@ const buildHeaders = (requiresAuth = false) => {
 const request = {
     create: async (url, jsonData, toast, config, extra={}) => {
         const instance = axios.create(config.service);
-        
         instance.defaults.headers = {...buildHeaders(config.requiresAuth), ...extra?.headers};
+        console.log(instance.defaults.headers);
 
         try{
             const response = await instance.post(url, jsonData);

@@ -51,8 +51,11 @@ export function convertISOToDateTime(isoString, fullFormat=true) {
 // Example usage
 
 
-export function saveStoreSlug(storeName){
+export function saveStoreSlug(storeName, store, store_url){
   localStorage.setItem('storeName', JSON.stringify(storeName))
+  localStorage.setItem('store', JSON.stringify(store))
+  localStorage.setItem('store_url', JSON.stringify(store_url))
+  
 }
 
 export function saveStoreId(storeId){
@@ -61,6 +64,14 @@ export function saveStoreId(storeId){
 
 export function getStoreName(){
   return JSON.parse(localStorage.getItem('storeName'));
+}
+
+export function getStore(){
+  return JSON.parse(localStorage.getItem('store'));
+}
+
+export function getStoreUrl(){
+  return JSON.parse(localStorage.getItem('store_url'));
 }
 
 export function getStoreId(){

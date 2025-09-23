@@ -56,7 +56,21 @@ const TransactionRow = ({ transaction }) => {
         </td>
         <td className="px-6 py-4 whitespace-nowrap">
           <button className="text-blue-600 hover:text-blue-800 transition-colors duration-200">
-            {transaction.is_invoice_generated ? <FileText className="w-4 h-4"></FileText>: "Not Generated"}
+            {
+              transaction?.customer_invoice?.invoice_url ? (
+                <a
+                  href={transaction?.customer_invoice?.invoice_url}   
+                  target="_blank"                  
+                  rel="noopener noreferrer"        
+                  className="flex items-center space-x-1 text-blue-600 hover:underline"
+                >
+                  <FileText className="w-4 h-4" />
+                  <span>View Invoice</span>
+                </a>
+              ) : (
+                "Not Generated"
+              )
+            }
           </button>
         </td>
         <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">

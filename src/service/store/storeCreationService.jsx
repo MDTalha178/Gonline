@@ -16,7 +16,7 @@ import request from "../../request/request";
 
 export const storeCreationService = async(formData, toast) =>{
     try {
-        const response =  await request.create(endPoint.store.createStore, formData, toast,  {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true});
+        const response =  await request.create(endPoint.store.createStore, formData, toast,  {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true,},  {headers:{ "Content-Type": "multipart/form-data" }});
         if (response.success === true) return response
     } catch (error) {
         toast.error(error.message);

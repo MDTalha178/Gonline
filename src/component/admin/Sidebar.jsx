@@ -8,12 +8,13 @@ import {
   ChevronRight,
   User,
   LogOut,
-  ShoppingBag
+  ShoppingBag,
+  Store
 } from "lucide-react";
 import { useState } from "react";
 import { redirect, useNavigate } from "react-router-dom";
 import { getToken } from "../../module/Auth/token";
-import { getSidebarState, handleLogout, saveSidebarState } from "../../utils/utils";
+import { getSidebarState, getStore, getStoreUrl, handleLogout, saveSidebarState } from "../../utils/utils";
 
 const AdminSidebar = ({currentPage='Dashboard'}) => {
   const navigate = useNavigate();
@@ -72,10 +73,15 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
             isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
           }`}>
             <div className="w-8 h-8 bg-white rounded-none flex items-center justify-center">
-              <User className="w-5 h-5 text-gray-900" />
+              {!getStoreUrl() && <Store className="w-5 h-5 text-gray-900" />}
+              {getStoreUrl() &&<img 
+                src={getStoreUrl()}
+                alt="Store Logo"
+                className="w-full h-full object-cover rounded-none"
+              />}
             </div>
             <div>
-              <h3 className="font-medium text-sm uppercase tracking-wider">{getToken()?.firstName} {getToken()?.lastName}</h3>
+              <h3 className="font-medium text-sm uppercase tracking-wider">{getStore()}</h3>
               <p className="text-xs text-gray-400 font-light">Management System</p>
             </div>
           </div>

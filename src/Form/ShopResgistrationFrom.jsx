@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import { Camera, MapPin, Plus, X } from 'lucide-react';
 import contactTypes from '../data/contactType';
 
-const ShopDetailsForm = ({formData, handleInputChange, isAddContact, setIsAddContact, category}) => {
+const ShopDetailsForm = ({formData, handleInputChange, isAddContact, setIsAddContact, category, handleFileChange, preview}) => {
+
+  const fileInputRef = useRef(null);
+
+  const handleClick = () => {
+    fileInputRef.current.click();
+  };
+
+
  return (
     <div className="bg-white rounded-2xl shadow-lg p-8">
       <div className="mb-8">
@@ -12,16 +20,40 @@ const ShopDetailsForm = ({formData, handleInputChange, isAddContact, setIsAddCon
 
       <div className="grid md:grid-cols-2 gap-6">
         {/* Shop Logo Upload */}
-        <div className="md:col-span-2">
-          <label className="block text-sm font-medium text-gray-700 mb-3">Shop Logo</label>
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-purple-400 transition-colors cursor-pointer">
-            <Camera className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <div className="text-sm text-gray-600">
-              <span className="font-medium text-purple-600">Click to upload</span> or drag and drop
-            </div>
-            <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
-          </div>
+      <div className="md:col-span-2">
+        <label className="block text-sm font-medium text-gray-700 mb-3">Shop Logo</label>
+
+        <div
+          onClick={handleClick}
+          className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-purple-400 transition-colors cursor-pointer"
+        >
+          {preview ? (
+            <img
+              src={preview}
+              alt="Shop Logo Preview"
+              className="mx-auto h-24 object-contain rounded-lg"
+            />
+          ) : (
+            <>
+              <Camera className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+              <div className="text-sm text-gray-600">
+                <span className="font-medium text-purple-600">Click to upload</span> or drag and drop
+              </div>
+              <p className="text-xs text-gray-500 mt-1">PNG, JPG up to 5MB</p>
+            </>
+          )}
         </div>
+
+          {/* Hidden file input */}
+          <input
+            type="file"
+            ref={fileInputRef}
+            accept="image/jpeg, image/png"
+            onChange={(e) =>handleFileChange(e.target.files[0])}
+            className="hidden"
+          />
+      </div>
+
 
         {/* Basic Info */}
         <div>

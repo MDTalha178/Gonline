@@ -25,6 +25,11 @@ const AdminOrderList = () => {
   const [sortBy, setSortBy] = useState("orderDate");
   const [sortOrder, setSortOrder] = useState("desc");
   const [loading, setLoading] = useState(false);
+  const [cuuerntPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  const [orderStats, setOrderStats] = useState({})
 
   const statusOptions = ["All", "Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"];
   const paymentOptions = ["All", "Paid", "Pending", "Failed", "Refunded"];
@@ -168,14 +173,24 @@ const AdminOrderList = () => {
     return matchesSearch && matchesStatus && matchesPayment;
   });
 
-  const fetchOrders = async () => {
-    setLoading(true);
-    const response = await getOrder(toast, {'search': searchTerm});
+  const fetchOrders = async (page=0) => {
+    const response = await getOrder(toast, {'search': searchTerm, 'page': page > 0? page: cuuerntPage});
     if (response?.data) {
-      setOrderData(response.data);
+      setOrderData(response.data?.order_list?.results);
+      setTotalPages(response.data?.order_list?.meta?.total_pages);
+      setItemsPerPage(response.data?.order_list?.meta?.page_size);
+      setCurrentPage(response.data?.order_list?.meta?.current_page);
+      setTotalItems(response.data?.order_list?.meta?.total_items);
+      setOrderStats(response?.data?.order_stats)
     }
     setLoading(false);
   };
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchOrders(page);
+    
+  }
 
   useEffect(() => {
     fetchOrders();
@@ -223,14 +238,14 @@ const AdminOrderList = () => {
         </div>
 
         {/* Stats Cards */}
-        <OrderStats ordersStats={orderData?.order_stats} />
+        <OrderStats ordersStats={orderStats} />
 
         {/* Responsive Table */}
          <div className="lg:hidden space-y-4">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Order ({orderData?.order_list?.length})</h2>
           </div>
-           {orderData?.order_list && orderData?.order_list.map((order) =>(
+           {orderData && orderData.map((order) =>(
           <OrderResponsiveRow key={order.id} order={order} />
         ))}
         </div>
@@ -263,8 +278,8 @@ const AdminOrderList = () => {
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-700 uppercase tracking-wider">Actions</th>
                 </tr>
               </thead>
-              {loading? <RowLoader /> : orderData?.order_list?.length > 0 ?<tbody className="divide-y divide-gray-200">
-                {orderData.length === 0? <RowLoader /> : orderData?.order_list && orderData?.order_list.map((order) => (
+              {loading? <RowLoader /> : orderData.length > 0 ?<tbody className="divide-y divide-gray-200">
+                {orderData.length === 0? <RowLoader /> : orderData && orderData?.map((order) => (
                   <OrderRow key={order.id} order={order} />
                 ))}
               </tbody>:
@@ -294,16 +309,20 @@ const AdminOrderList = () => {
         </div>
 
         {/* Results Summary */}
-        {orderData?.order_list &&<div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-          <span>Showing {filteredOrders.length} of {sampleOrders.length} orders</span>
+        {orderData &&<div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+          <span>Showing {orderData.length} of {totalItems} orders</span>
           <div className="flex items-center space-x-2">
-            <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200">
+            {cuuerntPage > 1 && <button onClick={() => handlePageChange(cuuerntPage - 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
               Previous
-            </button>
-            <span className="px-3 py-1 bg-gray-900 text-white">1</span>
-            <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200">
+            </button>}
+            {cuuerntPage >2 && cuuerntPage - 1 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage - 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage - 1}</span>}
+            {totalItems > itemsPerPage && <span className="px-3 py-1 bg-gray-900 text-white">{cuuerntPage}</span>}
+            {cuuerntPage + 1 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage + 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage + 1}</span>}
+            {cuuerntPage + 2 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage + 2)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage + 2}</span>}
+            {/* {cuuerntPage + 3 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage + 3)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage + 3}</span>} */}
+            {cuuerntPage < totalPages &&<button onClick={() => handlePageChange(cuuerntPage + 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
               Next
-            </button>
+            </button>}
           </div>
         </div>}
       </div>

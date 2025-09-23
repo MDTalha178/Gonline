@@ -29,13 +29,15 @@ import AdminSidebar from "../Sidebar";
 import { fetchProductList } from "../../../service/marketPlace/product_service";
 import { useToast } from "../../../hooks/useToast";
 import { checkoutService } from "../../../service/admin/Checkout/checkoutService";
+import useDebounce from "../../../hooks/useDebounce";
 
 const CheckoutComponent = () => {
   const {toast} = useToast()
-  // Sample product inventory data
-   const [products, setproducts] = useState([]);
 
+
+  const [products, setproducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const [customer, setCustomer] = useState(null);
   const [showCustomerForm, setShowCustomerForm] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cash');
@@ -45,10 +47,10 @@ const CheckoutComponent = () => {
   const [amountReceived, setAmountReceived] = useState('');
   const [processing, setProcessing] = useState(false);
   const [loading, setLoading] = useState(false)
-
+  // const [debouncedQuery] = useDebounce(searchQuery, 500);
+  const debouncedSearchTerm = useDebounce(searchQuery, 500); 
   
   // Product search states
-  const [searchQuery, setSearchQuery] = useState('');
   const [showProductSearch, setShowProductSearch] = useState(false);
   const [barcodeInput, setBarcodeInput] = useState('');
 
@@ -61,7 +63,7 @@ const CheckoutComponent = () => {
   });
 
   // Filter products based on search query
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = products?.filter(product =>
     product?.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     product?.sku.toLowerCase().includes(searchQuery.toLowerCase()) 
   );
@@ -69,10 +71,9 @@ const CheckoutComponent = () => {
   const fetchProdouct = async () => {
     setLoading(true);
     try{
-      const response = await fetchProductList(toast);
-      console.log(response);
-      if(response?.data){
-        setproducts(response.data);
+      const response = await fetchProductList(toast, {'search': searchQuery});
+      if(response?.data?.results){
+        setproducts(response?.data?.results);
       }
     }
     catch (error) {
@@ -80,11 +81,15 @@ const CheckoutComponent = () => {
     }finally{
       setLoading(false);
     }
+    
   }
 
   useEffect(() =>{
-    fetchProdouct();
-  },[setproducts, setProcessing])
+    if(debouncedSearchTerm){
+      fetchProdouct();
+    }
+    
+  },[debouncedSearchTerm, setProcessing])
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.product_price * item.quantity), 0);
   const discountAmount = discountType === 'percentage' 
@@ -189,7 +194,7 @@ const CheckoutComponent = () => {
 
   const handleCustomerSubmit = () => {
     if (!customerForm.name || !customerForm.phone) {
-      alert('Name and phone number are required');
+      toast.error('Name and phone number are required');
       return;
     }
     setCustomer(customerForm);
@@ -257,6 +262,7 @@ const CheckoutComponent = () => {
                       onChange={(e) => {
                         setSearchQuery(e.target.value);
                         setShowProductSearch(true);
+                        fetchProdouct();
                       }}
                       onFocus={() => setShowProductSearch(true)}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
@@ -266,8 +272,8 @@ const CheckoutComponent = () => {
                   {/* Product Search Results */}
                   {showProductSearch && searchQuery && (
                     <div className="absolute z-10 w-full mt-1 bg-white border border-gray-200 rounded-none shadow-lg max-h-64 overflow-y-auto">
-                      {loading ? <div className="p-4">Loading...</div> : filteredProducts.length > 0 ? (
-                        filteredProducts.map(product => (
+                      {loading ? <div className="p-4">Loading...</div> : products.length > 0 ? (
+                        products.map(product => (
                           <div
                             key={product.id}
                             onClick={() => addToCart(product)}

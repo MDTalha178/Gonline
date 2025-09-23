@@ -4,9 +4,9 @@ import request from "../../../request/request";
 import { getStoreId, getStoreName } from "../../../utils/utils";
 
 
-export const getTransaction = async(toast) => {
+export const getTransaction = async(toast, queryParams={}) => {
     try {
-        const response =  await request.read(endPoint.admin.transaction, toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreId()}});
+        const response =  await request.read(`${endPoint.admin.transaction}?${new URLSearchParams(queryParams).toString()}`, toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreId()}});
         if (response.success === true) return response
     } catch (error) {
         console.log(error,'error');

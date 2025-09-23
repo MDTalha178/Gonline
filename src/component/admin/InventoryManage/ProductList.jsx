@@ -10,6 +10,7 @@ const ProductList = ({product, handleOnDelete, handleUpdateProduct}) =>{
     const{toast} = useToast();
     const navigate = useNavigate();
     const [isDelete, setIsDelete] = useState(false);
+    
 
     const handleDelete = async() => {
         handleOnDelete(product.id)

@@ -28,6 +28,10 @@ const AdminTransactions = () => {
   const [sortBy, setSortBy] = useState("date");
   const [sortOrder, setSortOrder] = useState("desc");
   const [isLoading, setIsLoading] = useState(false);
+  const [cuuerntPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
 
   const statusOptions = ["All", "Success", "Pending", "Failed", "Refunded"];
   const paymentOptions = ["All", "Credit Card", "Debit Card", "UPI", "Net Banking", "Wallet", "Cash"];
@@ -116,13 +120,23 @@ const AdminTransactions = () => {
     return matchesSearch && matchesStatus && matchesPayment;
   });
 
-  const fetchTransactions = async () =>{
+  const fetchTransactions = async (page=0) =>{
     setIsLoading(true);
-    const response = await getTransaction(toast);
+    const response = await getTransaction(toast, {'page': page> 0 ? page : cuuerntPage});
     if(response?.data){
-      settransactionData(response.data);
+      settransactionData(response.data?.results);
+      setTotalPages(response.data?.meta?.total_pages);
+      setItemsPerPage(response.data?.meta?.page_size);
+      setCurrentPage(response.data?.meta?.current_page);
+      setTotalItems(response.data?.meta?.total_items);
     }
     setIsLoading(false);
+  }
+
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+    fetchTransactions(page);
+    
   }
 
   useEffect(() =>{
@@ -247,16 +261,20 @@ const AdminTransactions = () => {
         </div>
 
         {/* Results Summary */}
-        {transactionData.length > 0 && <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-          <span>Showing {filteredTransactions.length} of {sampleTransactions.length} transactions</span>
+        {transactionData &&<div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+          <span>Showing {transactionData.length} of {totalItems} orders</span>
           <div className="flex items-center space-x-2">
-            <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 rounded-none">
+            {cuuerntPage > 1 && <button onClick={() => handlePageChange(cuuerntPage - 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
               Previous
-            </button>
-            <span className="px-3 py-1 bg-gray-900 text-white rounded-none">1</span>
-            <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 rounded-none">
+            </button>}
+            {cuuerntPage >2 && cuuerntPage - 1 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage - 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage - 1}</span>}
+           {totalItems > itemsPerPage && <span className="px-3 py-1 bg-gray-900 text-white">{cuuerntPage}</span>}
+            {cuuerntPage + 1 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage + 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage + 1}</span>}
+            {cuuerntPage + 2 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage + 2)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage + 2}</span>}
+            {/* {cuuerntPage + 3 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage + 3)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage + 3}</span>} */}
+            {cuuerntPage < totalPages &&<button onClick={() => handlePageChange(cuuerntPage + 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
               Next
-            </button>
+            </button>}
           </div>
         </div>}
       </div>

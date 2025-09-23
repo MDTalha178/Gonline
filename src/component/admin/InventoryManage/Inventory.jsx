@@ -35,6 +35,11 @@ const AdminInventory = () => {
   const [category, setCategory] = useState([]);
   const [productCategory, setProductCategory] = useState([]);
   const [islaoding, setIsLoading] = useState(false);
+  const [cuuerntPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [totalItems, setTotalItems] = useState(0);
+  
 
 
   const stockOptions = ["All", "In Stock", "Out of Stock", "Low Stock"];
@@ -43,7 +48,11 @@ const AdminInventory = () => {
     setIsLoading(true); 
       const response = await getStoreproduct(toast, null, {'search': searchTerm});
       if (response?.data){
-          setProduct(response.data);
+          setProduct(response.data?.results);
+          setTotalPages(response.data?.meta?.total_pages);
+          setItemsPerPage(response.data?.meta?.page_size);
+          setCurrentPage(response.data?.meta?.current_page);
+          setTotalItems(response.data?.meta?.total_items);
       }
       setIsLoading(false);
   }
@@ -221,16 +230,20 @@ const AdminInventory = () => {
           </div>
         </div>
         {/* Results Summary */}
-        {product.length > 0 && <div className="mt-4 flex items-center justify-between text-sm text-gray-600">
-          <span>Showing {product.length} of {product.length} products</span>
+        {product.length > 0  &&<div className="mt-4 flex items-center justify-between text-sm text-gray-600">
+          <span>Showing {product.length} of {totalItems} orders</span>
           <div className="flex items-center space-x-2">
-            <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 rounded-none">
+            {cuuerntPage > 1 && <button onClick={() => handlePageChange(cuuerntPage - 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
               Previous
-            </button>
-            <span className="px-3 py-1 bg-gray-900 text-white rounded-none">1</span>
-            <button className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 rounded-none">
+            </button>}
+             {cuuerntPage >2 && cuuerntPage - 1 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage - 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage -1}</span>}
+            {product.length > itemsPerPage && <span className="px-3 py-1 bg-gray-900 text-white">{cuuerntPage}</span>}
+            {cuuerntPage + 1 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage + 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage + 1}</span>}
+            {cuuerntPage + 2 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage + 2)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage + 2}</span>}
+            {/* {cuuerntPage + 3 <= totalPages &&<span onClick={() => handlePageChange(cuuerntPage + 3)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">{cuuerntPage + 3}</span>} */}
+            {cuuerntPage < totalPages &&<button onClick={() => handlePageChange(cuuerntPage + 1)} className="px-3 py-1 border border-gray-300 hover:bg-gray-50 transition-colors duration-200 cursor-pointer">
               Next
-            </button>
+            </button>}
           </div>
         </div>}
       </div>

@@ -120,9 +120,9 @@ const AdminDashboard = () => {
           {/* Profit */}
           <StatsCard
             title="Profit"
-            value={dashboardData.profit[profitFilter].value}
-            growth={dashboardData.profit[profitFilter].growth}
-            isPositive={dashboardData.profit[profitFilter].isPositive}
+            value={dashboardDatas?.profit[profitFilter].value}
+            growth={dashboardDatas?.profit[profitFilter].growth}
+            isPositive={dashboardDatas?.profit[profitFilter].isPositive}
             icon={TrendingUp}
           >
             <DropdownButton

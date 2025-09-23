@@ -32,7 +32,7 @@ const AdminLogin = () => {
     const response = await AdminloginService(payload, toast);
     if(response?.data){
       handlelogin(response?.data);
-      saveStoreSlug(response?.data?.slug);
+      saveStoreSlug(response?.data?.slug, response?.data?.store_name, response?.data?.store_logo);
       saveStoreId(response?.data?.id);
       navigate(`/dashboard`);
 
