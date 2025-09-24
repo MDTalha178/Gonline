@@ -195,10 +195,10 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <p className="text-2xl font-light text-gray-900 tracking-tight">₹1,967</p>
+              <p className="text-2xl font-light text-gray-900 tracking-tight">₹{dashboardDatas?.avg_order_value.value}</p>
               <div className="flex items-center space-x-1">
                 <ArrowUpRight className="w-4 h-4 text-green-600" />
-                <span className="text-sm font-medium text-green-600">+4.2%</span>
+                <span className="text-sm font-medium text-green-600">{dashboardDatas?.avg_order_value?.growth}</span>
               </div>
             </div>
           </div>
@@ -212,10 +212,10 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="space-y-2">
-              <p className="text-2xl font-light text-gray-900 tracking-tight">2.1%</p>
+              <p className="text-2xl font-light text-gray-900 tracking-tight">{dashboardDatas?.return_rate?.value}%</p>
               <div className="flex items-center space-x-1">
                 <ArrowDownRight className="w-4 h-4 text-green-600" />
-                <span className="text-sm font-medium text-green-600">-0.3%</span>
+                <span className="text-sm font-medium text-green-600">-{dashboardDatas?.return_rate?.growth}%</span>
               </div>
             </div>
           </div>
