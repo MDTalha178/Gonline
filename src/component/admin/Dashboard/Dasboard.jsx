@@ -15,6 +15,7 @@ import AdminSidebar from "../Sidebar";
 import StatsCard from "./StatsCard";
 import DropdownButton from "./DropDownButton";
 import { getDashBoardStats } from "../../../service/admin/DashBoardService/dashboardService";
+import Activity from "./Activity";
 
 const AdminDashboard = () => {
   const [revenueFilter, setRevenueFilter] = useState("Monthly");
@@ -28,23 +29,7 @@ const AdminDashboard = () => {
   const timeFilters = ["Monthly", "Quarterly", "Yearly"];
   const orderFilters = ["All"];
 
-  const dashboardData = {
-    revenue: {
-      Monthly: { value: "₹2,45,000", growth: "+12.5%", isPositive: true },
-      Quarterly: { value: "₹7,85,000", growth: "+18.2%", isPositive: true },
-      Yearly: { value: "₹28,50,000", growth: "+25.8%", isPositive: true }
-    },
-    profit: {
-      Monthly: { value: "₹85,000", growth: "+8.3%", isPositive: true },
-      Quarterly: { value: "₹2,45,000", growth: "+15.7%", isPositive: true },
-      Yearly: { value: "₹9,20,000", growth: "+22.1%", isPositive: true }
-    },
-    orders: {
-      All: { value: "1,245", growth: "+5.8%", isPositive: true },
-      Online: { value: "890", growth: "+12.4%", isPositive: true },
-      Offline: { value: "355", growth: "-2.1%", isPositive: false }
-    }
-  };
+
 
   const fetchgetDashBoardStats = async () =>{
     const response =await getDashBoardStats();
@@ -222,30 +207,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Recent Activity Section */}
-        <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6">
-          <h3 className="text-lg font-light text-gray-900 mb-6 uppercase tracking-wider">Recent Activity</h3>
-          <div className="space-y-4">
-            {[
-              { action: "New order received", details: "Order #1234 - ₹2,450", time: "2 minutes ago", type: "success" },
-              { action: "Low stock alert", details: "Product ID: SKU001 - 5 items remaining", time: "15 minutes ago", type: "warning" },
-              { action: "Payment processed", details: "Transaction ID: TXN789 - ₹1,200", time: "1 hour ago", type: "success" },
-              { action: "User registered", details: "New customer account created", time: "2 hours ago", type: "info" },
-            ].map((activity, index) => (
-              <div key={index} className="flex items-center space-x-4 p-3 hover:bg-gray-50 transition-colors duration-200 border-l-2 border-transparent hover:border-gray-300">
-                <div className={`w-2 h-2 rounded-full ${
-                  activity.type === 'success' ? 'bg-green-500' : 
-                  activity.type === 'warning' ? 'bg-yellow-500' : 
-                  'bg-blue-500'
-                }`} />
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-900">{activity.action}</p>
-                  <p className="text-sm text-gray-600 font-light">{activity.details}</p>
-                </div>
-                <span className="text-xs text-gray-400 font-light">{activity.time}</span>
-              </div>
-            ))}
-          </div>
-        </div>
+        <Activity />
       </div>
     </div>
   );

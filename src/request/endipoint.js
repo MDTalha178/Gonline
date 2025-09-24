@@ -59,7 +59,8 @@ export const endPoint = {
         getProductSupplier: '/stores/product/get-supplier/',
         productUpdate: (productId) => `stores/product/${productId}/`,
         checkout: 'order/pos-checkout/',
-        dashboardStats: 'dashboard/dashboard-analytics/'
+        dashboardStats: 'dashboard/dashboard-analytics/',
+        activity: 'dashboard/dashboard-analytics/activity/'
 
     }
 }

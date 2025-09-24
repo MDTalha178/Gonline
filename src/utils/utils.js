@@ -1,3 +1,5 @@
+import { formatDistanceToNow } from "date-fns";
+
 const setDoummntTitle = (document, title) =>{
     document.title = title;
 }
