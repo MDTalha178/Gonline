@@ -28,8 +28,9 @@ import {
 import AdminSidebar from "../Sidebar";
 import { fetchProductList } from "../../../service/marketPlace/product_service";
 import { useToast } from "../../../hooks/useToast";
-import { checkoutService, customerCheckoutPos } from "../../../service/admin/Checkout/checkoutService";
+import { checkoutService, customerCheckoutPos, getPosCustomer } from "../../../service/admin/Checkout/checkoutService";
 import useDebounce from "../../../hooks/useDebounce";
+import { set } from "date-fns";
 
 const CheckoutComponent = () => {
   const {toast} = useToast()
@@ -38,7 +39,7 @@ const CheckoutComponent = () => {
   const [products, setproducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [customer, setCustomer] = useState(null);
+  const [customer, setCustomer] = useState(false);
   const [showCustomerForm, setShowCustomerForm] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('cash');
   const [discountType, setDiscountType] = useState('percentage');
@@ -51,7 +52,8 @@ const CheckoutComponent = () => {
   const [customer_id, setcustomer_id] = useState(null);
   const [isSearching, setIsSearching] = useState(false);
   const [showSearchResults, setShowSearchResults] = useState(false);
-  const [searchCustomer, setsearchCustomer] = useState([]);
+  const [searchCustomer, setsearchCustomer] = useState();
+  const [searchResults, setSearchResults] = useState([]);
   const debouncedCustomerSearchTerm = useDebounce(searchCustomer, 500); 
   
   // Product search states
@@ -66,11 +68,6 @@ const CheckoutComponent = () => {
     gst_number: ''
   });
 
-  // Filter products based on search query
-  const filteredProducts = products?.filter(product =>
-    product?.product_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    product?.sku.toLowerCase().includes(searchQuery.toLowerCase()) 
-  );
 
   const fetchProdouct = async () => {
     setLoading(true);
@@ -88,16 +85,28 @@ const CheckoutComponent = () => {
     
   }
 
+  const fetchCustomer = async() =>{
+    setIsSearching(true)
+    const response = await getPosCustomer(toast, {'search': searchCustomer});
+
+    if(response?.data){
+      setSearchResults(response?.data);
+      setShowSearchResults(true);
+      
+    }
+    setIsSearching(false);
+  }
+
   useEffect(() =>{
     if(debouncedSearchTerm){
       fetchProdouct();
     }
     if(debouncedCustomerSearchTerm){
       console.log('debouncedCustomerSearchTerm', debouncedCustomerSearchTerm);
-      // fetchCustomer();
+      fetchCustomer()
     }
     
-  },[debouncedSearchTerm, setProcessing, debouncedCustomerSearchTerm])
+  },[debouncedSearchTerm, setProcessing, debouncedCustomerSearchTerm, setSearchResults, setShowCustomerForm])
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.product_price * item.quantity), 0);
   const discountAmount = discountType === 'percentage' 
@@ -216,6 +225,25 @@ const CheckoutComponent = () => {
     
   };
 
+  const handleSelectCUstomer = (customer) => {
+    setCustomerForm({
+      customer_name: customer?.customer_name,
+      customer_phone: customer?.customer_phone,
+      customer_email: customer?.customer_email,
+      address: customer?.address,
+      gst_number: customer?.gst_number
+    })
+    setShowSearchResults(false);
+    setsearchCustomer();
+    setCustomer({
+      customer_name: customer?.customer_name,
+      customer_phone: customer?.customer_phone, 
+      customer_email: customer?.customer_email,
+      address: customer?.address,
+      gst_number: customer?.gst_number
+    });
+  }
+
   const processPayment = () => {
     if (cartItems.length === 0) {
       alert('Please add items to cart');
@@ -249,6 +277,7 @@ const CheckoutComponent = () => {
     setAmountReceived('');
     setDiscount(0);
   };
+
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -430,19 +459,28 @@ const CheckoutComponent = () => {
                   Customer Details
                 </h3>
                 
-      {customer ? (
+        {customer ? (
         // Display selected customer
         <div className="space-y-2">
               <div className="flex justify-between items-start">
                 <div>
-                  <p className="font-medium text-gray-900">{customer.customer_name}</p>
-                  <p className="text-sm text-gray-600">{customer.customer_phone}</p>
-                  {customer.customer_email && <p className="text-sm text-gray-600">{customer.customer_email}</p>}
-                  {customer.address && <p className="text-sm text-gray-500">{customer.address}</p>}
+                  <p className="font-medium text-gray-900">Customer Name: {customer?.customer_name}</p>
+                  <p className="text-sm text-gray-600">Phone: {customer?.customer_phone}</p>
+                  {customer.customer_email && <p className="text-sm text-gray-600">Email: {customer.customer_email}</p>}
+                  {customer.address && <p className="text-sm text-gray-500">Address: {customer.address}</p>}
                   {customer.gst_number && <p className="text-sm text-gray-500">GST: {customer.gst_number}</p>}
                 </div>
                 <button
-                  onClick={clearCustomer}
+                  onClick={() => {
+                    setCustomer(null);
+                    setCustomerForm({
+                      customer_name: '',
+                      customer_phone: '',
+                      email: '',
+                      address: '',
+                      gst_number: ''
+                    });
+                  }}
                   className="text-red-600 hover:bg-red-50 p-1 rounded-none"
                 >
                   <X className="w-4 h-4" />
@@ -478,7 +516,7 @@ const CheckoutComponent = () => {
                         {searchResults.map((result) => (
                           <div
                             key={result.id}
-                            onClick={() => handleCustomerSelect(result)}
+                            onClick={() => handleSelectCUstomer(result)}
                             className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
                           >
                             <div className="flex items-center">
@@ -494,9 +532,9 @@ const CheckoutComponent = () => {
                           </div>
                         ))}
                       </div>
-                    ) : searchQuery.trim() ? (
+                    ) : searchCustomer.trim() ? (
                       <div className="p-4 text-center text-gray-500">
-                        <Users className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                        <User className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                         <p className="text-sm">No customers found</p>
                         <p className="text-xs text-gray-400">Try a different search term</p>
                       </div>

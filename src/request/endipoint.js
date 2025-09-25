@@ -61,7 +61,8 @@ export const endPoint = {
         checkout: 'order/pos-checkout/',
         dashboardStats: 'dashboard/dashboard-analytics/',
         activity: 'dashboard/dashboard-analytics/activity/',
-        customerPos: 'order/pos-checkout-customer/'
+        customerPos: 'order/pos-checkout-customer/',
+        getPosCustomer: 'order/pos-customer/'
 
     }
 }

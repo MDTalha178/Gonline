@@ -26,3 +26,15 @@ export const customerCheckoutPos = async(formData, toast) => {
     }
     return null;
 }
+
+
+export const getPosCustomer = async(toast, queryParams={}) => {
+    try {
+        const response =  await request.read(`${endPoint.admin.getPosCustomer}?${new URLSearchParams(queryParams).toString()}`, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}});
+        if (response.success === true) return response
+    } catch (error) {
+        console.log(error,'error');
+        toast.error(error.message);
+    }
+    return null;
+}
