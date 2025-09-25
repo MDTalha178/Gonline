@@ -49,6 +49,10 @@ const CheckoutComponent = () => {
   const [loading, setLoading] = useState(false)
   const debouncedSearchTerm = useDebounce(searchQuery, 500); 
   const [customer_id, setcustomer_id] = useState(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showSearchResults, setShowSearchResults] = useState(false);
+  const [searchCustomer, setsearchCustomer] = useState([]);
+  const debouncedCustomerSearchTerm = useDebounce(searchCustomer, 500); 
   
   // Product search states
   const [showProductSearch, setShowProductSearch] = useState(false);
@@ -88,8 +92,12 @@ const CheckoutComponent = () => {
     if(debouncedSearchTerm){
       fetchProdouct();
     }
+    if(debouncedCustomerSearchTerm){
+      console.log('debouncedCustomerSearchTerm', debouncedCustomerSearchTerm);
+      // fetchCustomer();
+    }
     
-  },[debouncedSearchTerm, setProcessing])
+  },[debouncedSearchTerm, setProcessing, debouncedCustomerSearchTerm])
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.product_price * item.quantity), 0);
   const discountAmount = discountType === 'percentage' 
@@ -417,143 +425,222 @@ const CheckoutComponent = () => {
                 
                 {/* Customer Selection */}
                 <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <User className="w-5 h-5 mr-2 text-gray-600" />
-                    Customer Details
-                  </h3>
-                  
-                  {customer ? (
-                    <div className="space-y-2">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <p className="font-medium text-gray-900">{customer.customer_name}</p>
-                          <p className="text-sm text-gray-600">{customer.customer_phone}</p>
-                          {customer.email && <p className="text-sm text-gray-600">{customer.customer_email}</p>}
-                          {customer.address && <p className="text-sm text-gray-500">{customer.address}</p>}
-                        </div>
-                        <button
-                          onClick={() => setCustomer(null)}
-                          className="text-red-600 hover:bg-red-50 p-1 rounded-none"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="space-y-3">
-                      <button
-                        onClick={() => setShowCustomerForm(!showCustomerForm)}
-                        className="w-full flex items-center justify-center px-4 py-2 border border-dashed border-gray-300 rounded-none text-gray-600 hover:border-gray-400 hover:text-gray-700 transition-colors"
-                      >
-                        <UserPlus className="w-4 h-4 mr-2" />
-                        Add Customer (Optional)
-                      </button>
-                      
-                      {showCustomerForm && (
-                        <div className="space-y-3 mt-4 p-4 bg-gray-50 rounded-none">
-                          <input
-                            type="text"
-                            placeholder="Customer Name*"
-                            value={customerForm.name}
-                            onChange={(e) => setCustomerForm({...customerForm, customer_name: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                            required
-                          />
-                          <input
-                            type="tel"
-                            placeholder="Phone Number*"
-                            value={customerForm.phone}
-                            onChange={(e) => setCustomerForm({...customerForm, customer_phone: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                            required
-                          />
-                          <input
-                            type="email"
-                            placeholder="Email"
-                            value={customerForm.email}
-                            onChange={(e) => setCustomerForm({...customerForm, customer_email: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                          />
-                          <textarea
-                            placeholder="Address"
-                            value={customerForm.address}
-                            onChange={(e) => setCustomerForm({...customerForm, address: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                            rows="2"
-                          />
-                          <input
-                            type="text"
-                            placeholder="GST Number (Optional)"
-                            value={customerForm.gst_number}
-                            onChange={(e) => setCustomerForm({...customerForm, gst_number: e.target.value})}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                          />
-                          <div className="flex space-x-2">
-                            <button
-                              type="button"
-                              onClick={handleCustomerSubmit}
-                              className="flex-1 bg-gray-800 text-white px-4 py-2 rounded-none hover:bg-gray-900 transition-colors"
-                            >
-                              Add Customer
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => setShowCustomerForm(false)}
-                              className="px-4 py-2 border border-gray-300 text-gray-600 rounded-none hover:bg-gray-50 transition-colors"
-                            >
-                              Cancel
-                            </button>
-                          </div>
-                        </div>
-                      )}
+                <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+                  <User className="w-5 h-5 mr-2 text-gray-600" />
+                  Customer Details
+                </h3>
+                
+      {customer ? (
+        // Display selected customer
+        <div className="space-y-2">
+              <div className="flex justify-between items-start">
+                <div>
+                  <p className="font-medium text-gray-900">{customer.customer_name}</p>
+                  <p className="text-sm text-gray-600">{customer.customer_phone}</p>
+                  {customer.customer_email && <p className="text-sm text-gray-600">{customer.customer_email}</p>}
+                  {customer.address && <p className="text-sm text-gray-500">{customer.address}</p>}
+                  {customer.gst_number && <p className="text-sm text-gray-500">GST: {customer.gst_number}</p>}
+                </div>
+                <button
+                  onClick={clearCustomer}
+                  className="text-red-600 hover:bg-red-50 p-1 rounded-none"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+            </div>
+          ) : (
+        // Customer search and add section
+            <div className="space-y-4">
+              {/* Search Box */}
+              <div className="relative">
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <input
+                    type="text"
+                    placeholder="Search existing customer by name, phone, or email..."
+                    value={searchCustomer}
+                    onChange={(e) => setsearchCustomer(e.target.value)}
+                    className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                  {isSearching && (
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                      <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
                     </div>
                   )}
                 </div>
 
-                {/* Discount & Tax */}
-                <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6">
-                  <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
-                    <Calculator className="w-5 h-5 mr-2 text-gray-600" />
-                    Discount & Tax
-                  </h3>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Discount</label>
-                      <div className="flex space-x-2">
-                        <select
-                          value={discountType}
-                          onChange={(e) => setDiscountType(e.target.value)}
-                          className="px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500"
-                        >
-                          <option value="percentage">%</option>
-                          <option value="fixed">₹</option>
-                        </select>
-                        <input
-                          type="number"
-                          value={discount}
-                          onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
-                          className="flex-1 px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                          placeholder="0"
-                          min="0"
-                        />
+                {/* Search Results Dropdown */}
+                {showSearchResults && (
+                  <div className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-none shadow-lg max-h-60 overflow-y-auto">
+                    {searchResults.length > 0 ? (
+                      <div>
+                        {searchResults.map((result) => (
+                          <div
+                            key={result.id}
+                            onClick={() => handleCustomerSelect(result)}
+                            className="p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-b-0"
+                          >
+                            <div className="flex items-center">
+                              <User className="w-4 h-4 text-gray-400 mr-3 flex-shrink-0" />
+                              <div className="flex-1 min-w-0">
+                                <p className="font-medium text-gray-900 truncate">{result.customer_name}</p>
+                                <p className="text-sm text-gray-600">{result.customer_phone}</p>
+                                {result.customer_email && (
+                                  <p className="text-sm text-gray-500 truncate">{result.customer_email}</p>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">Tax Rate (%)</label>
-                      <input
-                        type="number"
-                        value={tax}
-                        onChange={(e) => setTax(parseFloat(e.target.value) || 0)}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
-                        placeholder="18"
-                        min="0"
-                        step="0.1"
-                      />
-                    </div>
+                    ) : searchQuery.trim() ? (
+                      <div className="p-4 text-center text-gray-500">
+                        <Users className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                        <p className="text-sm">No customers found</p>
+                        <p className="text-xs text-gray-400">Try a different search term</p>
+                      </div>
+                    ) : null}
+                  </div>
+                )}
+              </div>
+
+              {/* Divider */}
+              <div className="flex items-center">
+                <div className="flex-1 border-t border-gray-200"></div>
+                <div className="px-4 text-xs text-gray-500 bg-white">OR</div>
+                <div className="flex-1 border-t border-gray-200"></div>
+              </div>
+
+              {/* Add New Customer Button */}
+              <button
+                onClick={() => {
+                  setShowCustomerForm(!showCustomerForm);
+                  setSearchQuery('');
+                  setShowSearchResults(false);
+                }}
+                className="w-full flex items-center justify-center px-4 py-2 border border-dashed border-gray-300 rounded-none text-gray-600 hover:border-gray-400 hover:text-gray-700 transition-colors"
+              >
+                <UserPlus className="w-4 h-4 mr-2" />
+                Add New Customer
+              </button>
+              
+              {/* Add Customer Form */}
+              {showCustomerForm && (
+                <div className="space-y-3 mt-4 p-4 bg-gray-50 rounded-none">
+                  <input
+                    type="text"
+                    placeholder="Customer Name*"
+                    value={customerForm.customer_name}
+                    onChange={(e) => setCustomerForm({...customerForm, customer_name: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                    required
+                  />
+                  <input
+                    type="tel"
+                    placeholder="Phone Number*"
+                    value={customerForm.customer_phone}
+                    onChange={(e) => setCustomerForm({...customerForm, customer_phone: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                    required
+                  />
+                  <input
+                    type="email"
+                    placeholder="Email"
+                    value={customerForm.customer_email}
+                    onChange={(e) => setCustomerForm({...customerForm, customer_email: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                  <textarea
+                    placeholder="Address"
+                    value={customerForm.address}
+                    onChange={(e) => setCustomerForm({...customerForm, address: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                    rows="2"
+                  />
+                  <input
+                    type="text"
+                    placeholder="GST Number (Optional)"
+                    value={customerForm.gst_number}
+                    onChange={(e) => setCustomerForm({...customerForm, gst_number: e.target.value})}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  />
+                  <div className="flex space-x-2">
+                    <button
+                      type="button"
+                      onClick={handleCustomerSubmit}
+                      disabled={!customerForm.customer_name || !customerForm.customer_phone}
+                      className="flex-1 bg-gray-800 text-white px-4 py-2 rounded-none hover:bg-gray-900 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors"
+                    >
+                      Add Customer
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setShowCustomerForm(false);
+                        setCustomerForm({
+                          customer_name: '',
+                          customer_phone: '',
+                          customer_email: '',
+                          address: '',
+                          gst_number: ''
+                        });
+                      }}
+                      className="px-4 py-2 border border-gray-300 text-gray-600 rounded-none hover:bg-gray-50 transition-colors"
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
+              )}
+            </div>
+          )}
+        </div>
+
+          {/* Discount & Tax */}
+          <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6">
+            <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center">
+              <Calculator className="w-5 h-5 mr-2 text-gray-600" />
+              Discount & Tax
+            </h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Discount</label>
+                <div className="flex space-x-2">
+                  <select
+                    value={discountType}
+                    onChange={(e) => setDiscountType(e.target.value)}
+                    className="px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500"
+                  >
+                    <option value="percentage">%</option>
+                    <option value="fixed">₹</option>
+                  </select>
+                  <input
+                    type="number"
+                    value={discount}
+                    onChange={(e) => setDiscount(parseFloat(e.target.value) || 0)}
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                    placeholder="0"
+                    min="0"
+                  />
+                </div>
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">Tax Rate (%)</label>
+                <input
+                  type="number"
+                  value={tax}
+                  onChange={(e) => setTax(parseFloat(e.target.value) || 0)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
+                  placeholder="18"
+                  min="0"
+                  step="0.1"
+                />
+              </div>
+            </div>
+          </div>
 
                 {/* Order Summary */}
                 <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6">
