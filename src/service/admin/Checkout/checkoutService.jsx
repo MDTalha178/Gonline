@@ -15,3 +15,14 @@ export const checkoutService = async(formData, toast) => {
     }
     return null;
 }
+
+
+export const customerCheckoutPos = async(formData, toast) => {
+    try{
+        const response =  await request.create(endPoint.admin.customerPos, formData, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()}, });
+        if (response.success === true) return response
+    } catch (error) {
+        toast.error(error.message);
+    }
+    return null;
+}

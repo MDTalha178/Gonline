@@ -19,9 +19,9 @@ return(
     </td>
     <td className="px-6 py-4 whitespace-nowrap">
       <div className="text-sm">
-        <div className="font-medium text-gray-900">{order?.user?.user?.first_name}</div>
-        <div className="text-gray-500">{order?.user?.user?.email}</div>
-        <div className="text-gray-500 text-xs">{order?.user?.user?.phone}</div>
+        <div className="font-medium text-gray-900">{order?.user?.customer_name}</div>
+        <div className="text-gray-500">{order?.user?.customer_email}</div>
+        <div className="text-gray-500 text-xs">{order?.user?.customer_phone}</div>
       </div>
     </td>
     <td className="px-6 py-4 whitespace-nowrap">

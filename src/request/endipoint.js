@@ -60,7 +60,8 @@ export const endPoint = {
         productUpdate: (productId) => `stores/product/${productId}/`,
         checkout: 'order/pos-checkout/',
         dashboardStats: 'dashboard/dashboard-analytics/',
-        activity: 'dashboard/dashboard-analytics/activity/'
+        activity: 'dashboard/dashboard-analytics/activity/',
+        customerPos: 'order/pos-checkout-customer/'
 
     }
 }

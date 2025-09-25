@@ -25,7 +25,7 @@ const errorHandler = (error, toast = null, options = {}) => {
     else if (response && response.status) {
         // response?.data?.data?.non_field_errors[0]
         console.log(response?.data, 'response');
-        const message = response?.data?.data?.non_field_errors[0] || response?.data?.error || response.data && response.data.message ||response?.data[0]|| codeMessage[response.status];
+        const message = response?.data?.data?.non_field_errors[0] || response?.data?.non_field_errors[0]||  response?.data?.error || response.data && response.data.message ||response?.data[0]|| codeMessage[response.status];
         const { status } = response;
 
         // Show toast notification based on status

@@ -144,7 +144,7 @@ const AdminInventory = () => {
         </div>
 
         {/* Stats Cards */}
-        {islaoding ?<RowLoader />: product.length > 0 && <ProductStats product={product}/>}
+        {product.length > 0 && <ProductStats product={product}/>}
 
         <div className="lg:hidden space-y-4">
             <div className="flex items-center justify-between mb-4">

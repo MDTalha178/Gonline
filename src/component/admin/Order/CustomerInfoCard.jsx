@@ -23,21 +23,21 @@ return(
         <div className="flex items-center space-x-2 mb-3">
           <User className="w-4 h-4 text-gray-400" />
           <div>
-            <p className="font-medium text-gray-900">{user?.first_name} {user?.last_name}</p>
+            <p className="font-medium text-gray-900">{user?.customer_name}</p>
             <p className="text-sm text-gray-600">Customer</p>
           </div>
         </div>
         <div className="flex items-center space-x-2 mb-3">
           <Mail className="w-4 h-4 text-gray-400" />
           <div>
-            <p className="text-gray-900">{user?.email}</p>
+            <p className="text-gray-900">{user?.customer_email}</p>
             <p className="text-sm text-gray-600">Email</p>
           </div>
         </div>
         <div className="flex items-center space-x-2">
           <Phone className="w-4 h-4 text-gray-400" />
           <div>
-            <p className="text-gray-900">{user?.phone}</p>
+            <p className="text-gray-900">{user?.customer_phone}</p>
             <p className="text-sm text-gray-600">Phone</p>
           </div>
         </div>

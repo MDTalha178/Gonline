@@ -28,7 +28,7 @@ import {
 import AdminSidebar from "../Sidebar";
 import { fetchProductList } from "../../../service/marketPlace/product_service";
 import { useToast } from "../../../hooks/useToast";
-import { checkoutService } from "../../../service/admin/Checkout/checkoutService";
+import { checkoutService, customerCheckoutPos } from "../../../service/admin/Checkout/checkoutService";
 import useDebounce from "../../../hooks/useDebounce";
 
 const CheckoutComponent = () => {
@@ -47,17 +47,17 @@ const CheckoutComponent = () => {
   const [amountReceived, setAmountReceived] = useState('');
   const [processing, setProcessing] = useState(false);
   const [loading, setLoading] = useState(false)
-  // const [debouncedQuery] = useDebounce(searchQuery, 500);
   const debouncedSearchTerm = useDebounce(searchQuery, 500); 
+  const [customer_id, setcustomer_id] = useState(null);
   
   // Product search states
   const [showProductSearch, setShowProductSearch] = useState(false);
   const [barcodeInput, setBarcodeInput] = useState('');
 
   const [customerForm, setCustomerForm] = useState({
-    name: '',
-    phone: '',
-    email: '',
+    customer_name: '',
+    customer_phone: '',
+    customer_email: '',
     address: '',
     gst_number: ''
   });
@@ -112,7 +112,8 @@ const CheckoutComponent = () => {
       total_items: cartItems.length,
       product_id:cartItems.map((item) => {
         return {product_id: item.id, quantity: item.quantity}
-      })
+      }),
+      pos_customer_id: customer_id
     }
     const response = await checkoutService(payload, toast);
     if(response?.data){
@@ -192,14 +193,19 @@ const CheckoutComponent = () => {
     }
   };
 
-  const handleCustomerSubmit = () => {
-    if (!customerForm.name || !customerForm.phone) {
-      toast.error('Name and phone number are required');
+  const handleCustomerSubmit = async () => {
+    if (!customerForm.customer_name || !customerForm.customer_phone) {
+      toast.error('Name and phone number and email are required');
       return;
     }
-    setCustomer(customerForm);
-    setShowCustomerForm(false);
-    setCustomerForm({ name: '', phone: '', email: '', address: '', gst_number: '' });
+    const response = await customerCheckoutPos(customerForm, toast);
+    if(response?.data){
+      setcustomer_id(response?.data?.customer_id);
+      setCustomer(customerForm);
+      setShowCustomerForm(false);
+      setCustomerForm({ name: '', phone: '', email: '', address: '', gst_number: '' });
+    }
+    
   };
 
   const processPayment = () => {
@@ -420,9 +426,9 @@ const CheckoutComponent = () => {
                     <div className="space-y-2">
                       <div className="flex justify-between items-start">
                         <div>
-                          <p className="font-medium text-gray-900">{customer.name}</p>
-                          <p className="text-sm text-gray-600">{customer.phone}</p>
-                          {customer.email && <p className="text-sm text-gray-600">{customer.email}</p>}
+                          <p className="font-medium text-gray-900">{customer.customer_name}</p>
+                          <p className="text-sm text-gray-600">{customer.customer_phone}</p>
+                          {customer.email && <p className="text-sm text-gray-600">{customer.customer_email}</p>}
                           {customer.address && <p className="text-sm text-gray-500">{customer.address}</p>}
                         </div>
                         <button
@@ -449,7 +455,7 @@ const CheckoutComponent = () => {
                             type="text"
                             placeholder="Customer Name*"
                             value={customerForm.name}
-                            onChange={(e) => setCustomerForm({...customerForm, name: e.target.value})}
+                            onChange={(e) => setCustomerForm({...customerForm, customer_name: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                             required
                           />
@@ -457,7 +463,7 @@ const CheckoutComponent = () => {
                             type="tel"
                             placeholder="Phone Number*"
                             value={customerForm.phone}
-                            onChange={(e) => setCustomerForm({...customerForm, phone: e.target.value})}
+                            onChange={(e) => setCustomerForm({...customerForm, customer_phone: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                             required
                           />
@@ -465,7 +471,7 @@ const CheckoutComponent = () => {
                             type="email"
                             placeholder="Email"
                             value={customerForm.email}
-                            onChange={(e) => setCustomerForm({...customerForm, email: e.target.value})}
+                            onChange={(e) => setCustomerForm({...customerForm, customer_email: e.target.value})}
                             className="w-full px-3 py-2 border border-gray-300 rounded-none focus:ring-2 focus:ring-gray-500 focus:border-transparent"
                           />
                           <textarea

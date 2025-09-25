@@ -174,6 +174,7 @@ const AdminOrderList = () => {
   });
 
   const fetchOrders = async (page=0) => {
+    setLoading(true);
     const response = await getOrder(toast, {'search': searchTerm, 'page': page > 0? page: cuuerntPage});
     if (response?.data) {
       setOrderData(response.data?.order_list?.results);
@@ -294,10 +295,10 @@ const AdminOrderList = () => {
                     {/* Text */}
                     <div className="space-y-2">
                       <h3 className="text-lg font-medium text-gray-900">
-                        No transactions found
+                        No Order found
                       </h3>
                       <p className="text-sm text-gray-500 max-w-sm mx-auto">
-                        You don’t have any transactions yet. Once transactions are made, they’ll appear here for easy tracking and review.
+                        You don’t have any Order yet. Once Order are made, they’ll appear here for easy tracking and review.
                       </p>
                     </div>
                   </div>
