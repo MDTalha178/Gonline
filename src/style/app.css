@@ -1,1 +1,57 @@
 @import "tailwindcss";
+
+/* Add this to your CSS file or in a <style> tag */
+@keyframes shimmer-wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(-50%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer-wave {
+  animation: shimmer-wave 2s ease-in-out infinite;
+}
+
+/* Alternative: Even more subtle version */
+@keyframes shimmer-pulse {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.animate-shimmer-pulse {
+  animation: shimmer-pulse 1.5s ease-in-out infinite;
+}
+
+/* If using Tailwind, add this to your tailwind.config.js */
+/* 
+module.exports = {
+  theme: {
+    extend: {
+      animation: {
+        'shimmer-wave': 'shimmer-wave 2s ease-in-out infinite',
+        'shimmer-pulse': 'shimmer-pulse 1.5s ease-in-out infinite',
+      },
+      keyframes: {
+        'shimmer-wave': {
+          '0%': { transform: 'translateX(-100%)' },
+          '50%': { transform: 'translateX(-50%)' },
+          '100%': { transform: 'translateX(100%)' },
+        },
+        'shimmer-pulse': {
+          '0%, 100%': { opacity: '0.7' },
+          '50%': { opacity: '1' },
+        },
+      },
+    },
+  },
+}
+*/

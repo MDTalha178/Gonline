@@ -18,6 +18,12 @@ const FeatureProductSection = ({ featuredData ,storeId}) => {
         setLoading(false);
     }, [featuredProducts, storeOrigin]);
 
+    if(featuredData && featuredProducts.length <= 0){
+        return (
+            <p>No products found</p>
+        )
+    }
+
     return (
         <div className="w-full min-h-screen bg-white">
             {/* Full Width Container */}

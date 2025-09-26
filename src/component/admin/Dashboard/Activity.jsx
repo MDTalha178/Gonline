@@ -1,21 +1,27 @@
 import { useEffect, useState } from "react"
 import { getactivity } from "../../../service/admin/DashBoardService/dashboardService";
 import { TimeAgo } from "../../../utils/TimeConversionUtils";
+import ActivityItemShimmer from "./ActivityShimmer";
 const Activity = () =>{
 
     const [activity, setActivity] = useState([]);
-
+    const [isLoading, setLoading] = useState(false);
+ 
     const fetchActivity = async() =>{
+        setLoading(true);
         const response = await getactivity();
 
         if(response?.data){
             setActivity(response?.data);
         }
+        setLoading(false);
     }
 
     useEffect(() => {
         fetchActivity();
     }, [setActivity]);
+
+    if(isLoading) return <ActivityItemShimmer  message='Loading..' />
 
     return(
     <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6">

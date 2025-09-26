@@ -1,6 +1,12 @@
 import { ArrowDownRight, ArrowUpRight } from "lucide-react";
+import ShimmerEffect from "./shimmerEffect";
 
-const StatsCard = ({ title, value, growth, isPositive, icon: Icon, children, className=''}) => (
+const StatsCard = ({ title, value, growth, isPositive, icon: Icon, children, isLoading, className=''}) => {
+
+  if(isLoading){
+    return <ShimmerEffect />
+  }
+  return (
     <div className={`bg-white rounded-none shadow-sm border border-gray-200 p-6 hover:shadow-md transition-all duration-300 group} ${className}`}>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-sm font-medium text-gray-700 uppercase tracking-wider">{title}</h3>
@@ -27,5 +33,6 @@ const StatsCard = ({ title, value, growth, isPositive, icon: Icon, children, cla
       </div>
     </div>
   );
+}
 
 export default StatsCard
