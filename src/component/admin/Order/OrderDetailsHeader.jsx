@@ -3,7 +3,7 @@ import OrderDetailsStatusBadge from "./OrderDetailsStatusBadge";
 import { useNavigate } from "react-router-dom";
 import { convertISOToDateTime } from "../../../utils/utils";
 
-const OrderDetailsHeader = ({ order, onBack, onEdit, onCancel }) => {
+const OrderDetailsHeader = ({ order, setIsOpen }) => {
     const navigate = useNavigate();
 return(
   <div className="bg-white border-b border-gray-200 px-6 py-4 mb-6">
@@ -34,7 +34,7 @@ return(
             Print
           </button>
           <button 
-            onClick={onEdit}
+            onClick={() => setIsOpen(true)}
             className="flex items-center px-3 py-2 bg-blue-600 text-white hover:bg-blue-700 transition-colors"
           >
             <Edit className="w-4 h-4 mr-2" />

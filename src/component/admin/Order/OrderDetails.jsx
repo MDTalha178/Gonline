@@ -1,10 +1,4 @@
-import React, { useState, useEffect, use } from 'react';
-import { 
-  ArrowLeft, Edit, Trash2, Package, Truck, CheckCircle, XCircle, Clock, RotateCcw,
-  User, Mail, Phone, MapPin, CreditCard, Calendar, Eye, Download,
-  AlertTriangle, RefreshCw, PackageX, ShoppingBag, Copy, ExternalLink,
-  Printer
-} from 'lucide-react';
+import React, { useState, useEffect } from 'react';;
 import OrderDetailsHeader from './OrderDetailsHeader';
 import OrderItemsCard from './OrderItemCard';
 import PaymentShippingCard from './PaymentShippindcard';
@@ -12,15 +6,22 @@ import StatusUpdateActions from './StatusUpdateAction';
 import CustomerInfoCard from './CustomerInfoCard';
 import OrderTimelineCard from './OrderTimeLine';
 import { useToast } from '../../../hooks/useToast';
-import { getOrderDetails } from '../../../service/admin/OrderService/OrderService';
+import { getOrderDetails, updateOrderStatus } from '../../../service/admin/OrderService/OrderService';
 import { useParams } from 'react-router-dom';
+import EditOrderModal from './EditOrderModal';
+import OrderItemsCardSkeleton from '../Shimmer/OrderCardShimmer';
+import PaymentShippingCardSkeleton from '../Shimmer/PaymentShimmer';
+import { is } from 'date-fns/locale';
+import CustomerInfoCardSkeleton from '../Shimmer/CustomerShimmer';
+import OrderTimelineSkeleton from '../Shimmer/OrderTimelineShimmer';
 
 // Main Order Details Component
 const AdminOrderDetails = ({onBack }) => {
   const { toast } = useToast();
   const [order, setOrder] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const {orderId} = useParams();
+  const [isOpen, setIsOpen] = useState(false);
 
   // Sample order data (replace with actual API call)
   const sampleOrder = {
@@ -75,8 +76,10 @@ const AdminOrderDetails = ({onBack }) => {
   };
 
   const fetchOrderDetails = async () => {
+    setLoading(true);
     const response = await getOrderDetails(orderId, toast);
     if(response?.data) setOrder(response.data);
+    setLoading(false);
       
   }
 
@@ -84,46 +87,40 @@ const AdminOrderDetails = ({onBack }) => {
    if(orderId) fetchOrderDetails();
   }, [orderId]);
 
-  const handleStatusUpdate = (newStatus) => {
+
+  const handleStatusUpdate = async (newStatus) => {
     // Implement status update logic
-    toast(`Order status updated to ${newStatus}`);
-    setOrder({ ...order, status: newStatus });
-  };
-
-  const handleEdit = () => {
-    toast('Edit order functionality');
-  };
-
-  const handleCancel = () => {
-    if (confirm('Are you sure you want to cancel this order?')) {
-      handleStatusUpdate('Cancelled');
-    }
+    const response = await updateOrderStatus(newStatus, toast);
+    if(response?.success === true){
+      fetchOrderDetails();
+      setIsOpen(false);
+    } 
   };
 
   return (
     <div className="flex h-screen bg-gray-50">
+
+      {isOpen && <EditOrderModal isOpen={isOpen} setIsOpen={setIsOpen} order={order?.order_details} onSave={handleStatusUpdate} />}
       
       <div className="flex-1 overflow-y-auto">
         <OrderDetailsHeader
           order={order?.order_details} 
-          onBack={onBack} 
-          onEdit={handleEdit}
-          onCancel={handleCancel}
+          setIsOpen={setIsOpen} 
         />
         
         <div className="px-6 pb-6">
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {/* Left Column */}
             <div className="lg:col-span-2 space-y-6">
-              <OrderItemsCard order={order?.order_details}  orderdetails={order?.order_details?.order_item}/>
-              <PaymentShippingCard order={order?.order_details} />
+              {loading ? <OrderItemsCardSkeleton />: order?.order_details ? <OrderItemsCard order={order?.order_details}  orderdetails={order?.order_details?.order_item}/> : "No order details found"}
+              {loading ? <PaymentShippingCardSkeleton />: order?.order_details ? <PaymentShippingCard order={order?.order_details} />: "No Payment details found"}
               <StatusUpdateActions order={order?.order_details} onStatusUpdate={handleStatusUpdate} /> 
             </div>
             
             {/* Right Column */}
             <div className="space-y-6">
-              <CustomerInfoCard order={order?.order_details} />
-              <OrderTimelineCard order={order?.order_details} />
+              {loading ? <CustomerInfoCardSkeleton />:<CustomerInfoCard order={order?.order_details} />}
+              {loading ?<OrderTimelineSkeleton /> :<OrderTimelineCard order={order?.order_details} />}
             </div>
           </div>
         </div>

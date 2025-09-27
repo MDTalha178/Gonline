@@ -40,9 +40,10 @@ const StatusUpdateActions = ({ order, onStatusUpdate }) => {
           
           return (
             <button
+              disabled={true}
               key={index}
               onClick={() => onStatusUpdate(action.status)}
-              className={`px-4 py-2 font-medium transition-colors cursor-pointer ${variantClasses[action.variant]}`}
+              className={`px-4 py-2 font-medium transition-colors cursor-pointer-disabled ${variantClasses[action.variant]}`}
             >
               {action.label}
             </button>

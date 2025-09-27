@@ -5,9 +5,10 @@ import { convertISOToDateTime } from "../../../utils/utils";
 import { useNavigate } from "react-router-dom";
 import { PAYMENT } from "../../../utils/constant";
 
-const OrderRow = ({ order }) => {
+const OrderRow = ({ order, handleEdit}) => {
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
 
 return(
   <tr className="hover:bg-gray-50 transition-colors">
@@ -53,7 +54,7 @@ return(
         <button onClick={() => navigate(`/admin-orders/${order?.id}`)} className="text-blue-600 hover:text-blue-800 transition-colors cursor-pointer">
           <Eye className="w-4 h-4" />
         </button>
-        <button className="text-green-600 hover:text-green-800 transition-colors">
+        <button onClick={() => handleEdit(order)} className="text-green-600 hover:text-green-800 transition-colors cursor-pointer">
           <Edit className="w-4 h-4" />
         </button>
         {/* <button className="text-red-600 hover:text-red-800 transition-colors">
@@ -66,7 +67,7 @@ return(
 };
 
 
-export const OrderResponsiveRow = ({ order }) => {
+export const OrderResponsiveRow = ({ order, setIsOpen }) => {
   const navigate = useNavigate();
 
   return (
@@ -88,8 +89,8 @@ export const OrderResponsiveRow = ({ order }) => {
           >
             <Eye className="w-4 h-4" />
           </button>
-          <button className="text-green-600 hover:text-green-800 transition-colors p-1">
-            <Edit className="w-4 h-4" />
+          <button onCLick={() => handleEdit(order)} className="text-green-600 hover:text-green-800 transition-colors p-1">
+            <Edit className="w-4 h-4"  />
           </button>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import { CheckCircle, Clock, RefreshCw, RotateCcw, Truck, XCircle } from "lucide-react";
+import { CheckCircle, Clock, Package, RefreshCw, RotateCcw, Truck, XCircle } from "lucide-react";
 
 const OrderStatusBadge = ({ status }) => {
   const statusConfig = {
@@ -9,6 +9,7 @@ const OrderStatusBadge = ({ status }) => {
     'CANCELLED': { bg: 'bg-red-100', text: 'text-red-800', icon: XCircle },
     'RETURNED': { bg: 'bg-gray-100', text: 'text-gray-800', icon: RotateCcw },
     'CONFIRMED':{ bg: 'bg-green-100', text: 'text-green-800', icon: CheckCircle },
+    'PACKED':{ bg: 'bg-green-100', text: 'text-green-800', icon: Package },
   };
 
   const config = statusConfig[status] || statusConfig['Pending'];

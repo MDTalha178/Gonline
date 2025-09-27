@@ -1,3 +1,4 @@
+import { updateOrderStatus } from "../service/admin/OrderService/OrderService";
 
 
 export const endPoint = {
@@ -62,7 +63,8 @@ export const endPoint = {
         dashboardStats: 'dashboard/dashboard-analytics/',
         activity: 'dashboard/dashboard-analytics/activity/',
         customerPos: 'order/pos-checkout-customer/',
-        getPosCustomer: 'order/pos-customer/'
+        getPosCustomer: 'order/pos-customer/',
+        updateOrderStatus: 'order/update-order-status/'
 
     }
 }

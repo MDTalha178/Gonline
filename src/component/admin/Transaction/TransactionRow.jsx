@@ -169,7 +169,15 @@ export const TransactionResponsiveRow = ({ transaction }) => {
         </div>
          <div className="flex justify-between">
           <span>Invoice:</span>
-          <span className="font-medium">{transaction.is_invoice_generated ? <FileText className="w-4 h-4"></FileText>: "Not Generated"}</span>
+          <a 
+            href={transaction?.customer_invoice?.invoice_url}   
+            target="_blank"                  
+            rel="noopener noreferrer" 
+            className="font-medium"
+          >
+            <span className="font-medium">{transaction?.customer_invoice?.invoice_url ? <FileText className="w-4 h-4"></FileText>: "Not Generated"}</span>
+          </a>
+          
         </div>
       </div>
 

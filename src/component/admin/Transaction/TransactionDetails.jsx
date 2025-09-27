@@ -1,21 +1,20 @@
 import { 
-  Phone,
-  Mail,
   CheckCircle,
   Clock,
 } from "lucide-react";
-import { use, useEffect, useState } from "react";
-import AdminSidebar from "../Sidebar";
+import { useEffect, useState } from "react";
 import RefundModal from "./RefundModal";
 import TransactionDetailsHeader from "./TransactionDetailsHeader";
 import TransactionSummary from "./TrnsactionSummary";
 import { getTransactionDetails } from "../../../service/admin/TransactionService/transactions";
 import { useParams } from "react-router-dom";
 import { useToast } from "../../../hooks/useToast";
-import BillingAddress from "./BillingAddres";
-import PaymentDetails from "./PaymentDetails";
+import BillingAddress from "./BillingAddres";;
 import CustomerInfo from "./CustomerInfo";
 import OrderDetails from "./OrderDetails";
+import PaymentShippingCardSkeleton from "../Shimmer/PaymentShimmer";
+import OrderItemsCardSkeleton from "../Shimmer/OrderCardShimmer";
+import CustomerInfoCardSkeleton from "../Shimmer/CustomerShimmer";
 
 const TransactionDetails = ({ onBack }) => {
   const {toast} = useToast()
@@ -23,6 +22,7 @@ const TransactionDetails = ({ onBack }) => {
   const [refundAmount, setRefundAmount] = useState("");
   const [refundReason, setRefundReason] = useState("");
   const [transactionDatas, settransactionData] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const { transactionId} = useParams();
 
@@ -134,10 +134,12 @@ const TransactionDetails = ({ onBack }) => {
   };
 
   const fetchTransactionsDetails = async () =>{
-      const response = await getTransactionDetails(transactionId, toast);
-      if(response?.data){
-        settransactionData(response?.data);
-      }
+    setLoading(true);
+    const response = await getTransactionDetails(transactionId, toast);
+    if(response?.data){
+      settransactionData(response?.data);
+    }
+    setLoading(false);
   }
 
   useEffect(() =>{
@@ -165,10 +167,10 @@ const TransactionDetails = ({ onBack }) => {
           <div className="lg:col-span-2 space-y-6">
             
             {/* Transaction Summary */}
-            <TransactionSummary  transactionData={transactionDatas}/>
+            {loading?<PaymentShippingCardSkeleton />: <TransactionSummary  transactionData={transactionDatas}/>}
 
             {/* Order Items */}
-           <OrderDetails orderData={transactionDatas?.order_details}/>
+           {loading? <OrderItemsCardSkeleton/>: <OrderDetails orderData={transactionDatas?.order_details}/>}
 
             {/* Order Timeline */}
             <div className="bg-white rounded-none shadow-sm border border-gray-200 p-6 ">
@@ -209,16 +211,16 @@ const TransactionDetails = ({ onBack }) => {
           <div className="space-y-6">
             
             {/* Customer Info */}
-            <CustomerInfo customerData={transactionDatas?.order_details?.user} amount={transactionDatas?.order_details?.total_amount}/>
+           {loading ? <CustomerInfoCardSkeleton/>:<CustomerInfo customerData={transactionDatas?.order_details?.user} amount={transactionDatas?.order_details?.total_amount}/>}
 
             {/* Billing Address */}
-            <BillingAddress billingAddress={transactionDatas?.order_details?.shipping_address}/>
+            {loading ?<CustomerInfoCardSkeleton/>:<BillingAddress billingAddress={transactionDatas?.order_details?.shipping_address}/>}
 
             {/* Shipping Address */}
-            <BillingAddress billingAddress={transactionDatas?.order_details?.shipping_address} addressType="Shipping"/>
+            {loading ?<CustomerInfoCardSkeleton/>:<BillingAddress billingAddress={transactionDatas?.order_details?.shipping_address} addressType="Shipping"/>}
 
             {/* Payment Details */}
-            <PaymentDetails transactionData={transactionData} />
+            {/* <PaymentDetails transactionData={transactionData} /> */}
           </div>
         </div>
       </div>

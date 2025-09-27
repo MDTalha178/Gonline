@@ -46,7 +46,7 @@ const AdminInventory = () => {
 
   const fetchProduct = async () => {
     setIsLoading(true); 
-      const response = await getStoreproduct(toast, null, {'search': searchTerm});
+      const response = await getStoreproduct(toast, null, {'search': searchTerm, 'category': selectedCategory === "All" ? '' : selectedCategory});
       if (response?.data){
           setProduct(response.data?.results);
           setTotalPages(response.data?.meta?.total_pages);
@@ -76,7 +76,6 @@ const AdminInventory = () => {
   }
 
  const fetchCategory = async() =>{
- 
     const response = await getCategory(toast, {limit:100, offset:0});
     if(response?.data){
         setCategory(response?.data);
@@ -108,10 +107,13 @@ const AdminInventory = () => {
       if (searchTerm) {
         fetchProduct(searchTerm); 
       }
+      if(selectedCategory !== "All"){
+        fetchProduct(selectedCategory);
+      }
     }, 1000); 
     return () => clearTimeout(delayDebounce);
 
-  }, [showAddModal, setProduct, showUpdateModal, editProductData, searchTerm]);
+  }, [showAddModal, setProduct, showUpdateModal, editProductData, searchTerm, selectedCategory]);
 
 
 

@@ -8,8 +8,10 @@ import DateRangeFilter from '../Filter/Inventory/DateRangeFilter';
 import OrderStats from './OrderStats';
 import OrderRow, { OrderResponsiveRow } from './OrderRow';
 import { useToast } from '../../../hooks/useToast';
-import { getOrder } from '../../../service/admin/OrderService/OrderService';
+import { getOrder, updateOrderStatus } from '../../../service/admin/OrderService/OrderService';
 import { RowLoader } from '../Shimmer/rowLoader';
+import EditOrderModal from './EditOrderModal';
+import { set } from 'date-fns';
 
 
 // Main OrderList Component
@@ -30,152 +32,16 @@ const AdminOrderList = () => {
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [totalItems, setTotalItems] = useState(0);
   const [orderStats, setOrderStats] = useState({})
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectOrder, setSelectOrder] = useState({});
 
-  const statusOptions = ["All", "Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"];
+  const statusOptions = ["All","Confirmed", "Packed", "Pending", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"];
   const paymentOptions = ["All", "Paid", "Pending", "Failed", "Refunded"];
 
-  const sampleOrders = [
-    {
-      id: "ORD001",
-      orderId: "ORD-2024-001",
-      orderDate: "2024-08-19",
-      orderTime: "14:30:25",
-      customerName: "Rajesh Kumar",
-      customerEmail: "rajesh@email.com",
-      customerPhone: "+91-9876543210",
-      totalAmount: 2499.99,
-      itemCount: 2,
-      status: "Delivered",
-      paymentStatus: "Paid",
-      paymentMethod: "UPI",
-      trackingNumber: "TRK123456789",
-      shippingAddress: {
-        street: "123 MG Road",
-        city: "Mumbai",
-        state: "Maharashtra",
-        pincode: "400001"
-      },
-      items: [
-        { name: "Samsung Galaxy Earbuds", quantity: 1, price: 1999.99 },
-        { name: "Phone Case", quantity: 1, price: 500.00 }
-      ]
-    },
-    {
-      id: "ORD002",
-      orderId: "ORD-2024-002",
-      orderDate: "2024-08-19",
-      orderTime: "12:15:10",
-      customerName: "Priya Sharma",
-      customerEmail: "priya@email.com",
-      customerPhone: "+91-9876543211",
-      totalAmount: 15999.00,
-      itemCount: 1,
-      status: "Shipped",
-      paymentStatus: "Paid",
-      paymentMethod: "Credit Card",
-      trackingNumber: "TRK123456790",
-      shippingAddress: {
-        street: "456 Park Street",
-        city: "Delhi",
-        state: "Delhi",
-        pincode: "110001"
-      },
-      items: [
-        { name: "Dell Inspiron Laptop", quantity: 1, price: 15999.00 }
-      ]
-    },
-    {
-      id: "ORD003",
-      orderId: "ORD-2024-003",
-      orderDate: "2024-08-18",
-      orderTime: "18:45:33",
-      customerName: "Amit Singh",
-      customerEmail: "amit@email.com",
-      customerPhone: "+91-9876543212",
-      totalAmount: 899.50,
-      itemCount: 2,
-      status: "Processing",
-      paymentStatus: "Paid",
-      paymentMethod: "Net Banking",
-      trackingNumber: null,
-      shippingAddress: {
-        street: "789 Brigade Road",
-        city: "Bangalore",
-        state: "Karnataka",
-        pincode: "560001"
-      },
-      items: [
-        { name: "T-shirt", quantity: 1, price: 499.50 },
-        { name: "Jeans", quantity: 1, price: 400.00 }
-      ]
-    },
-    {
-      id: "ORD004",
-      orderId: "ORD-2024-004",
-      orderDate: "2024-08-18",
-      orderTime: "16:20:45",
-      customerName: "Sneha Patel",
-      customerEmail: "sneha@email.com",
-      customerPhone: "+91-9876543213",
-      totalAmount: 5499.00,
-      itemCount: 3,
-      status: "Pending",
-      paymentStatus: "Pending",
-      paymentMethod: "Debit Card",
-      trackingNumber: null,
-      shippingAddress: {
-        street: "321 CG Road",
-        city: "Ahmedabad",
-        state: "Gujarat",
-        pincode: "380001"
-      },
-      items: [
-        { name: "Yoga Mat", quantity: 1, price: 1999.00 },
-        { name: "Dumbbells", quantity: 1, price: 2500.00 },
-        { name: "Resistance Band", quantity: 1, price: 1000.00 }
-      ]
-    },
-    {
-      id: "ORD005",
-      orderId: "ORD-2024-005",
-      orderDate: "2024-08-17",
-      orderTime: "11:05:12",
-      customerName: "Vikram Gupta",
-      customerEmail: "vikram@email.com",
-      customerPhone: "+91-9876543214",
-      totalAmount: 1299.75,
-      itemCount: 3,
-      status: "Cancelled",
-      paymentStatus: "Refunded",
-      paymentMethod: "Wallet",
-      trackingNumber: null,
-      shippingAddress: {
-        street: "654 Civil Lines",
-        city: "Jaipur",
-        state: "Rajasthan",
-        pincode: "302001"
-      },
-      items: [
-        { name: "Book 1", quantity: 1, price: 400.00 },
-        { name: "Book 2", quantity: 1, price: 450.00 },
-        { name: "Book 3", quantity: 1, price: 449.75 }
-      ]
-    }
-  ];
-
-  const filteredOrders = sampleOrders.filter(order => {
-    const matchesSearch = order.orderId.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         order.customerName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         order.customerEmail.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesStatus = selectedStatus === "All" || order.status === selectedStatus;
-    const matchesPayment = selectedPayment === "All" || order.paymentStatus === selectedPayment;
-    
-    return matchesSearch && matchesStatus && matchesPayment;
-  });
 
   const fetchOrders = async (page=0) => {
     setLoading(true);
-    const response = await getOrder(toast, {'search': searchTerm, 'page': page > 0? page: cuuerntPage});
+    const response = await getOrder(toast, {'search': searchTerm, 'page': page > 0? page: cuuerntPage, 'status': selectedStatus === "All" ? '' : selectedStatus});
     if (response?.data) {
       setOrderData(response.data?.order_list?.results);
       setTotalPages(response.data?.order_list?.meta?.total_pages);
@@ -193,9 +59,24 @@ const AdminOrderList = () => {
     
   }
 
+  const handleUpdate = async(order_status) =>{
+    const response = await updateOrderStatus(order_status, toast);
+    if(response?.success === true){
+      fetchOrders();
+      setIsOpen(false);
+    } 
+    
+  }
+
+  const handleEdit = (order) => {
+    setSelectOrder(order);
+    setIsOpen(true);
+  }
+
+
   useEffect(() => {
     fetchOrders();
-  }, [dateRange, sortBy, sortOrder, searchTerm]);
+  }, [dateRange, sortBy, sortOrder, searchTerm, selectedStatus]);
 
   return (
     <div className="flex h-screen bg-gray-50">
@@ -247,11 +128,14 @@ const AdminOrderList = () => {
             <h2 className="text-lg font-semibold text-gray-900">Order ({orderData?.order_list?.length})</h2>
           </div>
            {orderData && orderData.map((order) =>(
-          <OrderResponsiveRow key={order.id} order={order} />
+            <>
+            <OrderResponsiveRow key={order.id} order={order} setIsOpen={setIsOpen}/>
+            </>
+          
         ))}
         </div>
        
-
+        <EditOrderModal isOpen={isOpen} setIsOpen={setIsOpen} order={selectOrder} onSave={handleUpdate} />
         {/* Orders Table */}
         <div className="bg-white shadow-sm border border-gray-200 overflow-hidden hidden lg:block">
           <div className="overflow-x-auto">
@@ -281,7 +165,10 @@ const AdminOrderList = () => {
               </thead>
               {loading? <RowLoader /> : orderData.length > 0 ?<tbody className="divide-y divide-gray-200">
                 {orderData.length === 0? <RowLoader /> : orderData && orderData?.map((order) => (
-                  <OrderRow key={order.id} order={order} />
+                  <>
+                  <OrderRow key={order.id} order={order}  handleEdit={handleEdit}/>
+                  </>
+                 
                 ))}
               </tbody>:
               <tr>

@@ -68,11 +68,11 @@ const TransactionDetailsHeader = ({transactionData, onBack}) =>{
             
             <div className="flex items-center space-x-3">
               <button
-                disabled={!transactionData?.customer_invoice | isDownloading}
+                disabled={!transactionData?.customer_invoice?.invoice_url || isDownloading}
                 onClick={handleDownload}
                 className={`flex items-center space-x-2 px-4 py-2 border transition-colors duration-200 rounded-none
                   ${
-                    transactionData?.customer_invoice
+                    transactionData?.customer_invoice?.invoice_url
                       ? "bg-white border-gray-300 hover:bg-gray-50 text-gray-700 cursor-pointer"
                       : "bg-gray-100 border-gray-200 text-gray-400 cursor-not-allowed"
                   }`}
