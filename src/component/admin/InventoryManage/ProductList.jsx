@@ -20,7 +20,7 @@ const ProductList = ({product, handleOnDelete, handleUpdateProduct}) =>{
 
     const getStockStatus = (quantity) => {
         if (quantity === 0) return { status: "Out of Stock", color: "text-red-600 bg-red-50", icon: XCircle };
-        if (quantity < 10) return { status: "Low Stock", color: "text-yellow-600 bg-yellow-50", icon: AlertTriangle };
+        if (quantity < product?.low_stock_threshold) return { status: "Low Stock", color: "text-yellow-600 bg-yellow-50", icon: AlertTriangle };
         return { status: "In Stock", color: "text-green-600 bg-green-50", icon: CheckCircle };
     };
     const status = getStockStatus(product?.product_quantity);

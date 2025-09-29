@@ -23,7 +23,7 @@ const AdminRoutes = [
   {
     path: "/dashboard/",
     element: (
-      <ProtectedRoute redirectTo="/" requiredRole={ROLE_TYPE.ADMIN}>
+      <ProtectedRoute isPublic={false} requiredRole={ROLE_TYPE.ADMIN} redirectTo="/" >
         <AdminDashboard />
       </ProtectedRoute>
     ),
@@ -75,7 +75,7 @@ const AdminRoutes = [
   {
     path: "/checkout/",
     element: (
-      <ProtectedRoute>
+      <ProtectedRoute redirectTo="/" requiredRole={ROLE_TYPE.ADMIN}>
         <CheckoutComponent />
       </ProtectedRoute>
     ),

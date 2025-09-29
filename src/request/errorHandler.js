@@ -4,7 +4,7 @@ import codeMessage from "./codeMessage";
 const errorHandler = (error, toast = null, options = {}) => {
     const { response } = error;
     const { showToast = true, redirectOnUnauth = true } = options;
-    console.log(error, 'error');
+    console.log(options);
     if (!response) {
         const message = codeMessage[503] || "Network error occurred";
         
@@ -24,11 +24,11 @@ const errorHandler = (error, toast = null, options = {}) => {
     }
     else if (response && response.status) {
         // response?.data?.data?.non_field_errors[0]
-        console.log(response?.data, 'response');
-        const message = response?.data?.error || response?.data?.data?.non_field_errors[0] || response?.data?.non_field_errors[0]||  response?.data?.error || response.data && response.data.message ||response?.data[0]|| codeMessage[response.status];
+        const message = response?.data?.message || response?.data?.detail || response?.data?.error || response?.data?.data?.non_field_errors[0] || response?.data?.non_field_errors[0]||  response?.data?.error || response.data && response.data.message ||response?.data[0]|| codeMessage[response.status];
         const { status } = response;
 
         // Show toast notification based on status
+        console.log(message, 'message', status, 'status', toast, 'toast');
         if (showToast && toast) {
             if (status === 401) {
                 toast.error("Your session has expired. Please login again.", {
@@ -37,7 +37,7 @@ const errorHandler = (error, toast = null, options = {}) => {
                 });
             }
             else if (status === 403) {
-                toast.error("You don't have permission to perform this action.", {
+                toast.error(message || "You don't have permission to perform this action.", {
                     title: "Access Denied",
                     duration: 5000
                 });
@@ -76,11 +76,9 @@ const errorHandler = (error, toast = null, options = {}) => {
 
         // Handle unauthorized access
         if (error.response.status === 401 && redirectOnUnauth) {
-            // You might need to import history or use a different navigation method
-            // history.push('/login');
-            // Or use window.location if no router history available
+        
             setTimeout(() => {
-                window.location.href = '/login';
+                window.location.reload();
             }, 2000); // Give time for user to read the toast
         }
         

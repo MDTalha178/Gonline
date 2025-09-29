@@ -52,8 +52,7 @@ const request = {
         const response = await instance.get(url);
         return successHandler(response, toast, {showToast: extra.showToast,});
         } catch (error) {
-            console.log(error, 'ee');
-        return errorHandler(error, toast, );
+        return errorHandler(error, toast);
         }
     },
 

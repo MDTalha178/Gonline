@@ -18,7 +18,7 @@ const FeatureProductSection = ({ featuredData ,storeId}) => {
         setLoading(false);
     }, [featuredProducts, storeOrigin]);
 
-    if(featuredData && featuredProducts.length <= 0){
+    if(featuredProducts && featuredProducts.length <= 0){
         return (
             <p>No products found</p>
         )

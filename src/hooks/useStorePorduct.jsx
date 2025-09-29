@@ -14,7 +14,7 @@ const useStorePorducts = (storeId, storeName=null) =>{
           try {
             const response = await getStoreproduct(toast, storeId, {}, storeName);
             if (response?.data){
-                setData(response.data);
+                setData(response.data?.results);
             } 
             else setData(data);
           } catch (error) {

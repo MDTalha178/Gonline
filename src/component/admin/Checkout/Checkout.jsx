@@ -31,6 +31,7 @@ import { useToast } from "../../../hooks/useToast";
 import { checkoutService, customerCheckoutPos, getPosCustomer } from "../../../service/admin/Checkout/checkoutService";
 import useDebounce from "../../../hooks/useDebounce";
 import { set } from "date-fns";
+import { getAdminStoreproduct } from "../../../service/admin/inventory/InventoryService";
 
 const CheckoutComponent = () => {
   const {toast} = useToast()
@@ -72,7 +73,7 @@ const CheckoutComponent = () => {
   const fetchProdouct = async () => {
     setLoading(true);
     try{
-      const response = await fetchProductList(toast, {'search': searchQuery});
+      const response = await getAdminStoreproduct(toast, {'search': searchQuery});
       if(response?.data?.results){
         setproducts(response?.data?.results);
       }
@@ -242,6 +243,9 @@ const CheckoutComponent = () => {
       address: customer?.address,
       gst_number: customer?.gst_number
     });
+    console.log(customer);
+    setcustomer_id(customer.id)
+    
   }
 
   const processPayment = () => {

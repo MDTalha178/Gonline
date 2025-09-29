@@ -8,9 +8,8 @@ import DateRangeFilter from "../Filter/Inventory/DateRangeFilter";
 import ProductStats from "./ProductStats";
 import ProductList, { ProductCard } from "./ProductList";
 import AddNewProduct from "./AddNewProduct";
-import { getStoreproduct } from "../../../service/marketPlace/product_service";
 import { useToast } from "../../../hooks/useToast";
-import { deleteProductService, getProductCategory } from "../../../service/admin/inventory/InventoryService";
+import { deleteProductService, getAdminStoreproduct, getProductCategory } from "../../../service/admin/inventory/InventoryService";
 import UpdateProduct from "./updateProduct";
 import { getCategory } from "../../../service/store/storeCreationService";
 import { ArrowUpDown, Package, Plus } from "lucide-react";
@@ -46,7 +45,7 @@ const AdminInventory = () => {
 
   const fetchProduct = async () => {
     setIsLoading(true); 
-      const response = await getStoreproduct(toast, null, {'search': searchTerm, 'category': selectedCategory === "All" ? '' : selectedCategory});
+      const response = await getAdminStoreproduct(toast, {'search': searchTerm, 'category': selectedCategory === "All" ? '' : selectedCategory});
       if (response?.data){
           setProduct(response.data?.results);
           setTotalPages(response.data?.meta?.total_pages);

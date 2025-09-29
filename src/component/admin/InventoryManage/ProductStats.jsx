@@ -2,23 +2,27 @@ import { AlertTriangle, CheckCircle, Package, XCircle } from "lucide-react"
 import { useEffect, useState } from "react";
 import { getProductStats } from "../../../service/admin/inventory/InventoryService";
 import StatsCardShimmer from "../Shimmer/StatsShimmer";
+import { useToast } from "../../../hooks/useToast";
 
 const ProductStats = ({product}) => {
+    const {toast} = useToast()
     const [prdductStats, setproductStats] = useState(null);
 
     useEffect(() =>{
     const fetchProductStats = async () => {
-        const response = await getProductStats();
+        const response = await getProductStats(toast);
         console.log(response);
         if(response?.data){
-            setproductStats(response?.data);
+          setproductStats(response?.data);
+          return;
         }
+        setproductStats([]);
     }
 
     fetchProductStats()
     },[setproductStats, product])
 
-    console.log(prdductStats);
+
     if(prdductStats === null){ 
       return(
         <>
