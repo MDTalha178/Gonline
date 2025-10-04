@@ -64,7 +64,11 @@ export const endPoint = {
         activity: 'dashboard/dashboard-analytics/activity/',
         customerPos: 'order/pos-checkout-customer/',
         getPosCustomer: 'order/pos-customer/',
-        updateOrderStatus: 'order/update-order-status/'
+        updateOrderStatus: 'order/update-order-status/',
+        customerLedger:'store-user/customer-ledger/',
+        customerLedgerDetails: (ledgerId) => `store-user/customer-ledger/${ledgerId}/`,
+        ledgerMetaData: (ledgerId) => `store-user/customer-ledger/${ledgerId}/ledger-meta-data/`,
+        customerLedgerCash : 'store-user/customer-ledger/cash-in-cash-out/'
 
     }
 }

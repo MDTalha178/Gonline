@@ -9,17 +9,21 @@ import {
   User,
   LogOut,
   ShoppingBag,
-  Store
+  Store,
+  BookOpen,
+  ChevronUp,
+  ChevronDown,
 } from "lucide-react";
 import { useState } from "react";
 import { redirect, useNavigate } from "react-router-dom";
 import { getToken } from "../../module/Auth/token";
 import { getSidebarState, getStore, getStoreUrl, handleLogout, saveSidebarState } from "../../utils/utils";
 
-const AdminSidebar = ({currentPage='Dashboard'}) => {
+const AdminSidebar = ({currentPage='Dashboard', LedgerOpen=false, subPage=''}) => {
   const navigate = useNavigate();
   const [isCollapsed, setIsCollapsed] = useState(getSidebarState());
-  const [activeItem, setActiveItem] = useState(currentPage);
+  const [activeItem, setActiveItem] = useState(subPage);
+  const [isLedgerOpen, setIsLedgerOpen] = useState(LedgerOpen);
 
   const menuItems = [
     {
@@ -42,6 +46,21 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
       icon: ShoppingCart,
       path: "/admin-orders/"
     },
+    {
+      name:"Ledger",
+      icon: BookOpen,
+      hasSubmenu: true,
+      submenu: [
+        {
+          name: "Customer Ledger",
+          path: "/customer-ledger/"
+        },
+        {
+          name: "Supplier Ledger",
+          path: "/supplier-ledger/"
+        }
+      ]
+    },
      {
       name: "Checkout",
       icon: ShoppingBag,
@@ -55,10 +74,22 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
    
   ];
 
+  const handleItemClick = (item) => {
+    if (item.hasSubmenu) {
+      setIsLedgerOpen(!isLedgerOpen);
+      // If sidebar is collapsed, expand it when clicking Ledger
+      if (isCollapsed) {
+        setIsCollapsed(saveSidebarState(false));
+      }
+    } else {
+      setActiveItem(item.name);
+      navigate(item.path);
+    }
+  };
 
-  const handleItemClick = (itemName) => {
-    setActiveItem(itemName.name);
-    navigate(itemName.path);
+  const handleSubmenuClick = (parentName, submenuItem) => {
+    setActiveItem(submenuItem.name);
+    navigate(submenuItem.path);
   };
 
   return (
@@ -100,7 +131,7 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 p-2">
+      <nav className="flex-1 p-2 overflow-y-auto">
         <ul className="space-y-1">
           {menuItems.map((item, index) => {
             const Icon = item.icon;
@@ -133,15 +164,59 @@ const AdminSidebar = ({currentPage='Dashboard'}) => {
                   </div>
                   
                   {/* Label */}
-                  <span className={`ml-3 font-light tracking-wide transition-all duration-200 ${
+                  <span className={`ml-3 font-light tracking-wide transition-all duration-200 flex-1 ${
                     isCollapsed ? 'opacity-0 w-0 overflow-hidden' : 'opacity-100'
                   }`}>
                     {item.name}
                   </span>
                   
+                  {/* Dropdown arrow for Ledger */}
+                  {item.hasSubmenu && !isCollapsed && (
+                    <div className="ml-auto">
+                      {isLedgerOpen ? (
+                        <ChevronUp className="w-4 h-4" />
+                      ) : (
+                        <ChevronDown className="w-4 h-4" />
+                      )}
+                    </div>
+                  )}
+                  
                   {/* Hover effect */}
                   <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity duration-200" />
                 </button>
+
+                {/* Submenu */}
+                {item.hasSubmenu && isLedgerOpen && !isCollapsed && (
+                  <ul className="mt-1 space-y-1 ml-4">
+                    {item.submenu.map((submenuItem) => {
+                      const isSubmenuActive = activeItem === submenuItem.name;
+                      return (
+                        <li key={submenuItem.name}>
+                          <button
+                            onClick={() => handleSubmenuClick(item.name, submenuItem)}
+                            className={`w-full flex items-center px-3 py-2 text-left transition-all duration-200 group relative cursor-pointer ${
+                              isSubmenuActive 
+                                ? 'bg-gray-800 text-white' 
+                                : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+                            }`}
+                          >
+                            {/* Submenu indicator */}
+                            <div className={`absolute left-0 top-0 h-full w-1 bg-gray-500 transition-all duration-300 ${
+                              isSubmenuActive ? 'opacity-100' : 'opacity-0'
+                            }`} />
+                            
+                            <span className="ml-3 font-light tracking-wide text-sm">
+                              {submenuItem.name}
+                            </span>
+                            
+                            {/* Hover effect */}
+                            <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity duration-200" />
+                          </button>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                )}
 
                 {/* Tooltip for collapsed state */}
                 {isCollapsed && (

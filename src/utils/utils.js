@@ -108,3 +108,7 @@ export const saveSidebarState = (isCollapsed) =>{
 export const getSidebarState = () =>{
   return JSON.parse(localStorage.getItem('isSidebarCollapsed')) || false;
 }
+
+export const clearStorage = () => {
+  localStorage.clear();
+}

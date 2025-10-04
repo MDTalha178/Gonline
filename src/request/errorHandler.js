@@ -1,3 +1,4 @@
+import { clearStorage } from "../utils/utils";
 import codeMessage from "./codeMessage";
 
 // Enhanced error handler with toast integration
@@ -76,7 +77,7 @@ const errorHandler = (error, toast = null, options = {}) => {
 
         // Handle unauthorized access
         if (error.response.status === 401 && redirectOnUnauth) {
-        
+            clearStorage()
             setTimeout(() => {
                 window.location.reload();
             }, 2000); // Give time for user to read the toast

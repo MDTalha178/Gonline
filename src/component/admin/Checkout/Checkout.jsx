@@ -26,12 +26,12 @@ import {
   LogOut
 } from "lucide-react";
 import AdminSidebar from "../Sidebar";
-import { fetchProductList } from "../../../service/marketPlace/product_service";
 import { useToast } from "../../../hooks/useToast";
 import { checkoutService, customerCheckoutPos, getPosCustomer } from "../../../service/admin/Checkout/checkoutService";
 import useDebounce from "../../../hooks/useDebounce";
-import { set } from "date-fns";
 import { getAdminStoreproduct } from "../../../service/admin/inventory/InventoryService";
+import PaymentModal from "./PaymentModal";
+import { set } from "date-fns";
 
 const CheckoutComponent = () => {
   const {toast} = useToast()
@@ -56,6 +56,8 @@ const CheckoutComponent = () => {
   const [searchCustomer, setsearchCustomer] = useState();
   const [searchResults, setSearchResults] = useState([]);
   const debouncedCustomerSearchTerm = useDebounce(searchCustomer, 500); 
+  const [showPaymentModal, setShowPaymentModal] = useState(false);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
   
   // Product search states
   const [showProductSearch, setShowProductSearch] = useState(false);
@@ -68,6 +70,16 @@ const CheckoutComponent = () => {
     address: '',
     gst_number: ''
   });
+
+
+  //  Payment check state
+  const [paymentCheckout, setPaymentCheckout] = useState({
+    payment_method: 'cash',
+    payment_type: 'FULL_PAYMENT',
+    received_amount: 0,
+    generate_invoice: true,
+    send_notification: false
+  })
 
 
   const fetchProdouct = async () => {
@@ -107,7 +119,7 @@ const CheckoutComponent = () => {
       fetchCustomer()
     }
     
-  },[debouncedSearchTerm, setProcessing, debouncedCustomerSearchTerm, setSearchResults, setShowCustomerForm])
+  },[debouncedSearchTerm, setProcessing, debouncedCustomerSearchTerm, setSearchResults, setShowCustomerForm, setShowPaymentModal])
 
   const subtotal = cartItems.reduce((sum, item) => sum + (item.product_price * item.quantity), 0);
   const discountAmount = discountType === 'percentage' 
@@ -131,7 +143,9 @@ const CheckoutComponent = () => {
       product_id:cartItems.map((item) => {
         return {product_id: item.id, quantity: item.quantity}
       }),
-      pos_customer_id: customer_id
+      pos_customer_id: customer_id,
+      ...paymentCheckout,
+      received_amount: paymentCheckout.payment_type === 'FULL_PAYMENT' ? total : paymentCheckout.received_amount
     }
     const response = await checkoutService(payload, toast);
     if(response?.data){
@@ -142,8 +156,12 @@ const CheckoutComponent = () => {
       setTax(0);
       fetchProdouct();
       toast.success("Order placed successfully");
+      setPaymentSuccess(true);
+      setShowPaymentModal(false);
     }
     setProcessing(false);
+    setPaymentSuccess(false);
+
   }
 
   // Add product to cart
@@ -248,6 +266,10 @@ const CheckoutComponent = () => {
     
   }
 
+
+  const handleProcessPayment = (field, value) =>{
+    setPaymentCheckout({...paymentCheckout, [field]: value})
+  }
   const processPayment = () => {
     if (cartItems.length === 0) {
       alert('Please add items to cart');
@@ -283,11 +305,13 @@ const CheckoutComponent = () => {
   };
 
 
+
   return (
     <div className="flex h-screen bg-gray-50">
       {/* Admin Sidebar */}
       <AdminSidebar currentPage="Checkout" />
       
+      {showPaymentModal &&<PaymentModal isOpen={true} setShowPaymentModal={setShowPaymentModal} total={total} onProcessPayment={handleCheckout} paymentCheckout={paymentCheckout} handleProcessPayment={handleProcessPayment} paymentSuccess={paymentSuccess} setPaymentSuccess={setPaymentSuccess} customer={customer}/>}
       {/* Main Content */}
       <div className="flex-1 overflow-auto">
         <div className="p-4">
@@ -716,7 +740,7 @@ const CheckoutComponent = () => {
                 </div>
 
                 <button
-                    onClick={handleCheckout}
+                    onClick={() =>setShowPaymentModal(true)}
                     disabled={cartItems.length === 0 || processing}
                     className="w-max bg-green-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
                     >

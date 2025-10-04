@@ -3,6 +3,8 @@ import CheckoutComponent from "../component/admin/Checkout/Checkout";
 import AdminDashboard from "../component/admin/Dashboard/Dasboard";
 import AdminInventory from "../component/admin/InventoryManage/Inventory";
 import ProductDetailsPage from "../component/admin/InventoryManage/InventoryDetails";
+import CustomerLedgerDetails from "../component/admin/Ledger/CustomerLedger/CustomerDetails";
+import CustomerLedger from "../component/admin/Ledger/CustomerLedger/CustomerLedger";
 import AdminOrderDetails from "../component/admin/Order/OrderDetails";
 import AdminOrderList from "../component/admin/Order/OrderListing";
 import TransactionDetails from "../component/admin/Transaction/TransactionDetails";
@@ -81,6 +83,22 @@ const AdminRoutes = [
     ),
   },
   {
+    path: "/customer-ledger/",
+    element: (
+      <ProtectedRoute redirectTo="/" requiredRole={ROLE_TYPE.ADMIN}>
+        <CustomerLedger />
+      </ProtectedRoute>
+    ),
+  },
+  {
+    path: "/customer-ledger/:ledgerId",
+    element: (
+      <ProtectedRoute redirectTo="/" requiredRole={ROLE_TYPE.ADMIN}>
+        <CustomerLedgerDetails />
+      </ProtectedRoute>
+    ),
+  },
+  {
     path: "/transaction/:transactionId",
     element: (
       <ProtectedRoute redirectTo="/" requiredRole={ROLE_TYPE.ADMIN}>
@@ -89,5 +107,7 @@ const AdminRoutes = [
     ),
   },
 ];
+
+
 
 export default AdminRoutes;
