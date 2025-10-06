@@ -6,7 +6,8 @@ import { getCustomerLedger } from '../../../../service/admin/ledger/CustomerLede
 import { useToast } from '../../../../hooks/useToast';
 import LedgerSearch from '../LedgerUtility/LedgerSearch';
 import LedgerFilter from '../LedgerUtility/Ledgerfilter';
-import LedgerStats from '../LedgerUtility/LedgerStats';;
+import LedgerStats from '../LedgerUtility/LedgerStats';import useDebounce from '../../../../hooks/useDebounce';
+;
 
 export default function CustomerLedger() {
   const {toast} = useToast()
@@ -15,9 +16,11 @@ export default function CustomerLedger() {
   const [selectedStatus, setSelectedStatus] = useState('all');
   const [showStatusFilter, setShowStatusFilter] = useState(false);
   const [ledgerStats, setLedgerStats] = useState(null)
+  const debouncedCustomerSearchTerm = useDebounce(searchTerm, 500);
+
 
   const fetchCustomerLedger = async () => {
-    const response = await getCustomerLedger(toast);
+    const response = await getCustomerLedger(toast, {search:searchTerm});
 
     if(response?.data){
       setcustomerLedger(response?.data?.ledger_data);
@@ -28,8 +31,11 @@ export default function CustomerLedger() {
   }
 
   useEffect(() => {
-    fetchCustomerLedger();
-  }, [setcustomerLedger])
+    if(debouncedCustomerSearchTerm){
+      fetchCustomerLedger()
+    }
+    if(!customerLedger || !debouncedCustomerSearchTerm) fetchCustomerLedger();
+  }, [setcustomerLedger, debouncedCustomerSearchTerm])
 
   const statusOptions = [
     { value: 'all', label: 'All Status' },

@@ -7,11 +7,13 @@ import { getToken } from "../module/Auth/token";
 const buildHeaders = (requiresAuth = false) => {
     const baseHeaders = {
         'Content-Type': 'application/json',
+        'X-AUTH-REQUIRED': "false"
     };
     if (requiresAuth) {
         const token = getToken()?.accessToken;
         if(token) {
             baseHeaders['Authorization'] = `Bearer ${token}`;
+            baseHeaders['X-AUTH-REQUIRED'] = "true"
         }
     }
     return baseHeaders;
