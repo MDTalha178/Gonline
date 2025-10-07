@@ -78,7 +78,7 @@ const CheckoutComponent = () => {
     payment_type: 'FULL_PAYMENT',
     received_amount: 0,
     generate_invoice: true,
-    send_notification: false
+    is_notification: false
   })
 
 

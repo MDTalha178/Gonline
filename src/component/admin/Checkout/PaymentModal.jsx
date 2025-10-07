@@ -210,8 +210,8 @@ const PaymentModal = ({ isOpen, setShowPaymentModal, total, onProcessPayment, pa
               <label className="flex items-center space-x-3 cursor-pointer group">
                 <input
                   type="checkbox"
-                  checked={paymentCheckout?.send_notification}
-                  onChange={(e) => handleProcessPayment('send_notification', e.target.checked)}
+                  onChange={(e) => handleProcessPayment('is_notification', e.target.checked)}
+                  checked={paymentCheckout?.is_notification}
                   className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-2 focus:ring-blue-500"
                 />
                 <div className="flex items-center flex-1">
