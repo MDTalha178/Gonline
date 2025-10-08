@@ -19,8 +19,7 @@ import request from "../../../request/request";
 export const AdminloginService = async (data, toast) => {
     const response = await request.create(endPoint.admin.adminLogin, data, toast, {service: SERVICE_CONFIGS.ADMIN_SERVICE, requiresAuth: false});
     try{
-        if(response.success === true){
-            console.log(response.data);
+        if(response?.success === true){
             setToken(response?.data)
             return response
         }

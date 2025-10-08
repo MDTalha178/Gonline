@@ -8,9 +8,9 @@ const PaymentModal = ({ isOpen, setShowPaymentModal, total, onProcessPayment, pa
 
 
   const paymentTypes = [
-    { id: 'cash', label: 'Cash', icon: Banknote, color: 'bg-green-50 border-green-500 text-green-700' },
-    { id: 'upi', label: 'UPI', icon: Smartphone, color: 'bg-blue-50 border-blue-500 text-blue-700' },
-    { id: 'card', label: 'Card', icon: CreditCard, color: 'bg-purple-50 border-purple-500 text-purple-700' }
+    { id: 'CARD', label: 'Cash', icon: Banknote, color: 'bg-green-50 border-green-500 text-green-700' },
+    { id: 'UPI', label: 'UPI', icon: Smartphone, color: 'bg-blue-50 border-blue-500 text-blue-700' },
+    { id: 'CARD', label: 'Card', icon: CreditCard, color: 'bg-purple-50 border-purple-500 text-purple-700' }
   ];
   const handlePaymentSubmit = () => {
     

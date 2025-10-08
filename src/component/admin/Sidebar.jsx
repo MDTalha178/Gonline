@@ -55,10 +55,10 @@ const AdminSidebar = ({currentPage='Dashboard', LedgerOpen=false, subPage=''}) =
           name: "Customer Ledger",
           path: "/customer-ledger/"
         },
-        {
-          name: "Supplier Ledger",
-          path: "/supplier-ledger/"
-        }
+        // {
+        //   name: "Supplier Ledger",
+        //   path: "/supplier-ledger/"
+        // }
       ]
     },
      {
@@ -66,11 +66,11 @@ const AdminSidebar = ({currentPage='Dashboard', LedgerOpen=false, subPage=''}) =
       icon: ShoppingBag,
       path: "/checkout/"
     },
-    {
-      name: "Audit",
-      icon: FileCheck,
-      path: "/audit-trail"
-    },
+    // {
+    //   name: "Audit",
+    //   icon: FileCheck,
+    //   path: "/audit-trail"
+    // },
    
   ];
 

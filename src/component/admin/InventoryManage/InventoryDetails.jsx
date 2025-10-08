@@ -5,6 +5,7 @@ import { fetchProductDetails } from '../../../service/marketPlace/product_servic
 import { useToast } from '../../../hooks/useToast';
 import { convertISOToDateTime } from '../../../utils/utils';
 import SubscriptionPaywall from './InventoryAnalytics';
+import { fetchAdminProductDetails } from '../../../service/admin/inventory/InventoryService';
 
 const ProductDetailsPage = () => {
   const {toast} = useToast();
@@ -83,14 +84,13 @@ const ProductDetailsPage = () => {
   ];
 
   const fetchProduct = async (productId) => {
-    const response = await fetchProductDetails(productId, toast);
+    const response = await fetchAdminProductDetails(productId, toast);
     if(response?.data){
       setProduct(response.data);
     }
   }
 
   useEffect(() => {
-    console.log("Product ID from URL:", productId);
     fetchProduct(productId);
   }, [setProduct]);
 

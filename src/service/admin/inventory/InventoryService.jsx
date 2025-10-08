@@ -94,3 +94,14 @@ export const getAdminStoreproduct = async(toast, queryParams={}) => {
     }
     return null;
 }
+
+
+export const fetchAdminProductDetails = async(productId, toast, queryParams={}) => {
+    try {
+        const response =  await request.read(`${endPoint.marketPalce.storeProduct}/${productId}/?${new URLSearchParams(queryParams).toString()}`, toast, {service: SERVICE_CONFIGS.STORE_SERVICE, requiresAuth: true}, {headers: { 'X-Store-Origin': getStoreName()},showToast: false});
+        if (response.success === true) return response
+    } catch (error) {
+        toast.error(error.message);
+    }
+    return null;
+}

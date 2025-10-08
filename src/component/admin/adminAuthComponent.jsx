@@ -37,6 +37,7 @@ const AdminLogin = () => {
       navigate(`/dashboard`);
 
     }
+    console.log(response, "calals");
     setIsLoading(false);
    
     
